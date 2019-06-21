@@ -77,16 +77,16 @@ class Term(object):
 
         self.deltas = dnew
 
-    def print_str(self):
+    def __repr__(self):
         s = str(self.scalar)
         for ss in self.sums:
-            s = s + ss.__str__()
+            s = s + str(ss)
         for dd in self.deltas:
-            s = s + dd.print_str()
+            s = s + str(dd)
         for tt in self.tensors:
-            s = s + tt.print_str()
+            s = s + str(tt)
         for oo in self.operators:
-            s = s + oo.print_str()
+            s = s + str(oo)
         return s
 
 
@@ -130,10 +130,10 @@ class Expression(object):
     def resolve(self):
         for i in range(len(self.terms)):
             self.terms[i].resolve()
-    def print_str(self):
+    def __repr__(self):
         s = str()
         for t in self.terms:
-           s = s + t.print_str() 
+           s = s + str(t)
            s = s + " + "
 
         return s[:-2]

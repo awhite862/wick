@@ -12,7 +12,7 @@ class Operator(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def print_str(self):
+    def __repr__(self):
         if self.ca:
             return "a^{\dagger}_" + str(self.index)
         else:
@@ -41,7 +41,7 @@ class Tensor(object):
             ss += str(sp)
         return hash(ss)
 
-    def print_str(self):
+    def __repr__(self):
         temp = self.name
         s = str()
         for idx in self.indices:
@@ -91,5 +91,5 @@ class Delta(object):
     def __hash__(self):
         return hash(''.join(sorted(self.i1 + self.i2)))
 
-    def print_str(self):
+    def __repr__(self):
         return "\delta_{" + self.i1 + "," + self.i2 + "}"
