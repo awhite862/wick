@@ -11,7 +11,7 @@ def are_operators(e):
 
 def is_occupied(s, occ):
     if occ is None:
-        return 'o' in s.name
+        return 'o' in s
     else:
         return s in occ
 
@@ -30,22 +30,20 @@ def apply_wick(e, occ=None):
         # loop to find a contraction
         for i,oi in enumerate(temp.operators):
             for j,oj in enumerate(temp.operators):
-                if j <= i or not oi.space == oj.space:
+                if j <= i or not oi.idx.space == oj.idx.space:
                     continue
 
                 # if there is a non-zero contraction, do it
-                if (is_occupied(oi.space, occ) and oi.ca and not oj.ca) or (
-                    not is_occupied(oi.space, occ) and not oi.ca and oj.ca):
+                if (is_occupied(oi.idx.space, occ) and oi.ca and not oj.ca) or (
+                    not is_occupied(oi.idx.space, occ) and not oi.ca and oj.ca):
                     sign = 1 if (i - j + 1)%2 == 0 else -1
-                    i1 = oi.index
-                    i2 = oj.index
-                    s1 = oi.space
-                    s2 = oj.space
+                    i1 = oi.idx
+                    i2 = oj.idx
                     t1 = copy.deepcopy(temp)
                     t1.scalar = t1.scalar*sign
                     del(t1.operators[j])
                     del(t1.operators[i])
-                    t1.deltas.append(Delta(i1,i2,s1,s2))
+                    t1.deltas.append(Delta(i1,i2))
 
                     # append to output
                     to.append(t1)

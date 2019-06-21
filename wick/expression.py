@@ -30,9 +30,7 @@ class Term(object):
         for dd in self.deltas:
             i2 = dd.i2
             i1 = dd.i1
-            s2 = dd.s2
-            s1 = dd.s1
-            assert(s1 == s2)
+            assert(i1.space == i2.space)
 
             ## Cases ##
             # 0 sums over neither index
@@ -43,8 +41,7 @@ class Term(object):
 
             dindx = []
             for i in range(len(self.sums)):
-                idx = self.sums[i].index
-                spc = self.sums[i].space
+                idx = self.sums[i].idx
                 if i2 == idx:
                     dindx.append(i)
                     case = 3 if case == 1 else 2
@@ -64,21 +61,17 @@ class Term(object):
                 for k in range(len(tt.indices)):
                     if case == 1:
                         if tt.indices[k] == i1:
-                            assert(tt.spaces[k] == s1)
                             tt.indices[k] = i2
                     else:
                         if tt.indices[k] == i2:
-                            assert(tt.spaces[k] == s1)
                             tt.indices[k] = i1
 
             for oo in self.operators:
                 if case == 1:
                     if oo.index == i1:
-                        assert(oo.space == s2)
                         oo.index = i2
                 else:
                     if oo.index == i2:
-                        assert(oo.space == s1)
                         oo.index = i1
 
 
