@@ -19,25 +19,35 @@ class Operator(object):
             return "a_" + str(self.index)
 
 class Tensor(object):
-    def __init__(self, indices, spaces, bk, name):
+    def __init__(self, indices, spaces, name):
         self.indices = indices
         self.spaces = spaces
-        self.bk = bk
-        assert(len(bk) == len(spaces))
         assert(len(spaces) == len(indices))
         self.name = name
 
+    def __eq__(self, other):
+        return self.indices == other.indices \
+                and self.spaces == other.spaces \
+                and self.name == other.name
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        ss = str(self.name)
+        for i in self.indices:
+            ss += i
+        for sp in self.spaces:
+            ss += str(sp)
+        return hash(ss)
+
     def print_str(self):
         temp = self.name
-        r = str()
-        l = str()
-        for i in range(len(self.bk)):
-            if self.bk[i]:
-                r = r + str(self.indices[i])
-            else:
-                l = l + str(self.indices[i])
+        s = str()
+        for idx in self.indices:
+            s += str(idx)
 
-        return self.name + "_{" + l + r + "}"
+        return self.name + "_{" + s + "}"
 
 
 class Sigma(object):
@@ -51,11 +61,15 @@ class Sigma(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def print_str(self):
+    def __hash__(self):
+        return hash(''.join(self.index + str(self.space)))
+
+    def __repr__(self):
         return "\sum_{" + str(self.index) + "}"
 
 class Delta(object):
     def __init__(self, i1, i2, s1, s2):
+        assert(s1 == s2)
         self.i1 = i1
         self.i2 = i2
         self.s1 = s1

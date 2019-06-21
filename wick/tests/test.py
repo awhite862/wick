@@ -15,12 +15,11 @@ indices = ["a","b"]
 indices2 = ["i","j"]
 spaces = [v1, v1]
 spaces2 = [o1, o1]
-bks = [True, False]
 sums.append(Sigma(indices[0], v1))
 sums.append(Sigma(indices[1], v1))
 sums.append(Sigma("i", o1))
-tensors.append(Tensor(indices2, spaces2, bks, "f"))
-tensors.append(Tensor(indices, spaces, bks, "f"))
+tensors.append(Tensor(indices2, spaces2, "f"))
+tensors.append(Tensor(indices, spaces, "f"))
 operators.append(Operator("a", v1, False))
 operators.append(Operator("b", v1, True))
 operators.append(Operator("i", o1, True))

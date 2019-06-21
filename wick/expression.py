@@ -1,3 +1,5 @@
+from copy import deepcopy
+from numbers import Number
 from operator import Sigma, Delta, Operator, Tensor
 
 class Term(object):
@@ -78,7 +80,7 @@ class Term(object):
     def print_str(self):
         s = str(self.scalar)
         for ss in self.sums:
-            s = s + ss.print_str()
+            s = s + ss.__str__()
         for dd in self.deltas:
             s = s + dd.print_str()
         for tt in self.tensors:
@@ -87,6 +89,39 @@ class Term(object):
             s = s + oo.print_str()
         return s
 
+
+    def __mul__(self, other):
+        if isinstance(other, Number):
+            new = deepcopy(self)
+            new.scalar *= other
+            return new
+        elif isinstance(other, Term):
+            scalar = self.scalar*other.scalar
+            sums = self.sums + other.sums
+            tensors = self.tensors + other.tensors
+            operators = self.operators + other.operators
+            deltas = self.deltas + other.deltas
+            return Term(scalar, sums, tensors, operators, deltas)
+        else:
+            return NotImplemented
+
+    def __rmul__(self, other):
+        if isinstance(other, Number):
+            new = deepcopy(self)
+            new.scalar *= other
+            return new
+        else:
+            return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, Term):
+            return self.scalar == other.scalar \
+                    and set(self.sums) == set(other.sums) \
+                    and set(self.tensors) == set(other.tensors) \
+                    and self.operators == other.operators \
+                    and set(self.deltas) == set(other.deltas)
+        else:
+            return NotImplemented
 
 class Expression(object):
     def __init__(self, terms):
@@ -102,3 +137,6 @@ class Expression(object):
            s = s + " + "
 
         return s[:-2]
+
+    def __mul__(self, other):
+        pass
