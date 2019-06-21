@@ -2,15 +2,67 @@ from copy import deepcopy
 from numbers import Number
 from operator import Sigma, Delta, Operator, Tensor
 
-#class AbIndex(object):
-#    def __init__(self, ts, os, summed, space):
-#        pass
-#
-#class TermMap(object):
-#    def __init__(self, sums, tensors, operators, deltas):
-#        assert(len(deltas) == 0)
-#        sidx = [s.index for s in sums]
-#        oidx = [o.index for o in operators]
+class TermMap(object):
+
+    class AbIdx(object):
+        def __init__(self, idx, ts, os, summed):
+            self.idx = idx
+            self.ts = ts
+            self.os = os
+            self.summed = summed
+
+        def __eq__(self, other):
+            first = self.idx.space == other.idx.space and self.summed == other.summed
+            if not first: return False
+            if not self.os == other.os: return False
+            for t,i in self.ts:
+                found = False
+                for s,j in other.ts:
+                    if t.name == s.name and i == j:
+                        found = True
+                        break
+                if not found: return False
+            return True
+
+    def __init__(self, sums, tensors, operators, deltas):
+        assert(len(deltas) == 0)
+        sidx = [s.idx for s in sums]
+        oidx = [o.idx for o in operators]
+        tidx = []
+        for t in tensors:
+            tidx += t.indices
+        self.uidx = set(sidx + oidx + tidx)
+        self.Is = []
+        for idx in self.uidx:
+            summed = True if idx in sidx else False
+            os = []
+            ts = []
+            for i,oi in enumerate(oidx):
+                if oi == idx:
+                    os.append(i)
+            for j,t in enumerate(tensors):
+                for i,ti in enumerate(t.indices):
+                    if ti == idx:
+                        ts.append((t,i))
+            self.Is.append(TermMap.AbIdx(idx, ts, os, summed))
+
+    def __eq__(self, other):
+        if len(self.Is) != len(other.Is): return False
+        # loop over unique indices
+        oidxs = []
+        for I in self.Is:
+            # find equivalent index if it exists
+            found = False
+            for i,J in enumerate(other.Is):
+                if I == J:
+                    found = True
+                    if i in oidxs:
+                        return False
+                    else:
+                        oidxs.append(i)
+                    break
+            if not found: return False
+        return True
 
 class Term(object):
     def __init__(self, scalar, sums, tensors, operators, deltas):
@@ -129,13 +181,15 @@ class Term(object):
     def __neq__(self, other):
         return not self.__eq__(other)
 
-    #def match(self, other):
-    #    if isinstance(other, Term):
-    #        if len(self.deltas) > 0 or len(other.deltas) > 0:
-    #            raise Exception("Cannot match terms with unresolved deltas!")
-
-    #    else:
-    #        return NotImplemented
+    def match(self, other):
+        if isinstance(other, Term):
+            if len(self.deltas) > 0 or len(other.deltas) > 0:
+                raise Exception("Cannot match terms with unresolved deltas!")
+            TM1 = TermMap(self.sums, self.tensors, self.operators, self.deltas)
+            TM2 = TermMap(other.sums, other.tensors, other.operators, other.deltas)
+            return TM1 == TM2
+        else:
+            return NotImplemented
 
 class Expression(object):
     def __init__(self, terms):

@@ -38,5 +38,26 @@ class TermTest(unittest.TestCase):
         out = t1*t2
         self.assertTrue(ref == out)
 
+    def test_term_map(self):
+        s = 1.0
+        i = Idx("i","occ")
+        j = Idx("j","occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i,j], 'f')]
+        operators = [Operator(i, True), Operator(j, False)]
+        t1 = Term(s, sums, tensors, operators, [])
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([j,i], 'f')]
+        operators = [Operator(j, True), Operator(i, False)]
+        t2 = Term(s, sums, tensors, operators, [])
+        sums = [Sigma(j), Sigma(i)]
+        tensors = [Tensor([i,j], 'f')]
+        operators = [Operator(i, True), Operator(j, False)]
+        t3 = Term(s, sums, tensors, operators, [])
+
+        self.assertTrue(t1.match(t2))
+        self.assertTrue(t1.match(t3))
+        self.assertTrue(t2.match(t3))
+
 if __name__ == '__main__':
     unittest.main()
