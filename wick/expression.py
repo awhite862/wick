@@ -2,6 +2,16 @@ from copy import deepcopy
 from numbers import Number
 from operator import Sigma, Delta, Operator, Tensor
 
+#class AbIndex(object):
+#    def __init__(self, ts, os, summed, space):
+#        pass
+#
+#class TermMap(object):
+#    def __init__(self, sums, tensors, operators, deltas):
+#        assert(len(deltas) == 0)
+#        sidx = [s.index for s in sums]
+#        oidx = [o.index for o in operators]
+
 class Term(object):
     def __init__(self, scalar, sums, tensors, operators, deltas):
         self.scalar = scalar
@@ -122,6 +132,17 @@ class Term(object):
                     and set(self.deltas) == set(other.deltas)
         else:
             return NotImplemented
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
+
+    #def match(self, other):
+    #    if isinstance(other, Term):
+    #        if len(self.deltas) > 0 or len(other.deltas) > 0:
+    #            raise Exception("Cannot match terms with unresolved deltas!")
+
+    #    else:
+    #        return NotImplemented
 
 class Expression(object):
     def __init__(self, terms):
