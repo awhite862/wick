@@ -238,5 +238,10 @@ class Expression(object):
 
         return s[:-2]
 
+    def __add__(self, other):
+        if isinstance(other, Expression):
+            return Expression(self.terms + other.terms)
+        else: return NotImplemented
+
     def __mul__(self, other):
         pass

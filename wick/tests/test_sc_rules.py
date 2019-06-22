@@ -4,6 +4,7 @@ from wick.index import Idx
 from wick.operator import *
 from wick.expression import *
 from wick.wick import apply_wick
+from wick.hamiltonian import one_e, two_e
 
 class TestSCRules(unittest.TestCase):
     def test_0d0(self):
@@ -14,29 +15,7 @@ class TestSCRules(unittest.TestCase):
         self.assertTrue(len(x.terms) == 1)
 
     def test_0d1(self):
-        # 0 differences, 1-particle operator
-        i = Idx("i","occ")
-        j = Idx("j","occ")
-        a = Idx("a","vir")
-        b = Idx("b","vir")
-        t1 = Term(1.0, [Sigma(i),Sigma(j)],
-                [Tensor([i,j],'f')],
-                [Operator(i, True), Operator(j, False)],
-                [])
-        t2 = Term(1.0, [Sigma(i),Sigma(a)],
-                [Tensor([i,a],'f')],
-                [Operator(i, True), Operator(a, False)],
-                [])
-        t3 = Term(1.0, [Sigma(a), Sigma(i)],
-                [Tensor([a,i], 'f')],
-                [Operator(a, True), Operator(i, False)],
-                [])
-        t4 = Term(1.0, [Sigma(a),Sigma(b)],
-                [Tensor([a,b],'f')],
-                [Operator(a, True), Operator(b, False)],
-                [])
-        e = Expression([t1,t2,t3,t4])
-        #print(e)
+        e = one_e("f", ["occ","vir"])
         x = apply_wick(e)
         x.resolve()
         print(x)
@@ -44,19 +23,7 @@ class TestSCRules(unittest.TestCase):
         self.assertTrue(len(x.terms[0].sums) == 1)
 
     def test_0d2(self):
-        # 0 differences, 2-particle operator
-        i = Idx("i","occ")
-        j = Idx("j","occ")
-        k = Idx("k","occ")
-        l = Idx("l","occ")
-        asym = TensorSym([(0,1,2,3),(1,0,2,3),(0,1,3,2),(1,0,3,2)],
-                [1.0, -1.0, -1.0, 1.0])
-        t1 = Term(0.25, [Sigma(i),Sigma(j),Sigma(k),Sigma(l)],
-                [Tensor([i,j,k,l],'I',sym=asym)],
-                [Operator(i, True), Operator(j, True),
-                    Operator(l, False), Operator(k, False)],
-                [])
-        e = Expression([t1])
+        e = two_e("I", ["occ","vir"])
         x = apply_wick(e)
         x.resolve()
         print(x)
