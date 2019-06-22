@@ -16,10 +16,20 @@ class Operator(object):
         else:
             return "a_" + str(self.idx)
 
+class TensorSym(object):
+    def __init__(self, plist, signs):
+        self.plist = plist
+        self.signs = signs
+        self.tlist = [(p,s) for p,s in zip(plist,signs)]
+
 class Tensor(object):
-    def __init__(self, indices, name):
+    def __init__(self, indices, name, sym=None):
         self.indices = indices
         self.name = name
+        if sym is None:
+            self.sym = TensorSym([tuple([i for i in range(len(indices))])], [1.0])
+        else:
+            self.sym = sym
 
     def __eq__(self, other):
         return self.indices == other.indices \
@@ -42,6 +52,11 @@ class Tensor(object):
 
         return self.name + "_{" + s + "}"
 
+def permute(t, p):
+    name = str(t.name)
+    indices = [t.indices[i] for i in p]
+    newt = Tensor(indices, name, sym=t.sym)
+    return newt
 
 class Sigma(object):
     def __init__(self, idx):

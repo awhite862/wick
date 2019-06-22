@@ -1,6 +1,7 @@
 import unittest
 
 from wick.index import Idx
+from wick.operator import *
 from wick.expression import *
 from wick.wick import apply_wick
 
@@ -18,19 +19,19 @@ class TestSCRules(unittest.TestCase):
         j = Idx("j","occ")
         a = Idx("a","vir")
         b = Idx("b","vir")
-        t1 = Term(1.0, [Sigma(i),Sigma(j)], 
+        t1 = Term(1.0, [Sigma(i),Sigma(j)],
                 [Tensor([i,j],'f')],
                 [Operator(i, True), Operator(j, False)],
                 [])
-        t2 = Term(1.0, [Sigma(i),Sigma(a)], 
+        t2 = Term(1.0, [Sigma(i),Sigma(a)],
                 [Tensor([i,a],'f')],
                 [Operator(i, True), Operator(a, False)],
                 [])
-        t3 = Term(1.0, [Sigma(a), Sigma(i)], 
+        t3 = Term(1.0, [Sigma(a), Sigma(i)],
                 [Tensor([a,i], 'f')],
                 [Operator(a, True), Operator(i, False)],
                 [])
-        t4 = Term(1.0, [Sigma(a),Sigma(b)], 
+        t4 = Term(1.0, [Sigma(a),Sigma(b)],
                 [Tensor([a,b],'f')],
                 [Operator(a, True), Operator(b, False)],
                 [])
@@ -48,8 +49,10 @@ class TestSCRules(unittest.TestCase):
         j = Idx("j","occ")
         k = Idx("k","occ")
         l = Idx("l","occ")
-        t1 = Term(0.25, [Sigma(i),Sigma(j),Sigma(k),Sigma(l)], 
-                [Tensor([i,j,k,l],'I')],
+        asym = TensorSym([(0,1,2,3),(1,0,2,3),(0,1,3,2),(1,0,3,2)],
+                [1.0, -1.0, -1.0, 1.0])
+        t1 = Term(0.25, [Sigma(i),Sigma(j),Sigma(k),Sigma(l)],
+                [Tensor([i,j,k,l],'I',sym=asym)],
                 [Operator(i, True), Operator(j, True),
                     Operator(l, False), Operator(k, False)],
                 [])

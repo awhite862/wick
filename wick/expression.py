@@ -1,6 +1,7 @@
 from copy import deepcopy
+from itertools import product
 from numbers import Number
-from operator import Sigma, Delta, Operator, Tensor
+from operator import Sigma, Delta, Operator, Tensor, permute
 
 class TermMap(object):
 
@@ -191,13 +192,44 @@ class Term(object):
         else:
             return NotImplemented
 
+    def pmatch(self, other):
+        if isinstance(other, Term):
+            tlists = [t.sym.tlist for t in other.tensors]
+            TM1 = TermMap(self.sums, self.tensors, self.operators, self.deltas)
+            for xs in product(*tlists):
+                sign = 1.0
+                for x in xs: sign *= x[1]
+                newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
+                TM2 = TermMap(other.sums, newtensors, other.operators, other.deltas)
+                if TM1 == TM2: return sign
+            return None
+        else: return NotImplemented
+
 class Expression(object):
     def __init__(self, terms):
         self.terms = terms
+        self.tthresh = 1e-15
 
     def resolve(self):
         for i in range(len(self.terms)):
             self.terms[i].resolve()
+
+        # get rid of terms that are zero
+        self.terms = filter(lambda x: abs(x.scalar) > self.tthresh, self.terms)
+
+        # compress all symmetry-related terms
+        newterms = []
+        while self.terms:
+            t1 = self.terms[0]
+            tm = filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]])
+            s = t1.scalar
+            for t in tm: s += t[1]*t[0].scalar
+            t1.scalar = s
+            newterms.append(deepcopy(t1))
+            tm = [t[0] for t in tm]
+            self.terms = filter(lambda x: x not in tm, self.terms[1:])
+        self.terms = newterms
+
     def __repr__(self):
         s = str()
         for t in self.terms:
