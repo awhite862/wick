@@ -92,23 +92,18 @@ class Term(object):
             # 3 sums over both indices
             case = 0
 
-            dindx = []
-            for i in range(len(self.sums)):
-                idx = self.sums[i].idx
+            dindx = -1 # index of sum to delete
+            for i,s in enumerate(self.sums):
+                idx = s.idx
                 if i2 == idx:
-                    dindx.append(i)
+                    dindx = i
                     case = 3 if case == 1 else 2
-                    break
                 elif i1 == idx:
-                    dindx.append(i)
                     case = 3 if case == 2 else 1
-                    break;
+                    if case != 3: dindx = i
 
-            if len(dindx) > 0:
-                dindx.sort()
-                dindx = dindx[::-1]
-                for j in dindx:
-                    del self.sums[j]
+            if dindx >= 0:
+                del self.sums[dindx]
 
             for tt in self.tensors:
                 for k in range(len(tt.indices)):
@@ -126,7 +121,6 @@ class Term(object):
                 else:
                     if oo.index == i2:
                         oo.index = i1
-
 
             if case == 0 and i1 != i2:
                 dnew.append(dd)
