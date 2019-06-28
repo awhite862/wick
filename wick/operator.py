@@ -1,3 +1,5 @@
+from .index import Idx
+
 class Operator(object):
     def __init__(self, idx, ca):
         self.idx = idx
@@ -48,9 +50,16 @@ class Tensor(object):
         temp = self.name
         s = str()
         for idx in self.indices:
-            s += idx.index
+            s += str(idx.index)
 
         return self.name + "_{" + s + "}"
+
+    #def ilist(self):
+    #    ilist = []
+    #    for idx in self.indices:
+    #        ii = idx.index
+    #        if ii not in ilist: ilist.append(ii)
+    #    return ilist
 
 def permute(t, p):
     name = str(t.name)
@@ -90,7 +99,7 @@ class Delta(object):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return hash(''.join(sorted(self.i1.index + self.i2.index)))
+        return hash(''.join(sorted(str(self.i1.index) + str(self.i2.index))))
 
     def __repr__(self):
-        return "\delta_{" + self.i1.index + "," + self.i2.index + "}"
+        return "\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"

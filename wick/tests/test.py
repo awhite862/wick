@@ -8,11 +8,11 @@ tensors = []
 operators = []
 deltas = []
 
-indices = [Idx("a","vir"),Idx("b","vir")]
-indices2 = [Idx("i","occ"),Idx("j","occ")]
+indices = [Idx(0,"vir"),Idx(1,"vir")]
+indices2 = [Idx(0,"occ"),Idx(1,"occ")]
 sums.append(Sigma(indices[0]))
 sums.append(Sigma(indices[1]))
-sums.append(Sigma(Idx("i","occ")))
+sums.append(Sigma(Idx(0,"occ")))
 tensors.append(Tensor(indices2, "f"))
 tensors.append(Tensor(indices, "f"))
 operators.append(Operator(indices[0], False))

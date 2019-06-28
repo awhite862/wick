@@ -146,11 +146,19 @@ class Term(object):
             new.scalar *= other
             return new
         elif isinstance(other, Term):
-            scalar = self.scalar*other.scalar
-            sums = self.sums + other.sums
-            tensors = self.tensors + other.tensors
-            operators = self.operators + other.operators
-            deltas = self.deltas + other.deltas
+            #sil1 = set(self.ilist())
+            #sil2 = set(other.ilist())
+            #if sil1.intersection(sil2):
+            #    new = other._igen("1")
+            #    print("Here we are")
+            #    print(new)
+            #else:
+            new = other
+            scalar = self.scalar*new.scalar
+            sums = self.sums + new.sums
+            tensors = self.tensors + new.tensors
+            operators = self.operators + new.operators
+            deltas = self.deltas + new.deltas
             return Term(scalar, sums, tensors, operators, deltas)
         else:
             return NotImplemented
@@ -176,6 +184,13 @@ class Term(object):
     def __neq__(self, other):
         return not self.__eq__(other)
 
+    #def _igen(self, I):
+    #    sums = [ss._igen(I) for ss in self.sums]
+    #    tensors = [tt._igen(I) for tt in self.tensors]
+    #    operators = [oo._igen(I) for oo in self.operators]
+    #    deltas = [dd._igen(I) for dd in self.deltas]
+    #    return Term(self.scalar, sums, tensors, operators, deltas)
+
     def match(self, other):
         if isinstance(other, Term):
             if len(self.deltas) > 0 or len(other.deltas) > 0:
@@ -198,6 +213,25 @@ class Term(object):
                 if TM1 == TM2: return sign
             return None
         else: return NotImplemented
+
+    #def ilist(self):
+    #    ilist = []
+    #    for ss in self.sums:
+    #        ii = ss.idx.index
+    #        if ii not in ilist: ilist.append(ii)
+    #    for tt in self.tensors:
+    #        itlst = tt.ilist()
+    #        for ii in itlst:
+    #            if ii not in ilist: ilist.append(ii)
+    #    for oo in self.operators:
+    #        ii = oo.idx.index
+    #        if ii not in ilist: ilist.append(ii)
+    #    for dd in self.deltas:
+    #        ii1 = dd.i1.index
+    #        ii2 = dd.i2.index
+    #        if ii1 not in ilist: ilist.append(ii1)
+    #        if ii2 not in ilist: ilist.append(ii2)
+    #    return ilist
 
 class Expression(object):
     def __init__(self, terms):

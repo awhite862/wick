@@ -4,7 +4,7 @@ class Idx(object):
         self.space = space
 
     def __repr__(self):
-        return self.index + "(" + self.space + ")"
+        return str(self.index) + "(" + self.space + ")"
 
     def __hash__(self):
         return hash(str(self))

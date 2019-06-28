@@ -5,8 +5,8 @@ from wick.operator import *
 
 class OperatorTest(unittest.TestCase):
     def test_operator(self):
-        i = Idx("i","occ")
-        j = Idx("j","occ")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
         O1 = Operator(i, False)
         O2 = Operator(i, False)
         O3 = Operator(j, False)
@@ -17,8 +17,8 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(O2 != O4)
 
     def test_tensor(self):
-        i = Idx("i","occ")
-        a = Idx("a","vir")
+        i = Idx(0,"occ")
+        a = Idx(0,"vir")
         T1 = Tensor([i,a], "g")
         T2 = Tensor([i,a], "f")
         T3 = Tensor([i,a], "f")
@@ -29,9 +29,9 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(T1 != T4) 
 
     def test_sigma(self):
-        i = Idx("i","occ")
-        j = Idx("j","occ")
-        a = Idx("a","vir")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
+        a = Idx(0,"vir")
         S1 = Sigma(i)
         S2 = Sigma(i)
         S3 = Sigma(j)
@@ -42,10 +42,10 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(S3 != S4)
 
     def test_delta(self):
-        i = Idx("i","occ")
-        j = Idx("j","occ")
-        a = Idx("a","vir")
-        b = Idx("b","vir")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
+        a = Idx(0,"vir")
+        b = Idx(1,"vir")
         D1 = Delta(i,j)
         D2 = Delta(i,j)
         D3 = Delta(j,i)

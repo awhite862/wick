@@ -6,8 +6,8 @@ from wick.expression import *
 class TermTest(unittest.TestCase):
     def test_scalar_mul(self):
         s = 1.0
-        i = Idx("i","occ")
-        j = Idx("j","occ")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         operators = [Operator(i, True), Operator(j, False)]
@@ -17,10 +17,10 @@ class TermTest(unittest.TestCase):
         self.assertTrue(t1 == t2)
 
     def test_mul(self):
-        i = Idx("i","occ")
-        j = Idx("j","occ")
-        a = Idx("a","vir")
-        b = Idx("b","vir")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
+        a = Idx(0,"vir")
+        b = Idx(1,"vir")
         sum1 = [Sigma(i), Sigma(j)]
         ten1 = [Tensor([i,j], 'f')]
         ops1 = [Operator(i, True), Operator(j, False)]
@@ -40,8 +40,8 @@ class TermTest(unittest.TestCase):
 
     def test_term_map(self):
         s = 1.0
-        i = Idx("i","occ")
-        j = Idx("j","occ")
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         operators = [Operator(i, True), Operator(j, False)]
@@ -58,6 +58,30 @@ class TermTest(unittest.TestCase):
         self.assertTrue(t1.match(t2))
         self.assertTrue(t1.match(t3))
         self.assertTrue(t2.match(t3))
+
+    #def test_ilist(self):
+    #    s = 1.0
+    #    i = Idx("i","occ")
+    #    j = Idx("j","occ")
+    #    sums = [Sigma(i), Sigma(j)]
+    #    tensors = [Tensor([i,j], 'f')]
+    #    operators = [Operator(i, True), Operator(j, False)]
+    #    t1 = Term(s, sums, tensors, operators, [])
+    #    ilist = t1.ilist()
+    #    iref = ['i', 'j']
+    #    self.assertTrue(set(iref) == set(ilist))
+
+    #def test_mul(self):
+    #    s = 1.0
+    #    i = Idx("i","occ")
+    #    j = Idx("j","occ")
+    #    sums = [Sigma(i), Sigma(j)]
+    #    tensors = [Tensor([i,j], 'f')]
+    #    operators = [Operator(i, True), Operator(j, False)]
+    #    t1 = Term(s, sums, tensors, operators, [])
+
+    #    t3 = t1*t1
+    #    print(t3)
 
 if __name__ == '__main__':
     unittest.main()
