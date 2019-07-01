@@ -18,6 +18,9 @@ class Operator(object):
         else:
             return "a_" + str(self.idx)
 
+    def _inc(self, i):
+        return Operator(Idx(self.idx.index + i, self.idx.space), self.ca)
+
 class TensorSym(object):
     def __init__(self, plist, signs):
         self.plist = plist
@@ -54,6 +57,10 @@ class Tensor(object):
 
         return self.name + "_{" + s + "}"
 
+    def _inc(self, i):
+        indices = [Idx(ii.index + i, ii.space) for ii in self.indices]
+        return Tensor(indices, self.name, sym=self.sym)
+
     def ilist(self):
         ilist = []
         for idx in self.indices:
@@ -82,6 +89,9 @@ class Sigma(object):
     def __repr__(self):
         return "\sum_{" + str(self.idx.index) + "}"
 
+    def _inc(self, i):
+        return Sigma(Idx(self.idx.index + i, self.idx.space))
+
 class Delta(object):
     def __init__(self, i1, i2):
         assert(i1.space == i2.space)
@@ -102,3 +112,6 @@ class Delta(object):
 
     def __repr__(self):
         return "\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
+
+    def _inc(self, i):
+        return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + 1, self.i2.space))

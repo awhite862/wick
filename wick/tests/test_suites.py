@@ -15,6 +15,7 @@ def run_suite():
 
     suite.addTest(test_term.TermTest("test_scalar_mul"))
     suite.addTest(test_term.TermTest("test_mul"))
+    suite.addTest(test_term.TermTest("test_mul2"))
     suite.addTest(test_term.TermTest("test_term_map"))
 
     return suite

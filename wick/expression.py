@@ -146,14 +146,14 @@ class Term(object):
             new.scalar *= other
             return new
         elif isinstance(other, Term):
-            #sil1 = set(self.ilist())
-            #sil2 = set(other.ilist())
-            #if sil1.intersection(sil2):
-            #    new = other._igen("1")
-            #    print("Here we are")
-            #    print(new)
-            #else:
-            new = other
+            sil1 = set(self.ilist())
+            sil2 = set(other.ilist())
+            if sil1.intersection(sil2):
+                m = max([i.index for i in sil2])
+                new = other._inc(m + 1)
+                #print(new)
+            else:
+                new = other
             scalar = self.scalar*new.scalar
             sums = self.sums + new.sums
             tensors = self.tensors + new.tensors
@@ -184,12 +184,12 @@ class Term(object):
     def __neq__(self, other):
         return not self.__eq__(other)
 
-    #def _igen(self, I):
-    #    sums = [ss._igen(I) for ss in self.sums]
-    #    tensors = [tt._igen(I) for tt in self.tensors]
-    #    operators = [oo._igen(I) for oo in self.operators]
-    #    deltas = [dd._igen(I) for dd in self.deltas]
-    #    return Term(self.scalar, sums, tensors, operators, deltas)
+    def _inc(self, i):
+        sums = [s._inc(i) for s in self.sums]
+        tensors = [t._inc(i) for t in self.tensors]
+        operators = [o._inc(i) for o in self.operators]
+        deltas = [d._inc(i) for d in self.deltas]
+        return Term(self.scalar, sums, tensors, operators, deltas)
 
     def match(self, other):
         if isinstance(other, Term):

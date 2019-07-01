@@ -71,17 +71,25 @@ class TermTest(unittest.TestCase):
         iref = [i, j]
         self.assertTrue(set(iref) == set(ilist))
 
-    #def test_mul(self):
-    #    s = 1.0
-    #    i = Idx("i","occ")
-    #    j = Idx("j","occ")
-    #    sums = [Sigma(i), Sigma(j)]
-    #    tensors = [Tensor([i,j], 'f')]
-    #    operators = [Operator(i, True), Operator(j, False)]
-    #    t1 = Term(s, sums, tensors, operators, [])
+    def test_mul2(self):
+        s = 1.0
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i,j], 'f')]
+        operators = [Operator(i, True), Operator(j, False)]
+        t1 = Term(s, sums, tensors, operators, [])
 
-    #    t3 = t1*t1
-    #    print(t3)
+        t3 = t1*t1
+        k = Idx(2,"occ")
+        l = Idx(3,"occ")
+        sums = [Sigma(i), Sigma(j), Sigma(k), Sigma(l)]
+        tensors = [Tensor([i,j], 'f'),Tensor([k,l], 'f')]
+        operators = [Operator(i, True), Operator(j, False),
+                Operator(k, True), Operator(l, False)]
+        #print(t3)
+        ttest = Term(s, sums, tensors, operators, [])
+        self.assertTrue(t3 == ttest)
 
 if __name__ == '__main__':
     unittest.main()
