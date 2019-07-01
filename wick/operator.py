@@ -54,12 +54,11 @@ class Tensor(object):
 
         return self.name + "_{" + s + "}"
 
-    #def ilist(self):
-    #    ilist = []
-    #    for idx in self.indices:
-    #        ii = idx.index
-    #        if ii not in ilist: ilist.append(ii)
-    #    return ilist
+    def ilist(self):
+        ilist = []
+        for idx in self.indices:
+            if idx not in ilist: ilist.append(idx)
+        return ilist
 
 def permute(t, p):
     name = str(t.name)

@@ -59,17 +59,17 @@ class TermTest(unittest.TestCase):
         self.assertTrue(t1.match(t3))
         self.assertTrue(t2.match(t3))
 
-    #def test_ilist(self):
-    #    s = 1.0
-    #    i = Idx("i","occ")
-    #    j = Idx("j","occ")
-    #    sums = [Sigma(i), Sigma(j)]
-    #    tensors = [Tensor([i,j], 'f')]
-    #    operators = [Operator(i, True), Operator(j, False)]
-    #    t1 = Term(s, sums, tensors, operators, [])
-    #    ilist = t1.ilist()
-    #    iref = ['i', 'j']
-    #    self.assertTrue(set(iref) == set(ilist))
+    def test_ilist(self):
+        s = 1.0
+        i = Idx("i","occ")
+        j = Idx("j","occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i,j], 'f')]
+        operators = [Operator(i, True), Operator(j, False)]
+        t1 = Term(s, sums, tensors, operators, [])
+        ilist = t1.ilist()
+        iref = [i, j]
+        self.assertTrue(set(iref) == set(ilist))
 
     #def test_mul(self):
     #    s = 1.0

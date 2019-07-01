@@ -214,24 +214,24 @@ class Term(object):
             return None
         else: return NotImplemented
 
-    #def ilist(self):
-    #    ilist = []
-    #    for ss in self.sums:
-    #        ii = ss.idx.index
-    #        if ii not in ilist: ilist.append(ii)
-    #    for tt in self.tensors:
-    #        itlst = tt.ilist()
-    #        for ii in itlst:
-    #            if ii not in ilist: ilist.append(ii)
-    #    for oo in self.operators:
-    #        ii = oo.idx.index
-    #        if ii not in ilist: ilist.append(ii)
-    #    for dd in self.deltas:
-    #        ii1 = dd.i1.index
-    #        ii2 = dd.i2.index
-    #        if ii1 not in ilist: ilist.append(ii1)
-    #        if ii2 not in ilist: ilist.append(ii2)
-    #    return ilist
+    def ilist(self):
+        ilist = []
+        for ss in self.sums:
+            idx = ss.idx
+            if idx not in ilist: ilist.append(idx)
+        for tt in self.tensors:
+            itlst = tt.ilist()
+            for ii in itlst:
+                if ii not in ilist: ilist.append(ii)
+        for oo in self.operators:
+            idx = oo.idx
+            if idx not in ilist: ilist.append(idx)
+        for dd in self.deltas:
+            ii1 = dd.i1
+            ii2 = dd.i2
+            if ii1 not in ilist: ilist.append(ii1)
+            if ii2 not in ilist: ilist.append(ii2)
+        return ilist
 
 class Expression(object):
     def __init__(self, terms):
