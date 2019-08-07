@@ -211,9 +211,9 @@ class Term(object):
         #print(imap)
         return imap
 
-    def _print_str(self):
+    def _print_str(self,with_scalar=True):
         imap = self._idx_map()
-        s = str(self.scalar)
+        s = str(self.scalar) if with_scalar else str()
         for ss in self.sums:
             s += ss._print_str(imap)
         for dd in self.deltas:
@@ -313,7 +313,9 @@ class Expression(object):
     def _print_str(self):
         s = str()
         for t in self.terms:
-           s += t._print_str()
-           s += " + "
+            sca = t.scalar
+            num = abs(sca)
+            sign = " + " if sca > 0 else " - "
+            s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
 
-        return s[:-2]
+        return s[:-1]

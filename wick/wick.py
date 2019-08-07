@@ -1,12 +1,11 @@
-from operator import Operator, Sigma, Delta
-from expression import Term, Expression
+from .operator import Operator, Sigma, Delta
+from .expression import Term, Expression
 import copy
 
 def are_operators(e):
     for i in range(len(e.terms)):
         if len(e.terms[i].operators) > 0:
             return True
-
     return False
 
 def is_occupied(s, occ):
@@ -14,6 +13,17 @@ def is_occupied(s, occ):
         return 'o' in s
     else:
         return s in occ
+
+def qp_creation(op, occ=None):
+    if (not is_occupied(op.idx.space, occ)) and op.ca:
+        return True
+    elif (is_occupied(op.idx.space, occ)) and not op.ca:
+        return True
+    else:
+        return False
+
+def qp_anihilation(op, occ=None):
+    return not qp_creation(op, occ=occ)
 
 def pair_list(lst):
     n = len(lst)

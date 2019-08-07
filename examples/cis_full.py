@@ -6,7 +6,7 @@ from wick.wick import apply_wick
 H1 = one_e("f",["occ","vir"])
 H2 = two_e("I",["occ","vir"])
 
-H = H1# + H2
+H = H1 + H2
 i = Idx(0,"occ")
 a = Idx(0,"vir")
 operators = [Operator(i,True), Operator(a,False)]
@@ -19,8 +19,8 @@ ket = Expression([Term(1.0,
 
 HC = H*ket
 S = bra*HC
-temp = Expression(HC.terms[0:1])
-tt = bra*temp
-out = apply_wick(tt)
+#temp = Expression(HC.terms[0:1])
+#tt = bra*temp
+out = apply_wick(S)
 out.resolve()
 print(out._print_str())
