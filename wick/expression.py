@@ -1,7 +1,7 @@
 from copy import deepcopy
 from itertools import product
 from numbers import Number
-from operator import Sigma, Delta, Operator, Tensor, permute
+from .operator import Sigma, Delta, Operator, Tensor, permute
 
 class TermMap(object):
 
@@ -64,6 +64,9 @@ class TermMap(object):
                     break
             if not found: return False
         return True
+
+def default_index_key():
+    return {"occ" : "ijklmno", "vir" : "abcdefg"}
 
 class Term(object):
     def __init__(self, scalar, sums, tensors, operators, deltas):
@@ -149,9 +152,8 @@ class Term(object):
             sil1 = set(self.ilist())
             sil2 = set(other.ilist())
             if sil1.intersection(sil2):
-                m = max([i.index for i in sil2])
+                m = max([i.index for i in sil1])
                 new = other._inc(m + 1)
-                #print(new)
             else:
                 new = other
             scalar = self.scalar*new.scalar
@@ -191,6 +193,37 @@ class Term(object):
         deltas = [d._inc(i) for d in self.deltas]
         return Term(self.scalar, sums, tensors, operators, deltas)
 
+    def _idx_map(self, indices=None):
+        if indices is None:
+            indices = default_index_key()
+        ilist = self.ilist()
+        off = {}
+        imap = {}
+        for idx in ilist:
+            n,s = idx.index,idx.space
+            if s in off:
+                o = off[s]
+                off[s] += 1
+            else:
+                o = 0
+                off[s] = 1
+            imap[idx] = indices[s][o]
+        #print(imap)
+        return imap
+
+    def _print_str(self):
+        imap = self._idx_map()
+        s = str(self.scalar)
+        for ss in self.sums:
+            s += ss._print_str(imap)
+        for dd in self.deltas:
+            s += dd._print_str(imap)
+        for tt in self.tensors:
+            s += tt._print_str(imap)
+        for oo in self.operators:
+            s += oo._print_str(imap)
+        return s
+
     def match(self, other):
         if isinstance(other, Term):
             if len(self.deltas) > 0 or len(other.deltas) > 0:
@@ -216,6 +249,9 @@ class Term(object):
 
     def ilist(self):
         ilist = []
+        for oo in self.operators:
+            idx = oo.idx
+            if idx not in ilist: ilist.append(idx)
         for ss in self.sums:
             idx = ss.idx
             if idx not in ilist: ilist.append(idx)
@@ -223,9 +259,6 @@ class Term(object):
             itlst = tt.ilist()
             for ii in itlst:
                 if ii not in ilist: ilist.append(ii)
-        for oo in self.operators:
-            idx = oo.idx
-            if idx not in ilist: ilist.append(idx)
         for dd in self.deltas:
             ii1 = dd.i1
             ii2 = dd.i2
@@ -272,4 +305,15 @@ class Expression(object):
         else: return NotImplemented
 
     def __mul__(self, other):
-        pass
+        if isinstance(other, Expression):
+            terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
+            return Expression(terms)
+        else: return NotImplemented
+
+    def _print_str(self):
+        s = str()
+        for t in self.terms:
+           s += t._print_str()
+           s += " + "
+
+        return s[:-2]

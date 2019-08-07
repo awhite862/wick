@@ -15,6 +15,40 @@ def is_occupied(s, occ):
     else:
         return s in occ
 
+def pair_list(lst):
+    n = len(lst)
+    assert(n%2 == 0)
+    if n < 2:
+        return [[],]
+    if n == 2:
+        return [[(lst[0],lst[1])],]
+    else:
+        plist = []
+        for i,x in enumerate(lst[1:]):
+            p1 = [(lst[0],x),]
+            remainder = pair_list(lst[1:i+1] + lst[i+2:])
+            for r in remainder:
+                plist.append(p1 + r)
+        return plist
+
+def find_pair(i, ipairs):
+    for p in ipairs:
+        if p[0] == i or p[1] ==i:
+            return p
+
+def get_sign(ipairs):
+    ncross = 0
+    for p in ipairs:
+        i,j = p
+        for x1 in range(i+1,j):
+            p1 = find_pair(x1, ipairs)
+            x2 = p1[0] if p1[1] == x1 else p1[1]
+            if x2 > j or x2 < i: ncross += 1
+
+    assert(ncross%2 == 0)
+    ncross = ncross//2
+    return 1.0 if ncross%2 == 0 else -1.0
+
 def apply_wick(e, occ=None):
     to = []
     # loop over terms
@@ -26,32 +60,38 @@ def apply_wick(e, occ=None):
         if len(temp.operators) == 0:
             to.append(copy.deepcopy(temp))
             continue
-
         # loop to find a contraction
-        for i,oi in enumerate(temp.operators):
-            for j,oj in enumerate(temp.operators):
-                if j <= i or not oi.idx.space == oj.idx.space:
-                    continue
-
-                # if there is a non-zero contraction, do it
+        plist = pair_list(temp.operators)
+        for pairs in plist:
+            t1 = copy.deepcopy(temp)
+            t1.operators = []
+            good = True
+            ipairs = []
+            for p in pairs:
+                oi,oj = p
+                if oi.idx.space != oj.idx.space:
+                    good = False
+                    break
                 if (is_occupied(oi.idx.space, occ) and oi.ca and not oj.ca) or (
                     not is_occupied(oi.idx.space, occ) and not oi.ca and oj.ca):
-                    sign = 1 if (i - j + 1)%2 == 0 else -1
+                    i = temp.operators.index(oi)
+                    j = temp.operators.index(oj)
+                    ipairs.append((i,j))
                     i1 = oi.idx
                     i2 = oj.idx
-                    t1 = copy.deepcopy(temp)
-                    t1.scalar = t1.scalar*sign
-                    del(t1.operators[j])
-                    del(t1.operators[i])
                     t1.deltas.append(Delta(i1,i2))
-
-                    # append to output
-                    to.append(t1)
+                else:
+                    good = False
                     break
+            # append to output
+            if good:
+                sign = get_sign(ipairs)
+                t1.scalar = sign*t1.scalar
+                to.append(t1)
         
     o = Expression(to)
     if are_operators(o):
-        return(apply_wick(o))
+        raise Exception("Application of Wick's theorem has failed!")
     else:
         return o
 

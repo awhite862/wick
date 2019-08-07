@@ -21,6 +21,13 @@ class Operator(object):
     def _inc(self, i):
         return Operator(Idx(self.idx.index + i, self.idx.space), self.ca)
 
+    def _print_str(self, imap):
+        if self.ca:
+            return "a^{\dagger}_" + imap[self.idx]
+        else:
+            return "a_" + imap[self.idx]
+
+
 class TensorSym(object):
     def __init__(self, plist, signs):
         self.plist = plist
@@ -67,6 +74,14 @@ class Tensor(object):
             if idx not in ilist: ilist.append(idx)
         return ilist
 
+    def _print_str(self, imap):
+        temp = self.name
+        s = str()
+        for idx in self.indices:
+            s += imap[idx]
+
+        return self.name + "_{" + s + "}"
+
 def permute(t, p):
     name = str(t.name)
     indices = [t.indices[i] for i in p]
@@ -92,6 +107,9 @@ class Sigma(object):
     def _inc(self, i):
         return Sigma(Idx(self.idx.index + i, self.idx.space))
 
+    def _print_str(self, imap):
+        return "\sum_{" + imap[self.idx] + "}"
+
 class Delta(object):
     def __init__(self, i1, i2):
         assert(i1.space == i2.space)
@@ -115,3 +133,6 @@ class Delta(object):
 
     def _inc(self, i):
         return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + 1, self.i2.space))
+
+    def _print_str(self, imap):
+        return "\delta_{" + imap[self.i1] + imap[self.i2] + "}"

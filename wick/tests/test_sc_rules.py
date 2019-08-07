@@ -18,15 +18,18 @@ class TestSCRules(unittest.TestCase):
         e = one_e("f", ["occ","vir"])
         x = apply_wick(e)
         x.resolve()
-        print(x)
+        #print(x)
         self.assertTrue(len(x.terms) == 1)
         self.assertTrue(len(x.terms[0].sums) == 1)
 
     def test_0d2(self):
         e = two_e("I", ["occ","vir"])
+        e = Expression(e.terms[0:1])
+        print(e._print_str())
         x = apply_wick(e)
+        print(x._print_str())
         x.resolve()
-        print(x)
+        print(x._print_str())
         self.assertTrue(True)
 
     def test_1d0(self):
