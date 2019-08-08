@@ -77,3 +77,6 @@ def two_e(name, spaces, anti=True, norder=False):
                             [])
                     terms.append(t)
     return Expression(terms)
+
+def commute(A, B):
+    return A*B - B*A

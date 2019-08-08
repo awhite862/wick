@@ -303,11 +303,20 @@ class Expression(object):
             return Expression(self.terms + other.terms)
         else: return NotImplemented
 
-    def __mul__(self, other):
+    def __sub__(self, other):
         if isinstance(other, Expression):
+            return self + -1.0*other
+
+    def __mul__(self, other):
+        if isinstance(other, Number):
+            new = Expression([other*t for t in self.terms])
+            return new
+        elif isinstance(other, Expression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return Expression(terms)
         else: return NotImplemented
+
+    __rmul__ = __mul__
 
     def _print_str(self):
         s = str()
