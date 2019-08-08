@@ -1,6 +1,12 @@
 from .index import Idx
 
 class Operator(object):
+    """
+    Fermion creation/annihilation operators
+    
+    idx (Idx): Index of operator
+    ca (Bool): Creation operator?
+    """
     def __init__(self, idx, ca):
         self.idx = idx
         self.ca = ca
@@ -19,6 +25,7 @@ class Operator(object):
             return "a_" + str(self.idx)
 
     def _inc(self, i):
+        """Increment indices"""
         return Operator(Idx(self.idx.index + i, self.idx.space), self.ca)
 
     def _print_str(self, imap):
@@ -29,12 +36,26 @@ class Operator(object):
 
 
 class TensorSym(object):
+    """
+    Representation of tensor permutational symmetry
+
+    plist (lsit): List of tuples representing permutations of indices
+    signs (list): List of signs representing the signes of each permutation
+    tlist (list): List of permutation, sign pairs
+    """
     def __init__(self, plist, signs):
         self.plist = plist
         self.signs = signs
         self.tlist = [(p,s) for p,s in zip(plist,signs)]
 
 class Tensor(object):
+    """
+    Tensor
+
+    indices (list): List of indices
+    name (str): Name of the tensor
+    sym (TensorSym): Permutational symmetry of tensor
+    """
     def __init__(self, indices, name, sym=None):
         self.indices = indices
         self.name = name

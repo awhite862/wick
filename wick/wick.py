@@ -73,10 +73,9 @@ def apply_wick(e, occ=None):
         # loop to find a contraction
         plist = pair_list(temp.operators)
         for pairs in plist:
-            t1 = copy.deepcopy(temp)
-            t1.operators = []
             good = True
             ipairs = []
+            deltas = []
             for p in pairs:
                 oi,oj = p
                 if oi.idx.space != oj.idx.space:
@@ -89,14 +88,18 @@ def apply_wick(e, occ=None):
                     ipairs.append((i,j))
                     i1 = oi.idx
                     i2 = oj.idx
-                    t1.deltas.append(Delta(i1,i2))
+                    deltas.append(Delta(i1,i2))
                 else:
                     good = False
                     break
             # append to output
             if good:
                 sign = get_sign(ipairs)
-                t1.scalar = sign*t1.scalar
+                t1 = Term(sign*temp.scalar,
+                        copy.deepcopy(temp.sums),
+                        copy.deepcopy(temp.tensors),
+                        [],
+                        deltas + copy.deepcopy(temp.deltas))
                 to.append(t1)
         
     o = Expression(to)

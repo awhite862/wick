@@ -275,20 +275,23 @@ class Expression(object):
             self.terms[i].resolve()
 
         # get rid of terms that are zero
-        self.terms = filter(lambda x: abs(x.scalar) > self.tthresh, self.terms)
+        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
         # compress all symmetry-related terms
         newterms = []
         while self.terms:
             t1 = self.terms[0]
-            tm = filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]])
+            tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
             s = t1.scalar
             for t in tm: s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(deepcopy(t1))
             tm = [t[0] for t in tm]
-            self.terms = filter(lambda x: x not in tm, self.terms[1:])
+            self.terms = list(filter(lambda x: x not in tm, self.terms[1:]))
         self.terms = newterms
+
+        # get rid of terms that are zero after compression
+        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
         s = str()

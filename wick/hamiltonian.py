@@ -62,10 +62,10 @@ def two_e(name, spaces, anti=True, norder=False):
             i = 0 if s2 != s1 else 1
             I2 = Idx(i,s2)
             for s3 in spaces:
-                xx = filter(lambda x: x,[s3 == s for s in [s1,s2]])
+                xx = list(filter(lambda x: x,[s3 == s for s in [s1,s2]]))
                 I3 = Idx(len(xx),s3)
                 for s4 in spaces:
-                    xx = filter(lambda x: x,[s4 == s for s in [s1,s2,s3]])
+                    xx = list(filter(lambda x: x,[s4 == s for s in [s1,s2,s3]]))
                     I4 = Idx(len(xx),s4)
                     operators = [Operator(I1, True), Operator(I2, True), Operator(I4,False), Operator(I3,False)]
                     nsign = 1.0

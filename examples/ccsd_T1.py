@@ -4,9 +4,13 @@ from wick.hamiltonian import one_e, two_e, get_sym, commute
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
+H2 = two_e("I",["occ","vir"], norder=True)
+H = H1 + H2
 
 i = Idx(0,"occ")
 a = Idx(0,"vir")
+j = Idx(1,"occ")
+b = Idx(1,"vir")
 operators = [Operator(i,True), Operator(a,False)]
 bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 T1 = Expression([Term(1.0,
@@ -14,10 +18,19 @@ T1 = Expression([Term(1.0,
     [Tensor([a, i], "t")],
     [Operator(a, True), Operator(i, False)],
     [])])
+T2 = Expression([Term(0.25,
+    [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
+    [Tensor([a, b, i, j], "t")],
+    [Operator(a, True), Operator(i, False), Operator(b, True), Operator(j, False)],
+    [])])
+T = T1 + T2
 
-HT = commute(H1,T1)
-HTT = commute(HT,T1)
-S = bra*(H1 + HT + 0.5*HTT)
+HT = commute(H,T)
+HTT = commute(HT,T)
+HTTT = commute(HTT,T)
+HTTTT = commute(HTTT,T)
+
+S = bra*(H + HT + (1.0/2.)*HTT + (1.0/6.0)*HTTT + (1.0/24.0)*HTTTT)
 out = apply_wick(S)
 out.resolve()
 print(out._print_str())
