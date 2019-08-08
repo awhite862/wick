@@ -208,7 +208,6 @@ class Term(object):
                 o = 0
                 off[s] = 1
             imap[idx] = indices[s][o]
-        #print(imap)
         return imap
 
     def _print_str(self,with_scalar=True):
@@ -252,13 +251,13 @@ class Term(object):
         for oo in self.operators:
             idx = oo.idx
             if idx not in ilist: ilist.append(idx)
-        for ss in self.sums:
-            idx = ss.idx
-            if idx not in ilist: ilist.append(idx)
         for tt in self.tensors:
             itlst = tt.ilist()
             for ii in itlst:
                 if ii not in ilist: ilist.append(ii)
+        for ss in self.sums:
+            idx = ss.idx
+            if idx not in ilist: ilist.append(idx)
         for dd in self.deltas:
             ii1 = dd.i1
             ii2 = dd.i2

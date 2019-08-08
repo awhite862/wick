@@ -76,6 +76,7 @@ class Tensor(object):
 
     def _print_str(self, imap):
         temp = self.name
+        if len(temp) == 0: return str()
         s = str()
         for idx in self.indices:
             s += imap[idx]

@@ -10,7 +10,7 @@ H = H1 + H2
 i = Idx(0,"occ")
 a = Idx(0,"vir")
 operators = [Operator(i,True), Operator(a,False)]
-bra = Expression([Term(1.0, [], [], operators, [])])
+bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 ket = Expression([Term(1.0,
     [Sigma(i), Sigma(a)],
     [Tensor([a, i], "c")],
