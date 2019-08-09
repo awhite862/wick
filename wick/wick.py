@@ -25,13 +25,27 @@ def qp_creation(op, occ=None):
 def qp_anihilation(op, occ=None):
     return not qp_creation(op, occ=occ)
 
-def pair_list(lst):
+def valid_contraction(o1, o2, occ=None):
+    if isinstance(o1, Operator) and isinstance(o2, Operator):
+         if o1.idx.space != o2.idx.space:
+             return False
+         if (is_occupied(o1.idx.space, occ) and o1.ca and not o2.ca) or (
+             not is_occupied(o1.idx.space, occ) and not o1.ca and o2.ca):
+             return True
+         return False
+    else:
+        return True
+
+def pair_list(lst,occ=None):
     n = len(lst)
     assert(n%2 == 0)
     if n < 2:
-        return [[],]
+        return []
     if n == 2:
-        return [[(lst[0],lst[1])],]
+        if valid_contraction(lst[0],lst[1],occ=occ):
+            return [[(lst[0],lst[1])],]
+        else:
+            return []
     else:
         plist = []
         for i,x in enumerate(lst[1:]):
@@ -73,7 +87,7 @@ def apply_wick(e, occ=None):
         # loop to find a contraction
         plist = pair_list(temp.operators)
         for pairs in plist:
-            good = True
+            good = bool(pairs)
             ipairs = []
             deltas = []
             for p in pairs:

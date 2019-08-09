@@ -18,19 +18,20 @@ T1 = Expression([Term(1.0,
     [Tensor([a, i], "t")],
     [Operator(a, True), Operator(i, False)],
     [])])
+sym = get_sym(True)
 T2 = Expression([Term(0.25,
     [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
-    [Tensor([a, b, i, j], "t")],
+    [Tensor([a, b, i, j], "t",sym=sym)],
     [Operator(a, True), Operator(i, False), Operator(b, True), Operator(j, False)],
     [])])
 T = T1 + T2
 
 HT = commute(H,T)
 HTT = commute(HT,T)
-HTTT = commute(HTT,T)
-HTTTT = commute(HTTT,T)
+#HTTT = commute(HTT,T)
+#HTTTT = commute(HTTT)
 
-S = bra*(H + HT + (1.0/2.)*HTT + (1.0/6.0)*HTTT + (1.0/24.0)*HTTTT)
+S = bra*(H + HT + (1.0/2.0)*HTT)
 out = apply_wick(S)
 out.resolve()
 print(out._print_str())
