@@ -44,15 +44,15 @@ class TermTest(unittest.TestCase):
         j = Idx(1,"occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
-        operators = [Operator(i, True), Operator(j, False)]
+        operators = []#[Operator(i, True), Operator(j, False)]
         t1 = Term(s, sums, tensors, operators, [])
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([j,i], 'f')]
-        operators = [Operator(j, True), Operator(i, False)]
+        #operators = [Operator(j, True), Operator(i, False)]
         t2 = Term(s, sums, tensors, operators, [])
         sums = [Sigma(j), Sigma(i)]
         tensors = [Tensor([i,j], 'f')]
-        operators = [Operator(i, True), Operator(j, False)]
+        #operators = [Operator(i, True), Operator(j, False)]
         t3 = Term(s, sums, tensors, operators, [])
 
         self.assertTrue(t1.match(t2))

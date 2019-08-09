@@ -3,6 +3,14 @@ from itertools import product
 from numbers import Number
 from .operator import Sigma, Delta, Operator, Tensor, permute
 
+# TODO: move this
+def is_occupied(s, occ):
+    if occ is None:
+        return 'o' in s
+    else:
+        return s in occ
+
+# TODO use only for more abstract class
 class TermMap(object):
 
     class AbIdx(object):
@@ -25,45 +33,26 @@ class TermMap(object):
                 if not found: return False
             return True
 
-    def __init__(self, sums, tensors, operators, deltas):
+    def __init__(self, sums, tensors, operators, deltas, occ=None):
         assert(len(deltas) == 0)
-        sidx = [s.idx for s in sums]
-        oidx = [o.idx for o in operators]
-        tidx = []
-        for t in tensors:
-            tidx += t.indices
-        self.uidx = set(sidx + oidx + tidx)
-        self.Is = []
-        for idx in self.uidx:
-            summed = True if idx in sidx else False
-            os = []
-            ts = []
-            for i,oi in enumerate(oidx):
-                if oi == idx:
-                    os.append(i)
-            for j,t in enumerate(tensors):
-                for i,ti in enumerate(t.indices):
-                    if ti == idx:
-                        ts.append((t,i))
-            self.Is.append(TermMap.AbIdx(idx, ts, os, summed))
+        assert(len(operators) == 0)
+        self.data = set()
+        for ti in tensors:
+            colist = str()
+            cvlist = str()
+            for i,iidx in enumerate(ti.indices):
+                occupied = is_occupied(iidx.space, occ)
+                for tj in tensors:
+                    if tj == ti: continue
+                    for j,jidx in enumerate(tj.indices):
+                        if iidx == jidx:
+                            cstr = str(i) + tj.name + str(j)
+                            if occupied: colist += cstr
+                            else: cvlist += cstr
+            self.data.add((ti.name,colist,cvlist))
 
     def __eq__(self, other):
-        if len(self.Is) != len(other.Is): return False
-        # loop over unique indices
-        oidxs = []
-        for I in self.Is:
-            # find equivalent index if it exists
-            found = False
-            for i,J in enumerate(other.Is):
-                if I == J:
-                    found = True
-                    if i in oidxs:
-                        return False
-                    else:
-                        oidxs.append(i)
-                    break
-            if not found: return False
-        return True
+        return self.data == other.data
 
 def default_index_key():
     return {"occ" : "ijklmno", "vir" : "abcdefg"}
@@ -242,7 +231,8 @@ class Term(object):
                 for x in xs: sign *= x[1]
                 newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors, other.operators, other.deltas)
-                if TM1 == TM2: return sign
+                if TM1 == TM2: 
+                    return sign
             return None
         else: return NotImplemented
 
