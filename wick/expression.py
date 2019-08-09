@@ -3,35 +3,28 @@ from itertools import product
 from numbers import Number
 from .operator import Sigma, Delta, Operator, Tensor, permute
 
-# TODO: move this
-def is_occupied(s, occ):
-    if occ is None:
-        return 'o' in s
-    else:
-        return s in occ
-
 # TODO use only for more abstract class
 class TermMap(object):
 
-    class AbIdx(object):
-        def __init__(self, idx, ts, os, summed):
-            self.idx = idx
-            self.ts = ts
-            self.os = os
-            self.summed = summed
+    #class AbIdx(object):
+    #    def __init__(self, idx, ts, os, summed):
+    #        self.idx = idx
+    #        self.ts = ts
+    #        self.os = os
+    #        self.summed = summed
 
-        def __eq__(self, other):
-            first = self.idx.space == other.idx.space and self.summed == other.summed
-            if not first: return False
-            if not self.os == other.os: return False
-            for t,i in self.ts:
-                found = False
-                for s,j in other.ts:
-                    if t.name == s.name and i == j:
-                        found = True
-                        break
-                if not found: return False
-            return True
+    #    def __eq__(self, other):
+    #        first = self.idx.space == other.idx.space and self.summed == other.summed
+    #        if not first: return False
+    #        if not self.os == other.os: return False
+    #        for t,i in self.ts:
+    #            found = False
+    #            for s,j in other.ts:
+    #                if t.name == s.name and i == j:
+    #                    found = True
+    #                    break
+    #            if not found: return False
+    #        return True
 
     def __init__(self, sums, tensors, operators, deltas, occ=None):
         assert(len(deltas) == 0)
@@ -41,7 +34,7 @@ class TermMap(object):
             colist = str()
             cvlist = str()
             for i,iidx in enumerate(ti.indices):
-                occupied = is_occupied(iidx.space, occ)
+                occupied = iidx.is_occupied(occ=occ)
                 for tj in tensors:
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):

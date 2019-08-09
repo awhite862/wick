@@ -8,16 +8,10 @@ def are_operators(e):
             return True
     return False
 
-def is_occupied(s, occ):
-    if occ is None:
-        return 'o' in s
-    else:
-        return s in occ
-
 def qp_creation(op, occ=None):
-    if (not is_occupied(op.idx.space, occ)) and op.ca:
+    if (not op.idx.is_occupied(occ=occ)) and op.ca:
         return True
-    elif (is_occupied(op.idx.space, occ)) and not op.ca:
+    elif (op.idx.is_occupied(occ=occ)) and not op.ca:
         return True
     else:
         return False
@@ -29,8 +23,8 @@ def valid_contraction(o1, o2, occ=None):
     if isinstance(o1, Operator) and isinstance(o2, Operator):
          if o1.idx.space != o2.idx.space:
              return False
-         if (is_occupied(o1.idx.space, occ) and o1.ca and not o2.ca) or (
-             not is_occupied(o1.idx.space, occ) and not o1.ca and o2.ca):
+         if (o1.idx.is_occupied(occ=occ) and o1.ca and not o2.ca) or (
+             not o1.idx.is_occupied(occ=occ) and not o1.ca and o2.ca):
              return True
          return False
     else:
@@ -95,8 +89,8 @@ def apply_wick(e, occ=None):
                 if oi.idx.space != oj.idx.space:
                     good = False
                     break
-                if (is_occupied(oi.idx.space, occ) and oi.ca and not oj.ca) or (
-                    not is_occupied(oi.idx.space, occ) and not oi.ca and oj.ca):
+                if (oi.idx.is_occupied(occ=occ) and oi.ca and not oj.ca) or (
+                    not oi.idx.is_occupied(occ=occ) and not oi.ca and oj.ca):
                     i = temp.operators.index(oi)
                     j = temp.operators.index(oj)
                     ipairs.append((i,j))

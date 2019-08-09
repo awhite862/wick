@@ -15,3 +15,9 @@ class Idx(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def is_occupied(self, occ=None):
+        if occ is None:
+            return 'o' in self.space
+        else:
+            return self.space in occ
