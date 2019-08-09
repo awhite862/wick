@@ -313,3 +313,9 @@ class Expression(object):
             s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
 
         return s[:-1]
+
+    def are_operators(self):
+        for i in range(len(self.terms)):
+            if len(self.terms[i].operators) > 0:
+                return True
+        return False

@@ -2,23 +2,6 @@ from .operator import Operator, Sigma, Delta
 from .expression import Term, Expression
 import copy
 
-def are_operators(e):
-    for i in range(len(e.terms)):
-        if len(e.terms[i].operators) > 0:
-            return True
-    return False
-
-def qp_creation(op, occ=None):
-    if (not op.idx.is_occupied(occ=occ)) and op.ca:
-        return True
-    elif (op.idx.is_occupied(occ=occ)) and not op.ca:
-        return True
-    else:
-        return False
-
-def qp_anihilation(op, occ=None):
-    return not qp_creation(op, occ=occ)
-
 def valid_contraction(o1, o2, occ=None):
     if isinstance(o1, Operator) and isinstance(o2, Operator):
          if o1.idx.space != o2.idx.space:
@@ -111,7 +94,7 @@ def apply_wick(e, occ=None):
                 to.append(t1)
         
     o = Expression(to)
-    if are_operators(o):
+    if o.are_operators():
         raise Exception("Application of Wick's theorem has failed!")
     else:
         return o

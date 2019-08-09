@@ -2,13 +2,12 @@ from itertools import product
 from .index import Idx
 from .operator import Operator, TensorSym, Tensor, Sigma
 from .expression import Term, Expression
-from .wick import qp_creation
 
 def is_normal_ordered(operators, occ):
     fa = None
     for i,op in enumerate(operators):
-        if fa is None and (not qp_creation(op, occ)): fa = i
-        if fa is not None and qp_creation(op, occ): return False
+        if fa is None and (not op.qp_creation(occ)): fa = i
+        if fa is not None and op.qp_creation(occ): return False
     return True
 
 def normal_ordered(operators,occ=None,sign=1.0):
@@ -17,8 +16,8 @@ def normal_ordered(operators,occ=None,sign=1.0):
     fa = None
     swap = None
     for i,op in enumerate(operators):
-        if fa is None and (not qp_creation(op, occ)): fa = i
-        if fa is not None and qp_creation(op, occ):
+        if fa is None and (not op.qp_creation(occ)): fa = i
+        if fa is not None and op.qp_creation(occ):
             swap = i
             break
     assert(swap is not None)

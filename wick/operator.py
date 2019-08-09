@@ -34,6 +34,16 @@ class Operator(object):
         else:
             return "a_" + imap[self.idx]
 
+    def qp_creation(self, occ=None):
+        if (not self.idx.is_occupied(occ=occ)) and self.ca:
+            return True
+        elif (self.idx.is_occupied(occ=occ)) and not self.ca:
+            return True
+        else:
+            return False
+
+    def qp_anihilation(self, occ=None):
+        return not self.qp_creation(occ=occ)
 
 class TensorSym(object):
     """
