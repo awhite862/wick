@@ -26,10 +26,11 @@ def pair_list(lst,occ=None):
     else:
         plist = []
         for i,x in enumerate(lst[1:]):
-            p1 = [(lst[0],x),]
-            remainder = pair_list(lst[1:i+1] + lst[i+2:])
-            for r in remainder:
-                plist.append(p1 + r)
+            if valid_contraction(lst[0], x):
+                p1 = [(lst[0],x),]
+                remainder = pair_list(lst[1:i+1] + lst[i+2:])
+                for r in remainder:
+                    plist.append(p1 + r)
         return plist
 
 def find_pair(i, ipairs):
