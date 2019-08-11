@@ -1,0 +1,14 @@
+ + 1.0f_{ai}
+ - 1.0\sum_{j}f_{ji}t_{aj}
+ + 1.0\sum_{j}\sum_{b}f_{jb}t_{abij}
+ + 1.0\sum_{b}f_{ab}t_{bi}
+ - 0.5\sum_{j}\sum_{k}\sum_{b}I_{jkib}t_{abjk}
+ - 1.0\sum_{j}\sum_{b}I_{jaib}t_{bj}
+ + 0.5\sum_{j}\sum_{b}\sum_{c}I_{jabc}t_{cbij}
+ - 1.0\sum_{j}\sum_{b}f_{jb}t_{bi}t_{aj}
+ - 1.0\sum_{j}\sum_{k}\sum_{b}I_{jkib}t_{aj}t_{bk}
+ + 0.5\sum_{j}\sum_{k}\sum_{b}\sum_{c}I_{jkbc}t_{ci}t_{abjk}
+ + 0.5\sum_{j}\sum_{k}\sum_{b}\sum_{c}I_{jkbc}t_{aj}t_{cbik}
+ - 1.0\sum_{j}\sum_{k}\sum_{b}\sum_{c}I_{jkbc}t_{cj}t_{abik}
+ + 1.0\sum_{j}\sum_{b}\sum_{c}I_{jabc}t_{ci}t_{bj}
+ + 1.0\sum_{j}\sum_{k}\sum_{b}\sum_{c}I_{jkbc}t_{ci}t_{aj}t_{bk}

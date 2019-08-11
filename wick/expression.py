@@ -5,27 +5,6 @@ from .operator import Sigma, Delta, Operator, Tensor, permute
 
 # TODO use only for more abstract class
 class TermMap(object):
-
-    #class AbIdx(object):
-    #    def __init__(self, idx, ts, os, summed):
-    #        self.idx = idx
-    #        self.ts = ts
-    #        self.os = os
-    #        self.summed = summed
-
-    #    def __eq__(self, other):
-    #        first = self.idx.space == other.idx.space and self.summed == other.summed
-    #        if not first: return False
-    #        if not self.os == other.os: return False
-    #        for t,i in self.ts:
-    #            found = False
-    #            for s,j in other.ts:
-    #                if t.name == s.name and i == j:
-    #                    found = True
-    #                    break
-    #            if not found: return False
-    #        return True
-
     def __init__(self, sums, tensors, operators, deltas, occ=None):
         assert(len(deltas) == 0)
         assert(len(operators) == 0)
