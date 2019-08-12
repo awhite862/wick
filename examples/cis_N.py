@@ -21,4 +21,6 @@ HC = H*ket
 S = bra*HC
 out = apply_wick(S)
 out.resolve()
-print(out._print_str())
+final = AExpression(Ex=out)
+final.simplify()
+print(final._print_str())

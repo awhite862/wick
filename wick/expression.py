@@ -5,9 +5,7 @@ from .operator import Sigma, Delta, Operator, Tensor, permute
 
 # TODO use only for more abstract class
 class TermMap(object):
-    def __init__(self, sums, tensors, operators, deltas, occ=None):
-        assert(len(deltas) == 0)
-        assert(len(operators) == 0)
+    def __init__(self, sums, tensors, occ=None):
         self.data = set()
         for ti in tensors:
             colist = str()
@@ -184,30 +182,6 @@ class Term(object):
             s += oo._print_str(imap)
         return s
 
-    def match(self, other):
-        if isinstance(other, Term):
-            if len(self.deltas) > 0 or len(other.deltas) > 0:
-                raise Exception("Cannot match terms with unresolved deltas!")
-            TM1 = TermMap(self.sums, self.tensors, self.operators, self.deltas)
-            TM2 = TermMap(other.sums, other.tensors, other.operators, other.deltas)
-            return TM1 == TM2
-        else:
-            return NotImplemented
-
-    def pmatch(self, other):
-        if isinstance(other, Term):
-            tlists = [t.sym.tlist for t in other.tensors]
-            TM1 = TermMap(self.sums, self.tensors, self.operators, self.deltas)
-            for xs in product(*tlists):
-                sign = 1.0
-                for x in xs: sign *= x[1]
-                newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
-                TM2 = TermMap(other.sums, newtensors, other.operators, other.deltas)
-                if TM1 == TM2: 
-                    return sign
-            return None
-        else: return NotImplemented
-
     def ilist(self):
         ilist = []
         for oo in self.operators:
@@ -227,6 +201,140 @@ class Term(object):
             if ii2 not in ilist: ilist.append(ii2)
         return ilist
 
+class ATerm(object):
+    def __init__(self, scalar=None, sums=None, tensors=None, term=None):
+        if term is not None:
+            assert(len(term.deltas) == 0)
+            assert(len(term.operators) == 0)
+            if scalar is not None:
+                raise Exception("ATerm improperly initialized")
+            if sums is not None:
+                raise Exception("ATerm improperly initialized")
+            if tensors is not None:
+                raise Exception("ATerm improperly initialized")
+            self.scalar = deepcopy(term.scalar)
+            self.sums = deepcopy(term.sums)
+            self.tensors = deepcopy(term.tensors)
+        else:
+            if scalar is None: scalar = 1.0
+            if sums is None or tensors is None:
+                raise Exception("Improper initialization of ATerm")
+            self.scalar = scalar
+            self.sums = sums
+            self.tensors = tensors
+
+    def __repr__(self):
+        s = str(self.scalar)
+        for ss in self.sums:
+            s = s + str(ss)
+        for tt in self.tensors:
+            s = s + str(tt)
+        return s
+
+
+    def __mul__(self, other):
+        if isinstance(other, Number):
+            new = deepcopy(self)
+            new.scalar *= other
+            return new
+        elif isinstance(other, ATerm):
+            sil1 = set(self.ilist())
+            sil2 = set(other.ilist())
+            if sil1.intersection(sil2):
+                m = max([i.index for i in sil1])
+                new = other._inc(m + 1)
+            else:
+                new = other
+            scalar = self.scalar*new.scalar
+            sums = self.sums + new.sums
+            tensors = self.tensors + new.tensors
+            return ATerm(scalar=scalar, sums=sums, tensors=tensors)
+        else:
+            return NotImplemented
+
+    def __rmul__(self, other):
+        if isinstance(other, Number):
+            new = deepcopy(self)
+            new.scalar *= other
+            return new
+        else:
+            return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, ATerm):
+            return self.scalar == other.scalar \
+                    and set(self.sums) == set(other.sums) \
+                    and set(self.tensors) == set(other.tensors)
+        else:
+            return NotImplemented
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
+
+    def _inc(self, i):
+        sums = [s._inc(i) for s in self.sums]
+        tensors = [t._inc(i) for t in self.tensors]
+        return Term(scalar=self.scalar, sums=sums, tensors=tensors)
+
+    def _idx_map(self, indices=None):
+        if indices is None:
+            indices = default_index_key()
+        ilist = self.ilist()
+        off = {}
+        imap = {}
+        for idx in ilist:
+            n,s = idx.index,idx.space
+            if s in off:
+                o = off[s]
+                off[s] += 1
+            else:
+                o = 0
+                off[s] = 1
+            imap[idx] = indices[s][o]
+        return imap
+
+    def _print_str(self,with_scalar=True):
+        imap = self._idx_map()
+        s = str(self.scalar) if with_scalar else str()
+        for ss in self.sums:
+            s += ss._print_str(imap)
+        for tt in self.tensors:
+            s += tt._print_str(imap)
+        return s
+
+    def match(self, other):
+        if isinstance(other, ATerm):
+            TM1 = TermMap(self.sums, self.tensors)
+            TM2 = TermMap(other.sums, other.tensors)
+            return TM1 == TM2
+        else:
+            return NotImplemented
+
+    def pmatch(self, other):
+        if isinstance(other, ATerm):
+            tlists = [t.sym.tlist for t in other.tensors]
+            TM1 = TermMap(self.sums, self.tensors)
+            for xs in product(*tlists):
+                sign = 1.0
+                for x in xs: sign *= x[1]
+                newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
+                TM2 = TermMap(other.sums, newtensors)
+                if TM1 == TM2: 
+                    return sign
+            return None
+        else: return NotImplemented
+
+    def ilist(self):
+        ilist = []
+        for tt in self.tensors:
+            itlst = tt.ilist()
+            for ii in itlst:
+                if ii not in ilist: ilist.append(ii)
+        for ss in self.sums:
+            idx = ss.idx
+            if idx not in ilist: ilist.append(idx)
+        return ilist
+
 class Expression(object):
     def __init__(self, terms):
         self.terms = terms
@@ -237,22 +345,6 @@ class Expression(object):
             self.terms[i].resolve()
 
         # get rid of terms that are zero
-        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
-
-        # compress all symmetry-related terms
-        newterms = []
-        while self.terms:
-            t1 = self.terms[0]
-            tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
-            s = t1.scalar
-            for t in tm: s += t[1]*t[0].scalar
-            t1.scalar = s
-            newterms.append(deepcopy(t1))
-            tm = [t[0] for t in tm]
-            self.terms = list(filter(lambda x: x not in tm, self.terms[1:]))
-        self.terms = newterms
-
-        # get rid of terms that are zero after compression
         self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
@@ -298,3 +390,71 @@ class Expression(object):
             if len(self.terms[i].operators) > 0:
                 return True
         return False
+
+class AExpression(object):
+    def __init__(self, terms=None, Ex=None):
+        if terms is not None and Ex is None:
+            self.terms = terms
+        elif Ex is not None and terms is None:
+            self.terms = [ATerm(term=t) for t in Ex.terms]
+        else:
+            raise Exception("Improper initialization of AExpression")
+        self.tthresh = 1e-15
+
+    def simplify(self):
+        # get rid of terms that are zero
+        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
+
+        # compress all symmetry-related terms
+        newterms = []
+        while self.terms:
+            t1 = self.terms[0]
+            tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
+            s = t1.scalar
+            for t in tm: s += t[1]*t[0].scalar
+            t1.scalar = s
+            newterms.append(deepcopy(t1))
+            tm = [t[0] for t in tm]
+            self.terms = list(filter(lambda x: x not in tm, self.terms[1:]))
+        self.terms = newterms
+
+        # get rid of terms that are zero after compression
+        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
+
+    def __repr__(self):
+        s = str()
+        for t in self.terms:
+           s = s + str(t)
+           s = s + " + "
+
+        return s[:-2]
+
+    def __add__(self, other):
+        if isinstance(other, Expression):
+            return AExpression(self.terms + other.terms)
+        else: return NotImplemented
+
+    def __sub__(self, other):
+        if isinstance(other, Expression):
+            return self + -1.0*other
+
+    def __mul__(self, other):
+        if isinstance(other, Number):
+            new = Expression([other*t for t in self.terms])
+            return new
+        elif isinstance(other, Expression):
+            terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
+            return Expression(terms)
+        else: return NotImplemented
+
+    __rmul__ = __mul__
+
+    def _print_str(self):
+        s = str()
+        for t in self.terms:
+            sca = t.scalar
+            num = abs(sca)
+            sign = " + " if sca > 0 else " - "
+            s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
+
+        return s[:-1]

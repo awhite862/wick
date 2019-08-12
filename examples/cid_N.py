@@ -28,12 +28,16 @@ HC = H*ket
 S = bra*HC
 out = apply_wick(S)
 out.resolve()
+final = AExpression(Ex=out)
+final.simplify()
 print("Sigma2")
-print(out._print_str())
+print(final._print_str())
 bra = Expression([Term(1.0, [], [Tensor([], "")], [], [])])
 S = bra*HC
 out = apply_wick(S)
 out.resolve()
+final = AExpression(Ex=out)
+final.simplify()
 print("Sigma0")
-print(out._print_str())
+print(final._print_str())
 
