@@ -1,0 +1,4 @@
+ + 1.0f_{ai}
+ - 1.0\sum_{j}f_{ji}t_{aj}
+ + 1.0\sum_{b}f_{ab}t_{bi}
+ - 1.0\sum_{jb}f_{jb}t_{bi}t_{aj}

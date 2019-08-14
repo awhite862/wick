@@ -271,6 +271,16 @@ class ATerm(object):
     def __neq__(self, other):
         return not self.__eq__(other)
 
+    def __lt__(self, other):
+        if isinstance(other, ATerm):
+            if len(self.tensors) < len(other.tensors): return True
+            elif len(self.tensors) == len(other.tensors):
+                return len(self.sums) < len(other.sums)
+            else:
+                return False
+        else:
+            return NotImplemented
+
     def _inc(self, i):
         sums = [s._inc(i) for s in self.sums]
         tensors = [t._inc(i) for t in self.tensors]
@@ -296,8 +306,11 @@ class ATerm(object):
     def _print_str(self,with_scalar=True):
         imap = self._idx_map()
         s = str(self.scalar) if with_scalar else str()
+        iis = str()
         for ss in self.sums:
-            s += ss._print_str(imap)
+            iis += imap[ss.idx]
+        if iis:
+            s += "\sum_{" + iis + "}"
         for tt in self.tensors:
             s += tt._print_str(imap)
         return s
@@ -460,3 +473,6 @@ class AExpression(object):
             s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
 
         return s[:-1]
+
+    def sort(self):
+        self.terms.sort()
