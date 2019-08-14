@@ -350,6 +350,9 @@ class ATerm(object):
             if idx not in ilist: ilist.append(idx)
         return ilist
 
+    def nidx(self):
+        return len(self.ilist())
+
 class Expression(object):
     def __init__(self, terms):
         self.terms = terms

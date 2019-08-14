@@ -29,8 +29,8 @@ T = T1 + T2
 HT = commute(H,T)
 HTT = commute(HT,T)
 HTTT = commute(HTT,T)
-#HTTTT = commute(HTTT,T)
-HTTTT = commute(commute(commute(commute(H2,T1),T1),T1),T1)
+HTTTT = commute(HTTT,T)
+#HTTTT = commute(commute(commute(commute(H2,T1),T1),T1),T1)
 
 S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)
 out = apply_wick(S)
