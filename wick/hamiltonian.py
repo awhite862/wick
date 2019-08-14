@@ -1,6 +1,6 @@
 from itertools import product
 from .index import Idx
-from .operator import Operator, TensorSym, Tensor, Sigma
+from .operator import FOperator, TensorSym, Tensor, Sigma
 from .expression import Term, Expression
 
 def is_normal_ordered(operators, occ):
@@ -33,10 +33,10 @@ def one_e(name, spaces, norder=False):
         for s2 in spaces:
             i = 0 if s2 != s1 else 1
             I2 = Idx(i,s2)
-            operators = [Operator(I1, True), Operator(I2, False)]
+            operators = [FOperator(I1, True), FOperator(I2, False)]
             nsign = 1.0
             if norder:
-                operators,nsign = normal_ordered([Operator(I1, True), Operator(I2, False)])
+                operators,nsign = normal_ordered([FOperator(I1, True), FOperator(I2, False)])
             t = Term(nsign, [Sigma(I1),Sigma(I2)],
                     [Tensor([I1,I2],name)],
                     operators,
@@ -66,7 +66,7 @@ def two_e(name, spaces, anti=True, norder=False):
                 for s4 in spaces:
                     xx = list(filter(lambda x: x,[s4 == s for s in [s1,s2,s3]]))
                     I4 = Idx(len(xx),s4)
-                    operators = [Operator(I1, True), Operator(I2, True), Operator(I4,False), Operator(I3,False)]
+                    operators = [FOperator(I1, True), FOperator(I2, True), FOperator(I4,False), FOperator(I3,False)]
                     nsign = 1.0
                     if norder:
                         operators,nsign = normal_ordered(operators)

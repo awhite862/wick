@@ -1,9 +1,9 @@
-from .operator import Operator, Sigma, Delta
+from .operator import FOperator, Sigma, Delta
 from .expression import Term, Expression
 import copy
 
 def valid_contraction(o1, o2, occ=None):
-    if isinstance(o1, Operator) and isinstance(o2, Operator):
+    if isinstance(o1, FOperator) and isinstance(o2, FOperator):
          if o1.idx.space != o2.idx.space:
              return False
          if (o1.idx.is_occupied(occ=occ) and o1.ca and not o2.ca) or (

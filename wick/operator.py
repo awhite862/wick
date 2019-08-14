@@ -1,6 +1,6 @@
 from .index import Idx
 
-class Operator(object):
+class FOperator(object):
     """
     Fermion creation/annihilation operators
     
@@ -26,7 +26,7 @@ class Operator(object):
 
     def _inc(self, i):
         """Increment indices"""
-        return Operator(Idx(self.idx.index + i, self.idx.space), self.ca)
+        return FOperator(Idx(self.idx.index + i, self.idx.space), self.ca)
 
     def _print_str(self, imap):
         if self.ca:

@@ -9,12 +9,12 @@ H2 = two_e("I",["occ","vir"], norder=True)
 H = H1 + H2
 i = Idx(0,"occ")
 a = Idx(0,"vir")
-operators = [Operator(i,True), Operator(a,False)]
+operators = [FOperator(i,True), FOperator(a,False)]
 bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 ket = Expression([Term(1.0,
     [Sigma(i), Sigma(a)],
     [Tensor([a, i], "c")],
-    [Operator(a, True), Operator(i, False)],
+    [FOperator(a, True), FOperator(i, False)],
     [])])
 
 HC = H*ket

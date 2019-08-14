@@ -7,12 +7,12 @@ H1 = one_e("f",["occ","vir"], norder=True)
 
 i = Idx(0,"occ")
 a = Idx(0,"vir")
-operators = [Operator(i,True), Operator(a,False)]
+operators = [FOperator(i,True), FOperator(a,False)]
 bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 T1 = Expression([Term(1.0,
     [Sigma(i), Sigma(a)],
     [Tensor([a, i], "t")],
-    [Operator(a, True), Operator(i, False)],
+    [FOperator(a, True), FOperator(i, False)],
     [])])
 
 HT = commute(H1,T1)

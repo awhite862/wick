@@ -11,7 +11,7 @@ i = Idx(0,"occ")
 j = Idx(1,"occ")
 a = Idx(0,"vir")
 b = Idx(1,"vir")
-operators = [Operator(i,True), Operator(a,False), Operator(j,True), Operator(b,False)]
+operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True), FOperator(b,False)]
 
 sym = get_sym(True)
 bra = Expression([Term(1.0, [], [Tensor([i, j, a, b], "")], operators, [])])
@@ -19,7 +19,7 @@ ket = Expression(
     [Term(0.25,
         [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
         [Tensor([a, b, i, j], "c", sym=sym)],
-        [Operator(a, True), Operator(i, False), Operator(b, True), Operator(j, False)],
+        [FOperator(a, True), FOperator(i, False), FOperator(b, True), FOperator(j, False)],
         []),
     Term(1.0,[], [Tensor([], "c")], [], [])
     ])

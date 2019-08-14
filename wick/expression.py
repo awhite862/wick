@@ -1,9 +1,8 @@
 from copy import deepcopy
 from itertools import product
 from numbers import Number
-from .operator import Sigma, Delta, Operator, Tensor, permute
+from .operator import Sigma, Delta, FOperator, Tensor, permute
 
-# TODO use only for more abstract class
 class TermMap(object):
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
