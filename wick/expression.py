@@ -313,6 +313,8 @@ class ATerm(object):
     def pmatch(self, other):
         if isinstance(other, ATerm):
             tlists = [t.sym.tlist for t in other.tensors]
+            if len(other.tensors) != len(self.tensors): return None
+            if len(self.sums) != len(other.sums): return None
             TM1 = TermMap(self.sums, self.tensors)
             for xs in product(*tlists):
                 sign = 1.0
