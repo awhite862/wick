@@ -88,5 +88,18 @@ class TermTest(unittest.TestCase):
         ttest = Term(s, sums, tensors, operators, [])
         self.assertTrue(t3 == ttest)
 
+    def test_tensor_sort(self):
+        i = Idx(0,"occ")
+        j = Idx(1,"occ")
+        a = Idx(0,"vir")
+        tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
+        sigmas = [Sigma(j)]
+        tt = ATerm(scalar=1.0, sums=sigmas, tensors = tensors)
+        print(tt._print_str())
+        tt.sort_tensors()
+        print(tt._print_str())
+        self.assertTrue(True)
+
+
 if __name__ == '__main__':
     unittest.main()

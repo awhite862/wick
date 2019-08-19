@@ -352,6 +352,11 @@ class ATerm(object):
     def nidx(self):
         return len(self.ilist())
 
+    def sort_tensors(self):
+        for i,tt in enumerate(self.tensors):
+            if not tt.name:
+                self.tensors[0],self.tensors[i] = self.tensors[i], self.tensors[0]
+
 class Expression(object):
     def __init__(self, terms):
         self.terms = terms
@@ -475,6 +480,10 @@ class AExpression(object):
             s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
 
         return s[:-1]
+
+    def sort_tensors(self):
+        for t in self.terms:
+            t.sort_tensors()
 
     def sort(self):
         self.terms.sort()
