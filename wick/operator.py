@@ -3,12 +3,13 @@ from .index import Idx
 class FOperator(object):
     """
     Fermion creation/annihilation operators
-    
+
     idx (Idx): Index of operator
     ca (Bool): Creation operator?
     """
     def __init__(self, idx, ca):
         self.idx = idx
+        assert(self.idx.fermion)
         self.ca = ca
 
     def __eq__(self, other):
@@ -43,6 +44,48 @@ class FOperator(object):
             return False
 
     def qp_anihilation(self, occ=None):
+        return not self.qp_creation(occ=occ)
+
+class BOperator(object):
+    """
+    Boson creation/annihilation operators
+
+    idx (Idx): Index of operator
+    ca (Bool): Creation operator?
+    """
+    def __init__(self, idx, ca):
+        self.idx = idx
+        assert(not self.idx.fermion)
+        self.ca = ca
+
+    def __eq__(self, other):
+        return self.idx == other.idx and \
+                self.ca == other.ca
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __repr__(self):
+        if self.ca:
+            return "a^{\dagger}_" + str(self.idx)
+        else:
+            return "a_" + str(self.idx)
+
+    def _inc(self, i):
+        """Increment indices"""
+        return FOperator(Idx(self.idx.index + i, self.idx.space), self.ca)
+
+    def _print_str(self, imap):
+        if self.ca:
+            return "a^{\dagger}_" + imap[self.idx]
+        else:
+            return "a_" + imap[self.idx]
+
+    def qp_creation(self):
+        if self.ca: return True
+        else: return False
+
+    def qp_anihilation(self):
         return not self.qp_creation(occ=occ)
 
 class TensorSym(object):

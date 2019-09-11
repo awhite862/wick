@@ -10,6 +10,11 @@ def valid_contraction(o1, o2, occ=None):
              not o1.idx.is_occupied(occ=occ) and not o1.ca and o2.ca):
              return True
          return False
+    #elif isinstance(o1, BOperator) and isinstance(o2, BOperator):
+    #     if o1.idx.space != o2.idx.space:
+    #         return False
+    #     if (o1.ca and not o2.ca) or (not o1.ca and o2.ca):
+    #         return True
     else:
         return True
 
@@ -58,7 +63,6 @@ def apply_wick(e, occ=None):
         # if there is an odd number of operators, then we are done
         if len(temp.operators)%2 != 0:
             continue
-
         if len(temp.operators) == 0:
             to.append(copy.deepcopy(temp))
             continue
@@ -73,7 +77,13 @@ def apply_wick(e, occ=None):
                 if oi.idx.space != oj.idx.space:
                     good = False
                     break
-                if (oi.idx.is_occupied(occ=occ) and oi.ca and not oj.ca) or (
+                if not oi.idx.fermion:
+                    i = temp.operators.index(oi)
+                    j = temp.operators.index(oj)
+                    i1 = oi.idx
+                    i2 = oj.idx
+                    deltas.append(Delta(i1,i2))
+                elif (oi.idx.is_occupied(occ=occ) and oi.ca and not oj.ca) or (
                     not oi.idx.is_occupied(occ=occ) and not oi.ca and oj.ca):
                     i = temp.operators.index(oi)
                     j = temp.operators.index(oj)

@@ -1,7 +1,8 @@
 class Idx(object):
-    def __init__(self, index, space):
+    def __init__(self, index, space, fermion=True):
         self.index = index
         self.space = space
+        self.fermion = fermion
 
     def __repr__(self):
         return str(self.index) + "(" + self.space + ")"
@@ -17,6 +18,8 @@ class Idx(object):
         return not self.__eq__(other)
 
     def is_occupied(self, occ=None):
+        if not self.fermion:
+            assert(False)
         if occ is None:
             return 'o' in self.space
         else:

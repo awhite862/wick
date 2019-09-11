@@ -9,7 +9,9 @@ class TermMap(object):
         for ti in tensors:
             colist = str()
             cvlist = str()
+            cblist = str()
             for i,iidx in enumerate(ti.indices):
+                fermion = iidx.fermion
                 occupied = iidx.is_occupied(occ=occ)
                 for tj in tensors:
                     if tj == ti: continue
@@ -17,14 +19,15 @@ class TermMap(object):
                         if iidx == jidx:
                             cstr = str(i) + tj.name + str(j)
                             if occupied: colist += cstr
-                            else: cvlist += cstr
-            self.data.add((ti.name,colist,cvlist))
+                            elif fermion: cvlist += cstr
+                            else: cblist += cstr
+            self.data.add((ti.name,colist,cvlist,cblist))
 
     def __eq__(self, other):
         return self.data == other.data
 
 def default_index_key():
-    return {"occ" : "ijklmno", "vir" : "abcdefg"}
+    return {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
 class Term(object):
     def __init__(self, scalar, sums, tensors, operators, deltas):
