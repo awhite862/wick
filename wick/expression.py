@@ -1,7 +1,7 @@
 from copy import deepcopy
 from itertools import product
 from numbers import Number
-from .operator import Sigma, Delta, FOperator, Tensor, permute
+from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute
 
 class TermMap(object):
     def __init__(self, sums, tensors, occ=None):
@@ -12,7 +12,7 @@ class TermMap(object):
             cblist = str()
             for i,iidx in enumerate(ti.indices):
                 fermion = iidx.fermion
-                occupied = iidx.is_occupied(occ=occ)
+                occupied = False if not fermion else iidx.is_occupied(occ=occ)
                 for tj in tensors:
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):

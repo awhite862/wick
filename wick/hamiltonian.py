@@ -1,6 +1,6 @@
 from itertools import product
 from .index import Idx
-from .operator import FOperator, TensorSym, Tensor, Sigma
+from .operator import BOperator, FOperator, TensorSym, Tensor, Sigma
 from .expression import Term, Expression
 
 def is_normal_ordered(operators, occ):
@@ -75,6 +75,17 @@ def two_e(name, spaces, anti=True, norder=False):
                             operators,
                             [])
                     terms.append(t)
+    return Expression(terms)
+
+def one_p(name, space="nm"):
+    I1 = Idx(0, space, fermion=False)
+    tc = Term(1.0, [Sigma(I1)],
+            [Tensor([I1],name)],
+            [BOperator(I1, True)],[])
+    ta = Term(1.0, [Sigma(I1)],
+            [Tensor([I1],name)],
+            [BOperator(I1, False)],[])
+    terms = [tc,ta]
     return Expression(terms)
 
 def commute(A, B):

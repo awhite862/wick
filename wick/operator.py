@@ -67,19 +67,19 @@ class BOperator(object):
 
     def __repr__(self):
         if self.ca:
-            return "a^{\dagger}_" + str(self.idx)
+            return "b^{\dagger}_" + str(self.idx)
         else:
-            return "a_" + str(self.idx)
+            return "b_" + str(self.idx)
 
     def _inc(self, i):
         """Increment indices"""
-        return FOperator(Idx(self.idx.index + i, self.idx.space), self.ca)
+        return BOperator(Idx(self.idx.index + i, self.idx.space, fermion=False), self.ca)
 
     def _print_str(self, imap):
         if self.ca:
-            return "a^{\dagger}_" + imap[self.idx]
+            return "b^{\dagger}_" + imap[self.idx]
         else:
-            return "a_" + imap[self.idx]
+            return "b_" + imap[self.idx]
 
     def qp_creation(self):
         if self.ca: return True
