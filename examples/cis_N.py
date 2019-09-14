@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e
+from wick.hamiltonian import one_e, two_e, E1
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
@@ -11,11 +11,7 @@ i = Idx(0,"occ")
 a = Idx(0,"vir")
 operators = [FOperator(i,True), FOperator(a,False)]
 bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
-ket = Expression([Term(1.0,
-    [Sigma(i), Sigma(a)],
-    [Tensor([a, i], "c")],
-    [FOperator(a, True), FOperator(i, False)],
-    [])])
+ket = E1("c", ["occ"], ["vir"])
 
 HC = H*ket
 S = bra*HC

@@ -88,5 +88,40 @@ def one_p(name, space="nm"):
     terms = [tc,ta]
     return Expression(terms)
 
+def two_p(name, space="nm",diag=True):
+    I1 = Idx(0, space, fermion=False)
+    if diag:
+        t1 = Term(1.0, [Sigma(I1)],
+                [Tensor([I1],name)],
+                [BOperator(I1, True),BOperator(I1,False)],[])
+    else:
+        I2 = Idx(1, space, fermion=False)
+        t1 = Term(1.0, [Sigma(I1),Sigma(I2)],
+                [Tensor([I1,I2],name)],
+                [BOperator(I1, True),BOperator(I2, False)],[])
+    return Expression([t1])
+
+def E1(name, ospaces, vspaces):
+    """
+    Return the tensor representation of a Fermion excitation operator
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    for os in ospaces:
+        for vs in vspaces:
+            i = Idx(0, os)
+            a = Idx(1, vs)
+            e1 = Term(1.0,
+                [Sigma(i), Sigma(a)],
+                [Tensor([a, i], name)],
+                [FOperator(a, True), FOperator(i, False)],
+                [])
+            terms.append(e1)
+    return Expression(terms)
+
 def commute(A, B):
+    """ Return the commutator of two operators"""
     return A*B - B*A
