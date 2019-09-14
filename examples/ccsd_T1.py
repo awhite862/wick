@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e, E1, get_sym, commute
+from wick.hamiltonian import one_e, two_e, E1, E2, commute
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
@@ -14,12 +14,7 @@ b = Idx(1,"vir")
 operators = [FOperator(i,True), FOperator(a,False)]
 bra = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 T1 = E1("t", ["occ"], ["vir"])
-sym = get_sym(True)
-T2 = Expression([Term(0.25,
-    [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
-    [Tensor([a, b, i, j], "t",sym=sym)],
-    [FOperator(a, True), FOperator(i, False), FOperator(b, True), FOperator(j, False)],
-    [])])
+T2 = E2("t", ["occ"], ["vir"])
 T = T1 + T2
 
 HT = commute(H,T)

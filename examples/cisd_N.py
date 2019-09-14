@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e, E1, get_sym
+from wick.hamiltonian import one_e, two_e, E1, E2
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
@@ -12,15 +12,9 @@ j = Idx(1,"occ")
 a = Idx(0,"vir")
 b = Idx(1,"vir")
 
-sym = get_sym(True)
 C0 = Expression([Term(1.0,[], [Tensor([], "c")], [], [])])
 C1 = E1("c", ["occ"], ["vir"])
-C2 = Expression(
-    [Term(0.25,
-        [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
-        [Tensor([a, b, i, j], "c", sym=sym)],
-        [FOperator(a, True), FOperator(i, False), FOperator(b, True), FOperator(j, False)],
-        [])])
+C2 = E2("c", ["occ"], ["vir"])
 
 ket = C0 + C1 + C2
 HC = H*ket
