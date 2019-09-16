@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e, E1, E2, D1, D2, commute
+from wick.hamiltonian import one_e, two_e, E1, E2, commute
 from wick.wick import apply_wick
 
 i = Idx(0,"occ")
@@ -12,8 +12,8 @@ T1 = E1("t", ["occ"], ["vir"])
 T2 = E2("t", ["occ"], ["vir"])
 T = T1 + T2
 
-L1 = D1("L", ["occ"], ["vir"])
-L2 = D2("L", ["occ"], ["vir"])
+L1 = E1("L", ["vir"], ["occ"])
+L2 = E2("L", ["vir"], ["occ"])
 L = L1 + L2
 
 # ov block

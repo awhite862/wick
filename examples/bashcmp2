@@ -1,0 +1,9 @@
+#!/bin/bash
+FILES="ccsd_1rdm ccsd_T1 cid_N cisd_N cis_N p1_test"
+for f in $FILES
+do
+    echo $f
+    python "$f".py > test.out
+    diff test.out  $f.out
+    rm test.out
+done

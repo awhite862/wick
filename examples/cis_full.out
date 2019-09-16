@@ -1,0 +1,6 @@
+ - 1.0\sum_{j}f_{ji}c_{aj}
+ + 1.0\sum_{j}f_{jj}c_{ai}
+ + 1.0\sum_{b}f_{ab}c_{bi}
+ - 1.0\sum_{jk}I_{jkji}c_{ak}
+ - 1.0\sum_{jb}I_{jaib}c_{bj}
+ + 1.0\sum_{jb}I_{jajb}c_{bi}

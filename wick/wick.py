@@ -13,7 +13,7 @@ def valid_contraction(o1, o2, occ=None):
     elif isinstance(o1, BOperator) and isinstance(o2, BOperator):
          if o1.idx.space != o2.idx.space:
              return False
-         if (o1.ca and not o2.ca) or (not o1.ca and o2.ca):
+         if (not o1.ca and o2.ca):
              return True
          return False
     elif type(o1) is not type(o1): return False
@@ -51,6 +51,7 @@ def get_sign(ipairs):
         i,j = p
         for x1 in range(i+1,j):
             p1 = find_pair(x1, ipairs)
+            if p1 is None: continue
             x2 = p1[0] if p1[1] == x1 else p1[1]
             if x2 > j or x2 < i: ncross += 1
 
