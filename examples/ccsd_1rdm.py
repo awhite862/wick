@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e, E1, E2, get_sym, commute
+from wick.hamiltonian import one_e, two_e, E1, E2, D1, D2, commute
 from wick.wick import apply_wick
 
 i = Idx(0,"occ")
@@ -12,17 +12,8 @@ T1 = E1("t", ["occ"], ["vir"])
 T2 = E2("t", ["occ"], ["vir"])
 T = T1 + T2
 
-L1 = Expression([Term(1.0,
-    [Sigma(i), Sigma(a)],
-    [Tensor([i, a], "L")],
-    [FOperator(i, True), FOperator(a, False)],
-    [])])
-sym = get_sym(True)
-L2 = Expression([Term(0.25,
-    [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
-    [Tensor([i, j, a, b], "L",sym=sym)],
-    [FOperator(i, True), FOperator(a, False), FOperator(j, True), FOperator(b, False)],
-    [])])
+L1 = D1("L", ["occ"], ["vir"])
+L2 = D2("L", ["occ"], ["vir"])
 L = L1 + L2
 
 # ov block

@@ -1,0 +1,14 @@
+P_{ov} = 
+ + 1.0L_{ia}
+P_{vv} = 
+ + 1.0\sum_{i}L_{ib}t_{ai}
+ - 0.5\sum_{ijc}L_{ijbc}t_{caij}
+P_{oo} = 
+ - 1.0\sum_{a}L_{ia}t_{aj}
+ + 0.5\sum_{akb}L_{ikab}t_{abkj}
+P_{vo} = 
+ + 1.0t_{ai}
+ + 1.0\sum_{jb}L_{jb}t_{baji}
+ - 1.0\sum_{jb}L_{jb}t_{aj}t_{bi}
+ + 0.5\sum_{jbkc}L_{jkbc}t_{aj}t_{bcki}
+ + 0.5\sum_{jbkc}L_{jkbc}t_{bi}t_{cajk}

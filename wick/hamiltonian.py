@@ -149,6 +149,54 @@ def E2(name, ospaces, vspaces):
                     terms.append(e2)
     return Expression(terms)
 
+def D1(name, ospaces, vspaces):
+    """
+    Return the tensor representation of a Fermion excitation operator
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    for os in ospaces:
+        for vs in vspaces:
+            i = Idx(0, os)
+            a = Idx(0, vs)
+            e1 = Term(1.0,
+                [Sigma(i), Sigma(a)],
+                [Tensor([i, a], name)],
+                [FOperator(i, True), FOperator(a, False)],
+                [])
+            terms.append(e1)
+    return Expression(terms)
+
+def D2(name, ospaces, vspaces):
+    """
+    Return the tensor representation of a Fermion excitation operator
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    sym = get_sym(True)
+    for i1,o1 in enumerate(ospaces):
+        for o2 in ospaces[i1:]:
+            for j1,v1 in enumerate(vspaces):
+                for v2 in vspaces[j1:]:
+                    i = Idx(0, o1)
+                    a = Idx(0, v1)
+                    j = Idx(1, o2)
+                    b = Idx(1, v2)
+                    e2 = Term(0.25,
+                        [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
+                        [Tensor([i, j, a, b], name, sym=sym)],
+                        [FOperator(i, True), FOperator(a, False),
+                            FOperator(j, True), FOperator(b, False)],
+                        [])
+                    terms.append(e2)
+    return Expression(terms)
+
 def commute(A, B):
     """ Return the commutator of two operators"""
     return A*B - B*A
