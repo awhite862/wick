@@ -29,7 +29,7 @@ out = apply_wick(full)
 out.resolve()
 final = AExpression(Ex=out)
 print("P_{ov} = ")
-print(final._print_str())
+print(final)
 
 # vv block
 operators = [FOperator(a,True), FOperator(b,False)]
@@ -45,7 +45,7 @@ out.resolve()
 final = AExpression(Ex=out)
 final.sort_tensors()
 print("P_{vv} = ")
-print(final._print_str())
+print(final)
 
 # oo block
 operators = [FOperator(j,False), FOperator(i,True)]
@@ -61,7 +61,7 @@ out.resolve()
 final = AExpression(Ex=out)
 final.sort_tensors()
 print("P_{oo} = ")
-print(final._print_str())
+print(final)
 
 # vo block
 operators = [FOperator(i,True), FOperator(a,False)]
@@ -76,4 +76,4 @@ out.resolve()
 final = AExpression(Ex=out)
 final.sort_tensors()
 print("P_{vo} = ")
-print(final._print_str())
+print(final)

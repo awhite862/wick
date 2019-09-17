@@ -4,6 +4,11 @@ from numbers import Number
 from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute
 
 class TermMap(object):
+    """Map indicating the contraction pattern of a given tensor expression
+
+    Attributes:
+        data (set): set of tuples indicating a contraction pattern of a tensor expression
+    """
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
         for ti in tensors:
@@ -30,6 +35,15 @@ def default_index_key():
     return {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
 class Term(object):
+    """Term of operators
+
+    Attributes:
+        scalar (Number): scalar multiplying the term
+        sums (list): list of sums over indices
+        tensors (list): list of tensors
+        operators (list): list of creation/anihillation operators
+        deltas (list): list of delta functions
+    """
     def __init__(self, scalar, sums, tensors, operators, deltas):
         self.scalar = scalar
         self.sums = sums
@@ -204,6 +218,13 @@ class Term(object):
         return ilist
 
 class ATerm(object):
+    """Abstract term
+
+    Attributes:
+        scalar (Number): scalar constant multiplying the term
+        sums (list): list of Sums in the term
+        tensors (list): list of Tensors
+    """
     def __init__(self, scalar=None, sums=None, tensors=None, term=None):
         if term is not None:
             assert(len(term.deltas) == 0)
@@ -361,6 +382,12 @@ class ATerm(object):
                 self.tensors[0],self.tensors[i] = self.tensors[i], self.tensors[0]
 
 class Expression(object):
+    """Operator expression
+
+    Attributes:
+        terms (list): List of terms
+        tthresh (float): Scalar thresholf for determining when terms are zero
+    """
     def __init__(self, terms):
         self.terms = terms
         self.tthresh = 1e-15
@@ -417,6 +444,12 @@ class Expression(object):
         return False
 
 class AExpression(object):
+    """Abstract tensor expression
+
+    Attributes:
+        terms (list): list of Terms in the expression
+        tthresh (float): Threshold for determining if a term is zero
+    """
     def __init__(self, terms=None, Ex=None, simplify=True, sort=True):
         if terms is not None and Ex is None:
             self.terms = terms
@@ -451,12 +484,7 @@ class AExpression(object):
         self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
-        s = str()
-        for t in self.terms:
-           s = s + str(t)
-           s = s + " + "
-
-        return s[:-2]
+        return self._print_str()
 
     def __add__(self, other):
         if isinstance(other, Expression):

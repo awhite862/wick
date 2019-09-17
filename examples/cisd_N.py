@@ -20,7 +20,7 @@ out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
 print("Sigma2")
-print(final._print_str())
+print(final)
 
 bra = projE1("occ", "vir")
 S = bra*HC
@@ -28,7 +28,7 @@ out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
 print("Sigma1")
-print(final._print_str())
+print(final)
 
 bra = Expression([Term(1.0, [], [Tensor([], "")], [], [])])
 S = bra*HC
@@ -36,5 +36,4 @@ out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
 print("Sigma0")
-print(final._print_str())
-
+print(final)

@@ -9,4 +9,4 @@ S = bra*Hp
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
-print(final._print_str())
+print(final)
