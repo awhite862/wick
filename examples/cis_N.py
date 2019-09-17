@@ -14,5 +14,4 @@ S = bra*HC
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
-final.simplify()
 print(final._print_str())

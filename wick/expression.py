@@ -417,7 +417,7 @@ class Expression(object):
         return False
 
 class AExpression(object):
-    def __init__(self, terms=None, Ex=None):
+    def __init__(self, terms=None, Ex=None, simplify=True, sort=True):
         if terms is not None and Ex is None:
             self.terms = terms
         elif Ex is not None and terms is None:
@@ -425,6 +425,10 @@ class AExpression(object):
         else:
             raise Exception("Improper initialization of AExpression")
         self.tthresh = 1e-15
+        if simplify:
+            self.simplify()
+        if sort:
+            self.sort()
 
     def simplify(self):
         # get rid of terms that are zero
