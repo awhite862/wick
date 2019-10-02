@@ -338,6 +338,20 @@ class ATerm(object):
             s += tt._print_str(imap)
         return s
 
+    def _einsum_str(self):
+        imap = self._idx_map()
+        s = str(self.scalar)
+        fstr = str()
+        istr = str()
+        tstr = str()
+        for tt in self.tensors:
+            if not tt.name:
+                fstr += tt._istr(imap)
+            else:
+                tstr += ", " + tt.name
+                istr += tt._istr(imap) + ","
+        return s + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
+
     def match(self, other):
         if isinstance(other, ATerm):
             TM1 = TermMap(self.sums, self.tensors)
@@ -515,6 +529,14 @@ class AExpression(object):
             s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
 
         return s[:-1]
+
+    def _print_einsum(self, lhs=None):
+        X = lhs if lhs is not None else str()
+        s = str()
+        for t in self.terms[:-1]:
+            s += X + " += " + t._einsum_str() + "\n"
+        s += X + " += " + self.terms[-1]._einsum_str()
+        return s
 
     def sort_tensors(self):
         for t in self.terms:

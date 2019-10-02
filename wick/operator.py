@@ -148,6 +148,12 @@ class Tensor(object):
             if idx not in ilist: ilist.append(idx)
         return ilist
 
+    def _istr(self, imap):
+        s = str()
+        for idx in self.indices:
+            s += imap[idx]
+        return s
+
     def _print_str(self, imap):
         temp = self.name
         if len(temp) == 0: return str()

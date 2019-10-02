@@ -261,7 +261,7 @@ def projE1(ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
+    return Expression([Term(1.0, [], [Tensor([a,i],"")], operators, [])])
 
 def projE2(o1, v1, o2, v2):
     """
@@ -279,14 +279,14 @@ def projE2(o1, v1, o2, v2):
     j = Idx(x, o1)
     b = Idx(y, v1)
     operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True), FOperator(b,False)]
-    return Expression([Term(1.0, [], [Tensor([i,j,a,b],"")], operators, [])])
+    return Expression([Term(1.0, [], [Tensor([a,b,i,j],"")], operators, [])])
 
 def projP1(space):
     """
     Return projection onto single Boson space
     """
     I = Idx(0, space, fermion=False)
-    return Expression([Term(1.0, [], [Tensor([],"")], [BOperator(I, False)], [])])
+    return Expression([Term(1.0, [], [Tensor([I],"")], [BOperator(I, False)], [])])
 
 def commute(A, B):
     """ Return the commutator of two operators"""
