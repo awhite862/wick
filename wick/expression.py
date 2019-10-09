@@ -535,7 +535,8 @@ class AExpression(object):
         s = str()
         for t in self.terms[:-1]:
             s += X + " += " + t._einsum_str() + "\n"
-        s += X + " += " + self.terms[-1]._einsum_str()
+        if self.terms:
+            s += X + " += " + self.terms[-1]._einsum_str()
         return s
 
     def sort_tensors(self):

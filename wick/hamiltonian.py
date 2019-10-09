@@ -77,10 +77,11 @@ def two_e(name, spaces, anti=True, norder=False):
                     terms.append(t)
     return Expression(terms)
 
-def one_p(name, space="nm"):
+def one_p(name, space="nm", name2 = None):
+    if name2 is None: name2 = name
     I1 = Idx(0, space, fermion=False)
     tc = Term(1.0, [Sigma(I1)],
-            [Tensor([I1],name)],
+            [Tensor([I1],name2)],
             [BOperator(I1, True)],[])
     ta = Term(1.0, [Sigma(I1)],
             [Tensor([I1],name)],
@@ -88,21 +89,17 @@ def one_p(name, space="nm"):
     terms = [tc,ta]
     return Expression(terms)
 
-def two_p(name, space="nm",diag=True):
+def two_p(name, space="nm"):
     I1 = Idx(0, space, fermion=False)
-    if diag:
-        t1 = Term(1.0, [Sigma(I1)],
-                [Tensor([I1],name)],
-                [BOperator(I1, True),BOperator(I1,False)],[])
-    else:
-        I2 = Idx(1, space, fermion=False)
-        t1 = Term(1.0, [Sigma(I1),Sigma(I2)],
-                [Tensor([I1,I2],name)],
-                [BOperator(I1, True),BOperator(I2, False)],[])
+    I2 = Idx(1, space, fermion=False)
+    t1 = Term(1.0, [Sigma(I1),Sigma(I2)],
+            [Tensor([I1,I2],name)],
+            [BOperator(I1, True),BOperator(I2, False)],[])
     return Expression([t1])
 
-def ep11(name, fspaces, bspaces, norder=False):
+def ep11(name, fspaces, bspaces, norder=False, name2=None):
     terms = []
+    if name2 is None: name2 = name
     for sb in bspaces:
         I1 = Idx(0, sb, fermion=False)
         for s1 in fspaces:
@@ -115,7 +112,7 @@ def ep11(name, fspaces, bspaces, norder=False):
                 if norder:
                     operators,nsign = normal_ordered([FOperator(p1, True), FOperator(p2, False)])
                 tc = Term(nsign, [Sigma(I1),Sigma(p1),Sigma(p2)],
-                        [Tensor([I1,p1,p2],name)],
+                        [Tensor([I1,p1,p2],name2)],
                         [BOperator(I1, True)] + operators,
                         [])
                 ta = Term(nsign, [Sigma(I1),Sigma(p1),Sigma(p2)],
@@ -210,9 +207,9 @@ def P2(name, spaces):
     for s1 in spaces:
         for s2 in spaces:
             I = Idx(0, s1, fermion=False)
-            i = 0 if s1 == s2 else 1
+            i = 1 if s1 == s2 else 0
             J = Idx(i, s2, fermion=False)
-            e2 = Term(1.0,
+            e2 = Term(0.5,
                 [Sigma(I),Sigma(J)],
                 [Tensor([I,J], name, sym=sym)],
                 [BOperator(I, True),BOperator(J, True)],
@@ -243,6 +240,35 @@ def EPS1(name, bspaces, ospaces, vspaces):
                     [BOperator(I, True), FOperator(a, True), FOperator(i, False)],
                     [])
                 terms.append(e1)
+    return Expression(terms)
+
+def EPS2(name, bspaces, ospaces, vspaces):
+    """
+    Return the tensor representation of a coupled
+    Fermion-double Boson excitation operator
+
+    name (string): name of the tensor
+    bspaces (list): list of Boson spaces
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    sym = TensorSym([(0,1,2,3),(1,0,2,3)], [1.0,1.0])
+    for b1 in bspaces:
+        for b2 in bspaces:
+            for os in ospaces:
+                for vs in vspaces:
+                    I = Idx(0, b1, fermion=False)
+                    i = 1 if b1 == b2 else 0
+                    J = Idx(i, b2, fermion=False)
+                    i = Idx(0, os)
+                    a = Idx(0, vs)
+                    e1 = Term(0.5,
+                        [Sigma(I), Sigma(J), Sigma(i), Sigma(a)],
+                        [Tensor([I, J, a, i], name, sym=sym)],
+                        [BOperator(I, True), BOperator(J, True), FOperator(a, True), FOperator(i, False)],
+                        [])
+                    terms.append(e1)
     return Expression(terms)
 
 def projE0():
@@ -287,6 +313,44 @@ def projP1(space):
     """
     I = Idx(0, space, fermion=False)
     return Expression([Term(1.0, [], [Tensor([I],"")], [BOperator(I, False)], [])])
+
+def projP2(space):
+    """
+    Return projection onto single Boson space
+    """
+    I = Idx(0, space, fermion=False)
+    J = Idx(1, space, fermion=False)
+    return Expression([Term(1.0, [], [Tensor([I,J],"")], [BOperator(I, False), BOperator(J, False)], [])])
+
+def projP1E1(bspace, ospace, vspace):
+    """
+    Return left-projector onto a space of single excitations coupled to boson excitations
+
+    vspace (str): boson space 
+    ospace (str): occupied space
+    vspace (str): virtual space
+    """
+    I = Idx(0, bspace, fermion=False)
+    i = Idx(0, ospace)
+    a = Idx(0, vspace)
+    operators = [BOperator(I,False), FOperator(i,True), FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([I,a,i],"")], operators, [])])
+
+def projP2E1(b1space, b2space, ospace, vspace):
+    """
+    Return left-projector onto a space of single excitations coupled to boson excitations
+
+    vspace (str): boson space 
+    ospace (str): occupied space
+    vspace (str): virtual space
+    """
+    I = Idx(0, b1space, fermion=False)
+    i = 1 if b1space == b2space else 0
+    J = Idx(i, b2space, fermion=False)
+    i = Idx(0, ospace)
+    a = Idx(0, vspace)
+    operators = [BOperator(I,False), BOperator(J,False), FOperator(i,True), FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([I,J,a,i],"")], operators, [])])
 
 def commute(A, B):
     """ Return the commutator of two operators"""
