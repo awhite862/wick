@@ -51,6 +51,10 @@ def get_sym(anti):
     else:
         return TensorSym([(0,1,2,3),(1,0,3,2)],[1.0,1.0])
 
+def get_sym_ip2():
+    return TensorSym([(0,1,2),(0,2,1)],
+                [1.0, -1.0])
+
 def two_e(name, spaces, anti=True, norder=False):
     terms = []
     sym = get_sym(anti)
@@ -175,6 +179,49 @@ def E2(name, ospaces, vspaces):
                             FOperator(b, True), FOperator(j, False)],
                         [])
                     terms.append(e2)
+    return Expression(terms)
+
+def Eip1(name, ospaces):
+    """
+    Return the tensor representation of a Fermion ionization
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    """
+    terms = []
+    for os in ospaces:
+        i = Idx(0, os)
+        e1 = Term(1.0,
+            [Sigma(i)],
+            [Tensor([i], name)],
+            [FOperator(i, False)],
+            [])
+        terms.append(e1)
+    return Expression(terms)
+
+def Eip2(name, ospaces, vspaces):
+    """
+    Return the tensor representation of a Fermion ip (trion)
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    sym = get_sym_ip2()
+    for i1,o1 in enumerate(ospaces):
+        for o2 in ospaces[i1:]:
+            for j1,v1 in enumerate(vspaces):
+                i = Idx(0, o1)
+                a = Idx(0, v1)
+                j = Idx(1, o2)
+                e2 = Term(0.5,
+                    [Sigma(i), Sigma(a), Sigma(j)],
+                    [Tensor([a, i, j], name, sym=sym)],
+                    [FOperator(a, True), FOperator(i, False),
+                        FOperator(j, False)],
+                    [])
+                terms.append(e2)
     return Expression(terms)
 
 def P1(name, spaces):
@@ -351,6 +398,16 @@ def projP2E1(b1space, b2space, ospace, vspace):
     a = Idx(0, vspace)
     operators = [BOperator(I,False), BOperator(J,False), FOperator(i,True), FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([I,J,a,i],"")], operators, [])])
+
+def projEip1(ospace):
+    """
+    Return left-projector onto a space of ionized determinants
+
+    ospace (str): occupied space
+    """
+    i = Idx(0, ospace)
+    operators = [FOperator(i,True)]
+    return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
 
 def commute(A, B):
     """ Return the commutator of two operators"""
