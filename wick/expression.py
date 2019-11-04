@@ -1,7 +1,7 @@
 from copy import deepcopy
 from itertools import product
 from numbers import Number
-from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute
+from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
 
 class TermMap(object):
     """Map indicating the contraction pattern of a given tensor expression
@@ -104,6 +104,8 @@ class Term(object):
                 dnew.append(dd)
 
         self.deltas = dnew
+        #if self.deltas:
+        #    self.resolve()
 
     def __repr__(self):
         s = str(self.scalar)
@@ -227,7 +229,7 @@ class ATerm(object):
     """
     def __init__(self, scalar=None, sums=None, tensors=None, term=None):
         if term is not None:
-            assert(len(term.deltas) == 0)
+            #assert(len(term.deltas) == 0)
             assert(len(term.operators) == 0)
             if scalar is not None:
                 raise Exception("ATerm improperly initialized")
@@ -238,6 +240,8 @@ class ATerm(object):
             self.scalar = deepcopy(term.scalar)
             self.sums = deepcopy(term.sums)
             self.tensors = deepcopy(term.tensors)
+            for d in term.deltas:
+                self.tensors.append(tensor_from_delta(d))
         else:
             if scalar is None: scalar = 1.0
             if sums is None or tensors is None:
@@ -470,7 +474,9 @@ class AExpression(object):
         elif Ex is not None and terms is None:
             self.terms = [ATerm(term=t) for t in Ex.terms]
         else:
-            raise Exception("Improper initialization of AExpression")
+            self.terms = []
+            simplify = False
+            sort = False
         self.tthresh = 1e-15
         if simplify:
             self.simplify()

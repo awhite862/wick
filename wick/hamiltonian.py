@@ -324,6 +324,26 @@ def projE0():
     """
     return Expression([Term(1.0, [], [Tensor([], "")], [], [])])
 
+def projF1(space):
+    """
+    Return left-projector onto a space of N+1 electron states
+
+    space (str): orbital space
+    """
+    a = Idx(0, space)
+    operators = [FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
+
+def projF_1(space):
+    """
+    Return left-projector onto a space of N-1 electron states
+
+    space (str): orbital space
+    """
+    i = Idx(0, space)
+    operators = [FOperator(i,True)]
+    return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
+
 def projE1(ospace, vspace):
     """
     Return left-projector onto a space of single excitations
@@ -407,6 +427,38 @@ def projEip1(ospace):
     """
     i = Idx(0, ospace)
     operators = [FOperator(i,True)]
+    return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
+
+def ketE1(ospace, vspace):
+    """
+    Return right-projector onto a space of single excitations
+
+    ospace (str): occupied space
+    vspace (str): virtual space
+    """
+    i = Idx(0, ospace)
+    a = Idx(0, vspace)
+    operators = [FOperator(a,True), FOperator(i,False)]
+    return Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
+
+def ketF1(space):
+    """
+    Return right-projector onto a space of N+1 electron states
+
+    space (str): orbital space
+    """
+    a = Idx(0, space)
+    operators = [FOperator(a,True)]
+    return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
+
+def ketF_1(space):
+    """
+    Return right-projector onto a space of N-1 electron states
+
+    space (str): orbital space
+    """
+    i = Idx(0, space)
+    operators = [FOperator(i,False)]
     return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
 
 def commute(A, B):

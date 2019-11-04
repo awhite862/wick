@@ -1,3 +1,4 @@
+import copy
 from .index import Idx
 
 class FOperator(object):
@@ -217,3 +218,8 @@ class Delta(object):
 
     def _print_str(self, imap):
         return "\delta_{" + imap[self.i1] + imap[self.i2] + "}"
+
+def tensor_from_delta(d):
+    sym = TensorSym([(0,1), (1,0)], [1.0, 1.0])
+    t = Tensor([d.i1, d.i2], "delta", sym=sym)
+    return t
