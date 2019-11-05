@@ -1,5 +1,5 @@
 from wick.expression import Expression, Term, AExpression
-from wick.hamiltonian import *
+from wick.ops import *
 from wick.wick import apply_wick
 
 

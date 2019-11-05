@@ -1,6 +1,6 @@
 from wick.index import Idx
 from wick.expression import *
-from wick.hamiltonian import one_e, two_e, E1, E2, commute
+from wick.ops import one_e, two_e, E1, E2, commute
 from wick.wick import apply_wick
 
 i = Idx(0,"occ")

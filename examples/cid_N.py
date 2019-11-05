@@ -1,5 +1,5 @@
 from wick.expression import *
-from wick.hamiltonian import *
+from wick.ops import *
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
@@ -18,7 +18,6 @@ out.resolve()
 final = AExpression(Ex=out)
 print("Sigma2")
 print(final)
-#bra = E0()
 S = HC
 out = apply_wick(S)
 out.resolve()
