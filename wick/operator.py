@@ -223,3 +223,26 @@ def tensor_from_delta(d):
     sym = TensorSym([(0,1), (1,0)], [1.0, 1.0])
     t = Tensor([d.i1, d.i2], "delta", sym=sym)
     return t
+
+def is_normal_ordered(operators, occ):
+    fa = None
+    for i,op in enumerate(operators):
+        if fa is None and (not op.qp_creation(occ)): fa = i
+        if fa is not None and op.qp_creation(occ): return False
+    return True
+
+def normal_ordered(operators,occ=None,sign=1.0):
+    if is_normal_ordered(operators, occ):
+        return (operators,sign)
+    fa = None
+    swap = None
+    for i,op in enumerate(operators):
+        if fa is None and (not op.qp_creation(occ)): fa = i
+        if fa is not None and op.qp_creation(occ):
+            swap = i
+            break
+    assert(swap is not None)
+    newops = operators[:fa] + [operators[swap]] + operators[fa:swap] + operators[swap+1:]
+    newsign = 1.0 if len(operators[fa:swap])%2 == 0 else -1.0
+    sign = sign*newsign
+    return normal_ordered(newops,sign=sign)
