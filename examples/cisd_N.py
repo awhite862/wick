@@ -14,7 +14,7 @@ C2 = E2("c", ["occ"], ["vir"])
 ket = C0 + C1 + C2
 HC = H*ket
 
-bra = projE2("occ", "vir", "occ", "vir")
+bra = braE2("occ", "vir", "occ", "vir")
 S = bra*HC
 out = apply_wick(S)
 out.resolve()
@@ -22,7 +22,7 @@ final = AExpression(Ex=out)
 print("Sigma2")
 print(final)
 
-bra = projE1("occ", "vir")
+bra = braE1("occ", "vir")
 S = bra*HC
 out = apply_wick(S)
 out.resolve()

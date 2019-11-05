@@ -6,7 +6,7 @@ H1 = one_e("f",["occ","vir"], norder=True)
 H2 = two_e("I",["occ","vir"], norder=True)
 H = H1 + H2
 
-bra = projE1("occ", "vir")
+bra = braE1("occ", "vir")
 T1 = E1("t", ["occ"], ["vir"])
 T2 = E2("t", ["occ"], ["vir"])
 T = T1 + T2

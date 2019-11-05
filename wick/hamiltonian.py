@@ -129,7 +129,7 @@ def ep11(name, fspaces, bspaces, norder=False, name2=None):
 
 def E0(name):
     """
-    Return a zero-rank constant tensor
+    Project onto the vacuum
     """
     return Expression([Term(1.0,[], [Tensor([], name)], [], [])])
 
@@ -318,33 +318,7 @@ def EPS2(name, bspaces, ospaces, vspaces):
                     terms.append(e1)
     return Expression(terms)
 
-def projE0():
-    """
-    Return a projector onto the vacuum.
-    """
-    return Expression([Term(1.0, [], [Tensor([], "")], [], [])])
-
-def projF1(space):
-    """
-    Return left-projector onto a space of N+1 electron states
-
-    space (str): orbital space
-    """
-    a = Idx(0, space)
-    operators = [FOperator(a,False)]
-    return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
-
-def projF_1(space):
-    """
-    Return left-projector onto a space of N-1 electron states
-
-    space (str): orbital space
-    """
-    i = Idx(0, space)
-    operators = [FOperator(i,True)]
-    return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
-
-def projE1(ospace, vspace):
+def braE1(ospace, vspace):
     """
     Return left-projector onto a space of single excitations
 
@@ -356,7 +330,7 @@ def projE1(ospace, vspace):
     operators = [FOperator(i,True), FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([a,i],"")], operators, [])])
 
-def projE2(o1, v1, o2, v2):
+def braE2(o1, v1, o2, v2):
     """
     Return left-projector onto a space of double excitations
 
@@ -374,14 +348,14 @@ def projE2(o1, v1, o2, v2):
     operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True), FOperator(b,False)]
     return Expression([Term(1.0, [], [Tensor([a,b,i,j],"")], operators, [])])
 
-def projP1(space):
+def braP1(space):
     """
     Return projection onto single Boson space
     """
     I = Idx(0, space, fermion=False)
     return Expression([Term(1.0, [], [Tensor([I],"")], [BOperator(I, False)], [])])
 
-def projP2(space):
+def braP2(space):
     """
     Return projection onto single Boson space
     """
@@ -389,7 +363,7 @@ def projP2(space):
     J = Idx(1, space, fermion=False)
     return Expression([Term(1.0, [], [Tensor([I,J],"")], [BOperator(I, False), BOperator(J, False)], [])])
 
-def projP1E1(bspace, ospace, vspace):
+def braP1E1(bspace, ospace, vspace):
     """
     Return left-projector onto a space of single excitations coupled to boson excitations
 
@@ -403,7 +377,7 @@ def projP1E1(bspace, ospace, vspace):
     operators = [BOperator(I,False), FOperator(i,True), FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([I,a,i],"")], operators, [])])
 
-def projP2E1(b1space, b2space, ospace, vspace):
+def braP2E1(b1space, b2space, ospace, vspace):
     """
     Return left-projector onto a space of single excitations coupled to boson excitations
 
@@ -419,7 +393,7 @@ def projP2E1(b1space, b2space, ospace, vspace):
     operators = [BOperator(I,False), BOperator(J,False), FOperator(i,True), FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([I,J,a,i],"")], operators, [])])
 
-def projEip1(ospace):
+def braEip1(ospace):
     """
     Return left-projector onto a space of ionized determinants
 
@@ -428,6 +402,16 @@ def projEip1(ospace):
     i = Idx(0, ospace)
     operators = [FOperator(i,True)]
     return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
+
+def braEea1(space):
+    """
+    Return left-projector onto a space of N+1 electron states
+
+    space (str): orbital space
+    """
+    a = Idx(0, space)
+    operators = [FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
 
 def ketE1(ospace, vspace):
     """
@@ -441,7 +425,7 @@ def ketE1(ospace, vspace):
     operators = [FOperator(a,True), FOperator(i,False)]
     return Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 
-def ketF1(space):
+def ketEea1(space):
     """
     Return right-projector onto a space of N+1 electron states
 
@@ -451,7 +435,7 @@ def ketF1(space):
     operators = [FOperator(a,True)]
     return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
 
-def ketF_1(space):
+def ketEip1(space):
     """
     Return right-projector onto a space of N-1 electron states
 

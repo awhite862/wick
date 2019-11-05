@@ -31,8 +31,8 @@ print("F_{ia} = ")
 print(final)
 
 # ba piece
-ket = ketF1("vir")
-bra = projF1("vir")
+ket = ketEea1("vir")
+bra = braEea1("vir")
 S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT - E0)*ket
 out = apply_wick(S)
 out.resolve()
@@ -42,8 +42,8 @@ print("F_{ba} = ")
 print(final)
 
 # ij piece
-ket = ketF_1("occ")
-bra = projF_1("occ")
+ket = ketEip1("occ")
+bra = braEip1("occ")
 S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT - E0)*ket
 out = apply_wick(S)
 out.resolve()

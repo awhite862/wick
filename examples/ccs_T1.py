@@ -4,7 +4,7 @@ from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
 
-bra = projE1("occ", "vir")
+bra = braE1("occ", "vir")
 T1 = E1("t", ["occ"], ["vir"])
 
 HT = commute(H1,T1)

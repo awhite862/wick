@@ -6,7 +6,7 @@ H1 = one_e("f",["occ","vir"])
 H2 = two_e("I",["occ","vir"])
 
 H = H1 + H2
-bra = projE1("occ", "vir")
+bra = braE1("occ", "vir")
 ket = E1("c", ["occ"], ["vir"])
 
 HC = H*ket

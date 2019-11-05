@@ -6,7 +6,7 @@ H1 = one_e("f",["occ","vir"], norder=True)
 H2 = two_e("I",["occ","vir"], norder=True)
 
 H = H1 + H2
-bra = projE2("occ", "vir", "occ", "vir")
+bra = braE2("occ", "vir", "occ", "vir")
 C0 = E0("c")
 C2 = E2("c", ["occ"], ["vir"])
 ket = C0 + C2
@@ -18,8 +18,8 @@ out.resolve()
 final = AExpression(Ex=out)
 print("Sigma2")
 print(final)
-bra = projE0()
-S = bra*HC
+#bra = E0()
+S = HC
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
