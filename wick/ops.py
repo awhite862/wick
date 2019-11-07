@@ -380,6 +380,34 @@ def braEip1(ospace):
     operators = [FOperator(i,True)]
     return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
 
+def braEip2(o1, o2, v1):
+    """
+    Return left-projector onto a space of (trion) N-1 particle determinants
+
+    o1 (str): first occupied space
+    o2 (str): second occupied space
+    v1 (str): virtual space
+    """
+    i = Idx(0, o1)
+    a = Idx(0, v1)
+    x = 1 if o2 == o1 else 0
+    j = Idx(x, o2)
+    operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True)]
+    return Expression([Term(1.0, [], [Tensor([i,a,j],"")], operators, [])])
+
+def braEdip1(o1, o2):
+    """
+    Return left-projector onto a space of N-2 particle determinants
+
+    o1 (str): first occupied space
+    o2 (str): second occupied space
+    """
+    i = Idx(0, o1)
+    x = 1 if o2 == o1 else 0
+    j = Idx(x, o2)
+    operators = [FOperator(i,True), FOperator(j,True)]
+    return Expression([Term(1.0, [], [Tensor([i,j],"")], operators, [])])
+
 def braEea1(space):
     """
     Return left-projector onto a space of N+1 electron states
@@ -389,6 +417,35 @@ def braEea1(space):
     a = Idx(0, space)
     operators = [FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
+
+def braEea2(o1, v1, v2):
+    """
+    Return left-projector onto a space of (trion) N+1 electron states
+
+    o1 (str): occupied space
+    v1 (str): first virtual space
+    v2 (str): second virtual space
+    """
+    i = Idx(0, o1)
+    a = Idx(0, v1)
+    y = 1 if v2 == v1 else 0
+    b = Idx(y, v2)
+    operators = [FOperator(i, True), FOperator(a,False), FOperator(b, False)]
+    return Expression([Term(1.0, [], [Tensor([a,b,i],"")], operators, [])])
+
+def braEdea1(v1, v2):
+    """
+    Return left-projector onto a space of N+2 electron states
+
+    v1 (str): first virtual space
+    v2 (str): second virtual space
+    """
+    a = Idx(0, v1)
+    y = 1 if v2 == v1 else 0
+    b = Idx(y, v2)
+    operators = [FOperator(a,False), FOperator(b,False)]
+    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
+
 
 def ketE1(ospace, vspace):
     """
@@ -402,6 +459,24 @@ def ketE1(ospace, vspace):
     operators = [FOperator(a,True), FOperator(i,False)]
     return Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
 
+def ketE2(o1, v1, o2, v2):
+    """
+    Return right-projector onto a space of double excitations
+
+    o1 (str): 1st occupied space
+    v1 (str): 1st virtual space
+    o2 (str): 2nd occupied space
+    v2 (str): 2nd virtual space
+    """
+    i = Idx(0, o1)
+    a = Idx(0, v1)
+    x = 1 if o2 == o1 else 0
+    y = 1 if v2 == v1 else 0
+    j = Idx(x, o1)
+    b = Idx(y, v1)
+    operators = [FOperator(a,True), FOperator(i,False), FOperator(b,True), FOperator(j,False)]
+    return Expression([Term(1.0, [], [Tensor([i,j,a,b],"")], operators, [])])
+
 def ketEea1(space):
     """
     Return right-projector onto a space of N+1 electron states
@@ -412,6 +487,21 @@ def ketEea1(space):
     operators = [FOperator(a,True)]
     return Expression([Term(1.0, [], [Tensor([a],"")], operators, [])])
 
+def ketEea2(o1, v1, v2):
+    """
+    Return right-projector onto a space of trion N+1 electron states
+
+    o1 (str): occupied space
+    v1 (str): first virtual space
+    v2 (str): second virtual space
+    """
+    i = Idx(0, o1)
+    a = Idx(0, v1)
+    y = 1 if v2 == v1 else 0
+    b = Idx(y, v2)
+    operators = [FOperator(b, True), FOperator(a,True), FOperator(i, False)]
+    return Expression([Term(1.0, [], [Tensor([i,a,b],"")], operators, [])])
+
 def ketEip1(space):
     """
     Return right-projector onto a space of N-1 electron states
@@ -421,6 +511,47 @@ def ketEip1(space):
     i = Idx(0, space)
     operators = [FOperator(i,False)]
     return Expression([Term(1.0, [], [Tensor([i],"")], operators, [])])
+
+def ketEip2(o1, o2, v1):
+    """
+    Return right-projector onto a space of trion N+1 electron states
+
+    o1 (str): occupied space
+    v1 (str): first virtual space
+    o2 (str): second occupied space
+    """
+    i = Idx(0, o1)
+    a = Idx(0, v1)
+    x = 1 if o2 == o1 else 0
+    j = Idx(x, o2)
+    operators = [FOperator(j, False), FOperator(a,True), FOperator(i, False)]
+    return Expression([Term(1.0, [], [Tensor([i,a,j],"")], operators, [])])
+
+def ketEdea1(v1, v2):
+    """
+    Return right-projector onto a space of N+2 electron states
+
+    v1 (str): first virtual space
+    v2 (str): second virtual space
+    """
+    a = Idx(0, v1)
+    y = 1 if v2 == v1 else 0
+    b = Idx(y, v2)
+    operators = [FOperator(b,True), FOperator(a,True)]
+    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
+
+def ketEdip1(o1, o2):
+    """
+    Return right-projector onto a space of N+2 electron states
+
+    o1 (str): first occupied space
+    o2 (str): second occupied space
+    """
+    i = Idx(0, o1)
+    x = 1 if o2 == o1 else 0
+    j = Idx(x, o2)
+    operators = [FOperator(j,False), FOperator(i,False)]
+    return Expression([Term(1.0, [], [Tensor([i,j],"")], operators, [])])
 
 def commute(A, B):
     """ Return the commutator of two operators"""

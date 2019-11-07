@@ -22,11 +22,13 @@ class TermMap(object):
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):
                         if iidx == jidx:
-                            cstr = str(i) + tj.name + str(j)
+                            tjname = tj.name if tj.name else "!"
+                            cstr = str(i) + tjname + str(j)
                             if occupied: colist += cstr
                             elif fermion: cvlist += cstr
                             else: cblist += cstr
-            self.data.add((ti.name,colist,cvlist,cblist))
+            tiname = ti.name if ti.name else "!"
+            self.data.add((tiname,colist,cvlist,cblist))
 
     def __eq__(self, other):
         return self.data == other.data
@@ -104,8 +106,6 @@ class Term(object):
                 dnew.append(dd)
 
         self.deltas = dnew
-        #if self.deltas:
-        #    self.resolve()
 
     def __repr__(self):
         s = str(self.scalar)
@@ -395,9 +395,41 @@ class ATerm(object):
         return len(self.ilist())
 
     def sort_tensors(self):
+        off = 0
         for i,tt in enumerate(self.tensors):
             if not tt.name:
-                self.tensors[0],self.tensors[i] = self.tensors[i], self.tensors[0]
+                self.tensors[off],self.tensors[i] = self.tensors[i], self.tensors[off]
+                off = off + 1
+
+    def connected(self):
+        ll = []
+        rtensors = [t for t in self.tensors if t.name]
+        for s in self.sums:
+            ll.append(s.idx)
+        adj = []
+        for idx in ll:
+            xx = set()
+            for i,t in enumerate(rtensors):
+                if idx in t.indices:
+                    xx.add(i)
+            adj.append(xx)
+        # If there are fewer than two tensors, there is no adjacency
+        if not adj: return (len(rtensors) < 2)
+        blue = set(adj[0])
+        nb = len(blue)
+        maxiter = 300000
+        while i < maxiter:
+            newtensors = []
+            for b in blue:
+                for ad in adj:
+                    if b in ad:
+                        for a in ad: newtensors.append(a)
+            blue = blue.union(set(newtensors))
+            nb2 = len(blue)
+            if nb2 == nb: break
+            nb = nb2
+            i = i + 1
+        return len(set(blue)) == len(rtensors)
 
 class Expression(object):
     """Operator expression
@@ -551,3 +583,12 @@ class AExpression(object):
 
     def sort(self):
         self.terms.sort()
+
+    def connected(self):
+        for t in self.terms:
+            if not t.connected(): return False
+        return True
+
+    def get_connected(self):
+        newterms = [t for t in self.terms if t.connected()]
+        return AExpression(terms=newterms)

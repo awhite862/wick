@@ -237,6 +237,7 @@ def normal_ordered(operators,occ=None,sign=1.0):
     fa = None
     swap = None
     for i,op in enumerate(operators):
+        assert(type(op) is FOperator)
         if fa is None and (not op.qp_creation(occ)): fa = i
         if fa is not None and op.qp_creation(occ):
             swap = i
