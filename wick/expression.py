@@ -401,6 +401,30 @@ class ATerm(object):
                 self.tensors[off],self.tensors[i] = self.tensors[i], self.tensors[off]
                 off = off + 1
 
+    def merge_external(self):
+        # check for sorting of external indices
+        ext = True
+        for t in self.tensors:
+            if ext == False and not t.name:
+                raise Exception("Cannot merge external indices in unsorted term")
+            if t.name: ext = False
+
+        # for the sorted term find the number of tensors
+        num_ext = 0
+        for t in self.tensors:
+            if not t.name: num_ext = num_ext + 1
+
+        # check for symmetry in external indices
+
+        if num_ext < 2: pass
+        else:
+            newtensors = deepcopy(self.tensors[num_ext:])
+            ext_indices = []
+            for t in self.tensors[:num_ext]:
+                ext_indices += t.indices
+            t_ext = Tensor(ext_indices, "")
+            self.tensors = [t_ext] + newtensors
+
     def connected(self):
         ll = []
         rtensors = [t for t in self.tensors if t.name]
@@ -430,6 +454,10 @@ class ATerm(object):
             nb = nb2
             i = i + 1
         return len(set(blue)) == len(rtensors)
+
+    def transpose(self, perm):
+        self.merge_external()
+        self.tensors[0].transpose(perm)
 
 class Expression(object):
     """Operator expression
@@ -592,3 +620,7 @@ class AExpression(object):
     def get_connected(self):
         newterms = [t for t in self.terms if t.connected()]
         return AExpression(terms=newterms)
+
+    def transpose(self, perm):
+        for t in self.terms:
+            t.transpose(perm)

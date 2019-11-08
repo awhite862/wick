@@ -164,6 +164,13 @@ class Tensor(object):
 
         return self.name + "_{" + s + "}"
 
+    def transpose(self, perm):
+        assert(len(self.indices) == len(perm))
+        newindices = []
+        for p in perm:
+            newindices.append(self.indices[p])
+        self.indices = newindices
+
 def permute(t, p):
     name = str(t.name)
     indices = [t.indices[i] for i in p]

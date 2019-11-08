@@ -392,8 +392,8 @@ def braEip2(o1, o2, v1):
     a = Idx(0, v1)
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
-    operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True)]
-    return Expression([Term(1.0, [], [Tensor([i,a,j],"")], operators, [])])
+    operators = [FOperator(i,True), FOperator(j,True), FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([a,i,j],"")], operators, [])])
 
 def braEdip1(o1, o2):
     """
@@ -431,7 +431,7 @@ def braEea2(o1, v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(i, True), FOperator(a,False), FOperator(b, False)]
-    return Expression([Term(1.0, [], [Tensor([a,b,i],"")], operators, [])])
+    return Expression([Term(1.0, [], [Tensor([b,a,i],"")], operators, [])])
 
 def braEdea1(v1, v2):
     """
@@ -444,7 +444,7 @@ def braEdea1(v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(a,False), FOperator(b,False)]
-    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
+    return Expression([Term(1.0, [], [Tensor([b,a],"")], operators, [])])
 
 
 def ketE1(ospace, vspace):
@@ -499,7 +499,7 @@ def ketEea2(o1, v1, v2):
     a = Idx(0, v1)
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
-    operators = [FOperator(b, True), FOperator(a,True), FOperator(i, False)]
+    operators = [FOperator(a, True), FOperator(b,True), FOperator(i, False)]
     return Expression([Term(1.0, [], [Tensor([i,a,b],"")], operators, [])])
 
 def ketEip1(space):
@@ -524,8 +524,8 @@ def ketEip2(o1, o2, v1):
     a = Idx(0, v1)
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
-    operators = [FOperator(j, False), FOperator(a,True), FOperator(i, False)]
-    return Expression([Term(1.0, [], [Tensor([i,a,j],"")], operators, [])])
+    operators = [FOperator(a,True), FOperator(j, False), FOperator(i, False)]
+    return Expression([Term(1.0, [], [Tensor([i,j,a],"")], operators, [])])
 
 def ketEdea1(v1, v2):
     """
@@ -538,7 +538,7 @@ def ketEdea1(v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(b,True), FOperator(a,True)]
-    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
+    return Expression([Term(1.0, [], [Tensor([b,a],"")], operators, [])])
 
 def ketEdip1(o1, o2):
     """
