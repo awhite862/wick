@@ -152,8 +152,8 @@ def E2(name, ospaces, vspaces):
                     e2 = Term(0.25,
                         [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
                         [Tensor([a, b, i, j], name, sym=sym)],
-                        [FOperator(a, True), FOperator(i, False),
-                            FOperator(b, True), FOperator(j, False)],
+                        [FOperator(a, True), FOperator(b, True),
+                            FOperator(j, False), FOperator(i, False)],
                         [])
                     terms.append(e2)
     return Expression(terms)
@@ -195,8 +195,7 @@ def Eip2(name, ospaces, vspaces):
                 e2 = Term(0.5,
                     [Sigma(i), Sigma(a), Sigma(j)],
                     [Tensor([a, i, j], name, sym=sym)],
-                    [FOperator(a, True), FOperator(i, False),
-                        FOperator(j, False)],
+                    [FOperator(a, True), FOperator(j, False), FOperator(i, False)],
                     [])
                 terms.append(e2)
     return Expression(terms)
@@ -322,7 +321,7 @@ def braE2(o1, v1, o2, v2):
     y = 1 if v2 == v1 else 0
     j = Idx(x, o1)
     b = Idx(y, v1)
-    operators = [FOperator(i,True), FOperator(a,False), FOperator(j,True), FOperator(b,False)]
+    operators = [FOperator(i,True), FOperator(j,True), FOperator(b,False), FOperator(a,False)]
     return Expression([Term(1.0, [], [Tensor([a,b,i,j],"")], operators, [])])
 
 def braP1(space):
@@ -430,8 +429,8 @@ def braEea2(o1, v1, v2):
     a = Idx(0, v1)
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
-    operators = [FOperator(i, True), FOperator(a,False), FOperator(b, False)]
-    return Expression([Term(1.0, [], [Tensor([b,a,i],"")], operators, [])])
+    operators = [FOperator(i, True), FOperator(b,False), FOperator(a, False)]
+    return Expression([Term(1.0, [], [Tensor([a,b,i],"")], operators, [])])
 
 def braEdea1(v1, v2):
     """
@@ -443,8 +442,8 @@ def braEdea1(v1, v2):
     a = Idx(0, v1)
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
-    operators = [FOperator(a,False), FOperator(b,False)]
-    return Expression([Term(1.0, [], [Tensor([b,a],"")], operators, [])])
+    operators = [FOperator(b,False), FOperator(a,False)]
+    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
 
 
 def ketE1(ospace, vspace):
@@ -474,7 +473,7 @@ def ketE2(o1, v1, o2, v2):
     y = 1 if v2 == v1 else 0
     j = Idx(x, o1)
     b = Idx(y, v1)
-    operators = [FOperator(a,True), FOperator(i,False), FOperator(b,True), FOperator(j,False)]
+    operators = [FOperator(a,True), FOperator(b,True), FOperator(j,False), FOperator(i,False)]
     return Expression([Term(1.0, [], [Tensor([i,j,a,b],"")], operators, [])])
 
 def ketEea1(space):
@@ -537,8 +536,8 @@ def ketEdea1(v1, v2):
     a = Idx(0, v1)
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
-    operators = [FOperator(b,True), FOperator(a,True)]
-    return Expression([Term(1.0, [], [Tensor([b,a],"")], operators, [])])
+    operators = [FOperator(a,True), FOperator(b,True)]
+    return Expression([Term(1.0, [], [Tensor([a,b],"")], operators, [])])
 
 def ketEdip1(o1, o2):
     """

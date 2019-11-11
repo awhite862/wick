@@ -1,14 +1,14 @@
 Sigma2
- - 1.0I_{abji}c_{}
- + 1.0\sum_{k}f_{ki}c_{abjk}
- - 1.0\sum_{k}f_{kj}c_{abik}
- - 1.0\sum_{c}f_{ac}c_{bcij}
- + 1.0\sum_{c}f_{bc}c_{acij}
- - 0.5\sum_{kl}I_{klji}c_{abkl}
- - 1.0\sum_{kc}I_{kaic}c_{bcjk}
- + 1.0\sum_{kc}I_{kbic}c_{acjk}
- + 1.0\sum_{kc}I_{kajc}c_{bcik}
- - 1.0\sum_{kc}I_{kbjc}c_{acik}
- - 0.5\sum_{cd}I_{abcd}c_{dcij}
+ + 1.0I_{baji}c_{}
+ + 1.0\sum_{k}f_{ki}c_{bakj}
+ - 1.0\sum_{k}f_{kj}c_{baki}
+ - 1.0\sum_{c}f_{bc}c_{acji}
+ + 1.0\sum_{c}f_{ac}c_{bcji}
+ - 0.5\sum_{kl}I_{klji}c_{balk}
+ - 1.0\sum_{kc}I_{kbic}c_{ackj}
+ + 1.0\sum_{kc}I_{kaic}c_{bckj}
+ + 1.0\sum_{kc}I_{kbjc}c_{acki}
+ - 1.0\sum_{kc}I_{kajc}c_{bcki}
+ - 0.5\sum_{cd}I_{bacd}c_{dcji}
 Sigma0
- - 0.25\sum_{ijab}I_{ijab}c_{baij}
+ + 0.25\sum_{ijab}I_{ijab}c_{baji}

@@ -1,8 +1,11 @@
 P_{ov} = 
  + 1.0L_{ia}
+ += 1.0*einsum('ia->ia', L)
 P_{vv} = 
  + 1.0\sum_{i}L_{ib}t_{ai}
  - 0.5\sum_{cij}L_{ijcb}t_{caji}
+ += 1.0*einsum('ib,ai->ab', L, t)
+ += -0.5*einsum('ijcb,caji->ab', L, t)
 P_{oo} = 
  - 1.0\sum_{a}L_{ia}t_{aj}
  + 0.5\sum_{abk}L_{ikab}t_{bajk}
