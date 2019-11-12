@@ -1,0 +1,75 @@
+F_{ov} = 
+ + 1.0f_{ia}
+ - 1.0\sum_{jb}t_{bj}I_{jiab}
+F_{vv} = 
+ + 1.0f_{ab}
+ - 1.0\sum_{i}t_{ai}f_{ib}
+ - 1.0\sum_{ic}t_{ci}I_{iabc}
+ + 0.5\sum_{jic}t_{acij}I_{jibc}
+ - 1.0\sum_{ijc}t_{ai}t_{cj}I_{ijbc}
+F_{oo} = 
+ + 1.0f_{ij}
+ + 1.0\sum_{a}t_{aj}f_{ia}
+ - 1.0\sum_{ka}t_{ak}I_{kija}
+ - 0.5\sum_{kba}t_{abkj}I_{kiba}
+ + 1.0\sum_{kba}t_{aj}t_{bk}I_{kiba}
+W_{oovv} = 
+ + 1.0I_{jiba}
+W_{vovv} = 
+ + 1.0I_{iacb}
+ + 1.0\sum_{j}t_{aj}I_{jicb}
+W_{ooov} = 
+ - 1.0I_{jika}
+ + 1.0\sum_{b}t_{bk}I_{jiab}
+I_{vvvv} = 
+ + 1.0I_{badc}
+ + 1.0\sum_{i}t_{ai}I_{ibdc}
+ - 1.0\sum_{i}t_{bi}I_{iadc}
+ - 0.5\sum_{ji}t_{baij}I_{jidc}
+ + 1.0\sum_{ij}t_{bi}t_{aj}I_{ijdc}
+I_{oooo} = 
+ + 1.0I_{jilk}
+ - 1.0\sum_{a}t_{al}I_{jika}
+ + 1.0\sum_{a}t_{ak}I_{jila}
+ - 0.5\sum_{ba}t_{ablk}I_{jiba}
+ + 1.0\sum_{ba}t_{ak}t_{bl}I_{jiba}
+I_{voov} = 
+ - 1.0I_{iajb}
+ - 1.0\sum_{k}t_{ak}I_{kijb}
+ + 1.0\sum_{c}t_{cj}I_{iabc}
+ + 1.0\sum_{kc}t_{ackj}I_{kibc}
+ + 1.0\sum_{kc}t_{cj}t_{ak}I_{kibc}
+I_{vvvo} = 
+ + 1.0I_{baic}
+ + 1.0\sum_{j}t_{baji}f_{jc}
+ + 1.0\sum_{j}t_{aj}I_{jbic}
+ - 1.0\sum_{j}t_{bj}I_{jaic}
+ - 1.0\sum_{d}t_{di}I_{bacd}
+ - 0.5\sum_{kj}t_{bajk}I_{kjic}
+ - 1.0\sum_{jd}t_{adji}I_{jbcd}
+ + 1.0\sum_{jd}t_{bdji}I_{jacd}
+ + 1.0\sum_{jk}t_{bj}t_{ak}I_{jkic}
+ - 1.0\sum_{jd}t_{di}t_{aj}I_{jbcd}
+ + 1.0\sum_{jd}t_{di}t_{bj}I_{jacd}
+ + 0.5\sum_{kjd}t_{di}t_{bajk}I_{kjcd}
+ - 1.0\sum_{jkd}t_{bj}t_{adki}I_{jkcd}
+ + 1.0\sum_{jkd}t_{aj}t_{bdki}I_{jkcd}
+ - 1.0\sum_{jkd}t_{dj}t_{baki}I_{jkcd}
+ - 1.0\sum_{jkd}t_{di}t_{bj}t_{ak}I_{jkcd}
+I_{ovoo} = 
+ - 1.0I_{iakj}
+ + 1.0\sum_{b}t_{abkj}f_{ib}
+ - 1.0\sum_{l}t_{al}I_{likj}
+ + 1.0\sum_{b}t_{bk}I_{iajb}
+ - 1.0\sum_{b}t_{bj}I_{iakb}
+ + 1.0\sum_{lb}t_{ablk}I_{lijb}
+ - 1.0\sum_{lb}t_{ablj}I_{likb}
+ + 0.5\sum_{cb}t_{bckj}I_{iacb}
+ + 1.0\sum_{lb}t_{bk}t_{al}I_{lijb}
+ - 1.0\sum_{lb}t_{bj}t_{al}I_{likb}
+ - 1.0\sum_{cb}t_{bj}t_{ck}I_{iacb}
+ - 1.0\sum_{lcb}t_{bj}t_{aclk}I_{licb}
+ + 1.0\sum_{lcb}t_{bk}t_{aclj}I_{licb}
+ + 0.5\sum_{lcb}t_{al}t_{bckj}I_{licb}
+ - 1.0\sum_{lcb}t_{bl}t_{ackj}I_{licb}
+ - 1.0\sum_{lcb}t_{bj}t_{ck}t_{al}I_{licb}
