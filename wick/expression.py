@@ -567,19 +567,19 @@ class AExpression(object):
         return self._print_str()
 
     def __add__(self, other):
-        if isinstance(other, Expression):
+        if isinstance(other, AExpression):
             return AExpression(self.terms + other.terms)
         else: return NotImplemented
 
     def __sub__(self, other):
-        if isinstance(other, Expression):
+        if isinstance(other, AExpression):
             return self + -1.0*other
 
     def __mul__(self, other):
         if isinstance(other, Number):
             new = Expression([other*t for t in self.terms])
             return new
-        elif isinstance(other, Expression):
+        elif isinstance(other, AExpression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return Expression(terms)
         else: return NotImplemented
