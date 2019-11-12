@@ -1,0 +1,4 @@
+W_{vovvvo} = 
+ - 1.0\sum_{k}t_{bakj}I_{kidc}
+W_{oovovo} = 
+ + 1.0\sum_{c}t_{aclk}I_{jibc}
