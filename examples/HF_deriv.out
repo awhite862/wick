@@ -1,0 +1,13 @@
+dE/dX* =
+ + 1.0f_{ai}
+dE/dX =
+ + 1.0f_{ia}
+
+d^2E/dX*dX* =
+ + 1.0I_{baji}
+d^2E/dX*dX =
+ - 1.0I_{jaib}
+ - 1.0f_{ji}delta_{ab}
+ + 1.0f_{ab}delta_{ij}
+d^2E/dXdX =
+ + 1.0I_{jiba}
