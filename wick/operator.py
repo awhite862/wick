@@ -133,11 +133,10 @@ class Tensor(object):
 
     def __repr__(self):
         temp = self.name
-        s = str()
+        istr = str()
         for idx in self.indices:
-            s += str(idx.index)
-
-        return self.name + "_{" + s + "}"
+            istr += str(idx.index)
+        return self.name + "_{" + istr + "}"
 
     def _inc(self, i):
         indices = [Idx(ii.index + i, ii.space) for ii in self.indices]
@@ -150,19 +149,18 @@ class Tensor(object):
         return ilist
 
     def _istr(self, imap):
-        s = str()
+        out = str()
         for idx in self.indices:
-            s += imap[idx]
-        return s
+            out += imap[idx]
+        return out
 
     def _print_str(self, imap):
         temp = self.name
         if len(temp) == 0: return str()
-        s = str()
+        istr = str()
         for idx in self.indices:
-            s += imap[idx]
-
-        return self.name + "_{" + s + "}"
+            istr += imap[idx]
+        return self.name + "_{" + istr + "}"
 
     def transpose(self, perm):
         assert(len(self.indices) == len(perm))

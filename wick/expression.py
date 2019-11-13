@@ -108,16 +108,16 @@ class Term(object):
         self.deltas = dnew
 
     def __repr__(self):
-        s = str(self.scalar)
+        out = str(self.scalar)
         for ss in self.sums:
-            s = s + str(ss)
+            out += str(ss)
         for dd in self.deltas:
-            s = s + str(dd)
+            out += str(dd)
         for tt in self.tensors:
-            s = s + str(tt)
+            out += str(tt)
         for oo in self.operators:
-            s = s + str(oo)
-        return s
+            out += str(oo)
+        return out
 
 
     def __mul__(self, other):
@@ -189,16 +189,16 @@ class Term(object):
 
     def _print_str(self,with_scalar=True):
         imap = self._idx_map()
-        s = str(self.scalar) if with_scalar else str()
+        out = str(self.scalar) if with_scalar else str()
         for ss in self.sums:
-            s += ss._print_str(imap)
+            out += ss._print_str(imap)
         for dd in self.deltas:
-            s += dd._print_str(imap)
+            out += dd._print_str(imap)
         for tt in self.tensors:
-            s += tt._print_str(imap)
+            out += tt._print_str(imap)
         for oo in self.operators:
-            s += oo._print_str(imap)
-        return s
+            out += oo._print_str(imap)
+        return out
 
     def ilist(self):
         ilist = []
@@ -251,13 +251,12 @@ class ATerm(object):
             self.tensors = tensors
 
     def __repr__(self):
-        s = str(self.scalar)
+        out = str(self.scalar)
         for ss in self.sums:
-            s = s + str(ss)
+            out += str(ss)
         for tt in self.tensors:
-            s = s + str(tt)
-        return s
-
+            out += str(tt)
+        return out
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -332,19 +331,19 @@ class ATerm(object):
 
     def _print_str(self,with_scalar=True):
         imap = self._idx_map()
-        s = str(self.scalar) if with_scalar else str()
+        out = str(self.scalar) if with_scalar else str()
         iis = str()
         for ss in self.sums:
             iis += imap[ss.idx]
         if iis:
-            s += "\sum_{" + iis + "}"
+            out += "\sum_{" + iis + "}"
         for tt in self.tensors:
-            s += tt._print_str(imap)
-        return s
+            out += tt._print_str(imap)
+        return out
 
     def _einsum_str(self):
         imap = self._idx_map()
-        s = str(self.scalar)
+        sstr = str(self.scalar)
         fstr = str()
         istr = str()
         tstr = str()
@@ -354,7 +353,7 @@ class ATerm(object):
             else:
                 tstr += ", " + tt.name
                 istr += tt._istr(imap) + ","
-        return s + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
+        return sstr + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
 
     def match(self, other):
         if isinstance(other, ATerm):
@@ -437,6 +436,7 @@ class ATerm(object):
                 if idx in t.indices:
                     xx.add(i)
             adj.append(xx)
+
         # If there are fewer than two tensors, there is no adjacency
         if not adj: return (len(rtensors) < 2)
         blue = set(adj[0])
@@ -452,7 +452,7 @@ class ATerm(object):
             nb2 = len(blue)
             if nb2 == nb: break
             nb = nb2
-            i = i + 1
+            i += 1
         return len(set(blue)) == len(rtensors)
 
     def transpose(self, perm):
@@ -478,12 +478,11 @@ class Expression(object):
         self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
-        s = str()
+        out = str()
         for t in self.terms:
-           s = s + str(t)
-           s = s + " + "
-
-        return s[:-2]
+           out += str(t)
+           out += " + "
+        return out[:-2]
 
     def __add__(self, other):
         if isinstance(other, Expression):
@@ -506,14 +505,13 @@ class Expression(object):
     __rmul__ = __mul__
 
     def _print_str(self):
-        s = str()
+        out = str()
         for t in self.terms:
             sca = t.scalar
             num = abs(sca)
             sign = " + " if sca > 0 else " - "
-            s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
-
-        return s[:-1]
+            out += sign + str(num) + t._print_str(with_scalar=False) + "\n"
+        return out[:-1]
 
     def are_operators(self):
         for i in range(len(self.terms)):
@@ -587,23 +585,22 @@ class AExpression(object):
     __rmul__ = __mul__
 
     def _print_str(self):
-        s = str()
+        out = str()
         for t in self.terms:
             sca = t.scalar
             num = abs(sca)
             sign = " + " if sca > 0 else " - "
-            s += sign + str(num) + t._print_str(with_scalar=False) + "\n"
-
-        return s[:-1]
+            out += sign + str(num) + t._print_str(with_scalar=False) + "\n"
+        return out[:-1]
 
     def _print_einsum(self, lhs=None):
         X = lhs if lhs is not None else str()
-        s = str()
+        out = str()
         for t in self.terms[:-1]:
-            s += X + " += " + t._einsum_str() + "\n"
+            out += X + " += " + t._einsum_str() + "\n"
         if self.terms:
-            s += X + " += " + self.terms[-1]._einsum_str()
-        return s
+            out += X + " += " + self.terms[-1]._einsum_str()
+        return out
 
     def sort_tensors(self):
         for t in self.terms:
