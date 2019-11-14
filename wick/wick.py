@@ -57,7 +57,7 @@ def get_sign(ipairs):
 
     assert(ncross%2 == 0)
     ncross = ncross//2
-    return 1.0 if ncross%2 == 0 else -1.0
+    return 1 if ncross%2 == 0 else -1
 
 def apply_wick(e, occ=None):
     to = []

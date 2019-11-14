@@ -114,7 +114,7 @@ class Tensor(object):
         self.indices = indices
         self.name = name
         if sym is None:
-            self.sym = TensorSym([tuple([i for i in range(len(indices))])], [1.0])
+            self.sym = TensorSym([tuple([i for i in range(len(indices))])], [1])
         else:
             self.sym = sym
 
@@ -236,7 +236,7 @@ def is_normal_ordered(operators, occ):
         if fa is not None and op.qp_creation(occ): return False
     return True
 
-def normal_ordered(operators,occ=None,sign=1.0):
+def normal_ordered(operators,occ=None,sign=1):
     if is_normal_ordered(operators, occ):
         return (operators,sign)
     fa = None
@@ -249,6 +249,6 @@ def normal_ordered(operators,occ=None,sign=1.0):
             break
     assert(swap is not None)
     newops = operators[:fa] + [operators[swap]] + operators[fa:swap] + operators[swap+1:]
-    newsign = 1.0 if len(operators[fa:swap])%2 == 0 else -1.0
+    newsign = 1 if len(operators[fa:swap])%2 == 0 else -1
     sign = sign*newsign
     return normal_ordered(newops,sign=sign)

@@ -16,7 +16,7 @@ HTT = commute(HT,T)
 HTTT = commute(HTT,T)
 HTTTT = commute(HTTT,T)
 
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)

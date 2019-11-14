@@ -1,3 +1,4 @@
+from fractions import Fraction
 from wick.index import Idx
 from wick.expression import *
 from wick.ops import one_e, two_e, E1, E2, commute
@@ -18,11 +19,11 @@ L = L1 + L2
 
 # ov block
 operators = [FOperator(a,True), FOperator(i,False)]
-pvo = Expression([Term(1.0, [], [Tensor([i,a],"")], operators, [])])
+pvo = Expression([Term(1, [], [Tensor([i,a],"")], operators, [])])
 
 PT = commute(pvo, T)
 PTT = commute(PT, T)
-mid = pvo + PT + 0.5*PTT
+mid = pvo + PT + Fraction('1/2')*PTT
 full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
@@ -33,11 +34,11 @@ print(final)
 
 # vv block
 operators = [FOperator(a,True), FOperator(b,False)]
-pvv = Expression([Term(1.0, [], [Tensor([b,a],"")], operators, [])])
+pvv = Expression([Term(1, [], [Tensor([b,a],"")], operators, [])])
 
 PT = commute(pvv, T)
 PTT = commute(PT, T)
-mid = pvv + PT + 0.5*PTT
+mid = pvv + PT + Fraction('1/2')*PTT
 full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
@@ -49,11 +50,11 @@ print(final)
 
 # oo block
 operators = [FOperator(j,False), FOperator(i,True)]
-poo = Expression([Term(-1.0, [], [Tensor([j,i],"")], operators, [])])
+poo = Expression([Term(-1, [], [Tensor([j,i],"")], operators, [])])
 
 PT = commute(poo, T)
 PTT = commute(PT, T)
-mid = poo + PT + 0.5*PTT
+mid = poo + PT + Fraction('1/2')*PTT
 full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
@@ -65,11 +66,11 @@ print(final)
 
 # vo block
 operators = [FOperator(i,True), FOperator(a,False)]
-pvo = Expression([Term(1.0, [], [Tensor([a,i],"")], operators, [])])
+pvo = Expression([Term(1, [], [Tensor([a,i],"")], operators, [])])
 
 PT = commute(pvo, T)
 PTT = commute(PT, T)
-mid = pvo + PT + 0.5*PTT
+mid = pvo + PT + Fraction('1/2')*PTT
 full = mid + L*mid
 out = apply_wick(full)
 out.resolve()

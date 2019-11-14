@@ -1,3 +1,4 @@
+from fractions import Fraction
 from wick.expression import *
 from wick.ops import *
 from wick.wick import apply_wick
@@ -20,11 +21,11 @@ HTT = commute(HT,T)
 HTTT = commute(HTT,T)
 HTTTT = commute(HTTT,T)
 
-S0 = (H + HT + (1.0/2.0)*HTT)
+S0 = (H + HT + Fraction('1/2')*HTT)
 E0 = apply_wick(S0)
 E0.resolve()
 
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT - E0)*R
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT - E0)*R
 
 out = apply_wick(S)
 out.resolve()

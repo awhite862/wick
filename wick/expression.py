@@ -243,7 +243,7 @@ class ATerm(object):
             for d in term.deltas:
                 self.tensors.append(tensor_from_delta(d))
         else:
-            if scalar is None: scalar = 1.0
+            if scalar is None: scalar = 1
             if sums is None or tensors is None:
                 raise Exception("Improper initialization of ATerm")
             self.scalar = scalar
@@ -331,7 +331,7 @@ class ATerm(object):
 
     def _print_str(self,with_scalar=True):
         imap = self._idx_map()
-        out = str(self.scalar) if with_scalar else str()
+        out = str(float(self.scalar)) if with_scalar else str()
         iis = str()
         for ss in self.sums:
             iis += imap[ss.idx]
@@ -343,7 +343,7 @@ class ATerm(object):
 
     def _einsum_str(self):
         imap = self._idx_map()
-        sstr = str(self.scalar)
+        sstr = str(float(self.scalar))
         fstr = str()
         istr = str()
         tstr = str()
@@ -370,7 +370,7 @@ class ATerm(object):
             if len(self.sums) != len(other.sums): return None
             TM1 = TermMap(self.sums, self.tensors)
             for xs in product(*tlists):
-                sign = 1.0
+                sign = 1
                 for x in xs: sign *= x[1]
                 newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors)
@@ -491,7 +491,7 @@ class Expression(object):
 
     def __sub__(self, other):
         if isinstance(other, Expression):
-            return self + -1.0*other
+            return self + -1*other
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -571,7 +571,7 @@ class AExpression(object):
 
     def __sub__(self, other):
         if isinstance(other, AExpression):
-            return self + -1.0*other
+            return self + -1*other
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -588,7 +588,7 @@ class AExpression(object):
         out = str()
         for t in self.terms:
             sca = t.scalar
-            num = abs(sca)
+            num = float(abs(sca))
             sign = " + " if sca > 0 else " - "
             out += sign + str(num) + t._print_str(with_scalar=False) + "\n"
         return out[:-1]

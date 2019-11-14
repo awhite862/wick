@@ -30,7 +30,7 @@ final = AExpression(Ex=out)
 print("Sigma1")
 print(final)
 
-bra = Expression([Term(1.0, [], [Tensor([], "")], [], [])])
+bra = Expression([Term(1, [], [Tensor([], "")], [], [])])
 S = bra*HC
 out = apply_wick(S)
 out.resolve()

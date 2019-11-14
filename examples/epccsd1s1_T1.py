@@ -1,3 +1,4 @@
+from fractions import Fraction
 from wick.expression import *
 from wick.ops import *
 from wick.wick import apply_wick
@@ -17,7 +18,7 @@ bra = braE1("occ", "vir")
 HT = commute(H,T)
 HTT = commute(HT,T)
 HTTT = commute(commute(commute(H2,T1),T1),T1)
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT)
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT)
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)

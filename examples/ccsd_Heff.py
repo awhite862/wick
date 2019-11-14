@@ -1,6 +1,7 @@
 from wick.expression import *
 from wick.ops import *
 from wick.wick import apply_wick
+from fractions import Fraction
 
 H1 = one_e("f",["occ","vir"], norder=True)
 H2 = two_e("I",["occ","vir"], norder=True)
@@ -17,7 +18,7 @@ HTTTT = commute(HTTT,T)
 
 # ov piece
 ket = ketE1("occ", "vir")
-S = (H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT)*ket
+S = (H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -29,7 +30,7 @@ print(final)
 # vv piece
 ket = ketEea1("vir")
 bra = braEea1("vir")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -41,7 +42,7 @@ print(final)
 # oo piece
 ket = ketEip1("occ")
 bra = braEip1("occ")
-S = -1.0*bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT)*ket
+S = -1*bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -54,7 +55,7 @@ print(final)
 
 # vvoo piece
 ket = ketE2("occ", "vir", "occ", "vir")
-S = (H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = (H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -66,7 +67,7 @@ print(final)
 # vovv piece
 ket = ketEea2("occ", "vir", "vir")
 bra = braEea1("vir")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -78,7 +79,7 @@ print(final)
 # ooov piece
 ket = ketEip2("occ", "occ", "vir")
 bra = braEip1("occ")
-S = -1.0*bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = -1*bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -92,7 +93,7 @@ print(final)
 # vvvv piece
 ket = ketEdea1("vir", "vir")
 bra = braEdea1("vir", "vir")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -105,7 +106,7 @@ print(final)
 # oooo piece
 ket = ketEdip1("occ", "occ")
 bra = braEdip1("occ", "occ")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -119,7 +120,7 @@ print(final)
 # voov piece
 ket = ketE1("occ", "vir")
 bra = braE1("occ", "vir")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -133,7 +134,7 @@ print(final)
 # vvvo piece
 ket = ketEea1("vir")
 bra = braEea2("occ", "vir", "vir")
-S = bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -147,7 +148,7 @@ print(final)
 # ovoo piece
 ket = ketEip1("occ")
 bra = braEip2("occ", "occ", "vir")
-S = -1.0*bra*(H + HT + (1.0/2.0)*HTT + (1/6.0)*HTTT + (1/24.0)*HTTTT)*ket
+S = -1*bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
