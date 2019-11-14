@@ -24,3 +24,8 @@ class Idx(object):
             return 'o' in self.space
         else:
             return self.space in occ
+
+from copy import copy
+
+def idx_copy(idx):
+    return Idx(copy(idx.index), idx.space, bool(idx.fermion))

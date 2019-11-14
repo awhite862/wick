@@ -1,6 +1,5 @@
 from .operator import BOperator, FOperator, Sigma, Delta
 from .expression import Term, Expression
-import copy
 
 def valid_contraction(o1, o2, occ=None):
     if isinstance(o1, FOperator) and isinstance(o2, FOperator):
@@ -67,7 +66,7 @@ def apply_wick(e, occ=None):
         if len(temp.operators)%2 != 0:
             continue
         if len(temp.operators) == 0:
-            to.append(copy.deepcopy(temp))
+            to.append(temp.copy())
             continue
         # loop to find a contraction
         plist = pair_list(temp.operators)
@@ -101,10 +100,10 @@ def apply_wick(e, occ=None):
             if good:
                 sign = get_sign(ipairs)
                 t1 = Term(sign*temp.scalar,
-                        copy.deepcopy(temp.sums),
-                        copy.deepcopy(temp.tensors),
+                        [s.copy() for s in temp.sums],
+                        [t.copy() for t in temp.tensors],
                         [],
-                        deltas + copy.deepcopy(temp.deltas))
+                        deltas + [d.copy() for d in temp.deltas])
                 to.append(t1)
         
     o = Expression(to)

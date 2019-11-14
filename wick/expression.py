@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import copy
 from itertools import product
 from numbers import Number
 from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
@@ -122,7 +122,7 @@ class Term(object):
 
     def __mul__(self, other):
         if isinstance(other, Number):
-            new = deepcopy(self)
+            new = self.copy()
             new.scalar *= other
             return new
         elif isinstance(other, Term):
@@ -144,7 +144,7 @@ class Term(object):
 
     def __rmul__(self, other):
         if isinstance(other, Number):
-            new = deepcopy(self)
+            new = self.copy()
             new.scalar *= other
             return new
         else:
@@ -219,6 +219,14 @@ class Term(object):
             if ii2 not in ilist: ilist.append(ii2)
         return ilist
 
+    def copy(self):
+        newscalar = copy(self.scalar)
+        newsums = [s.copy() for s in self.sums]
+        newtensors = [t.copy() for t in self.tensors]
+        newoperators = [o.copy() for o in self.operators]
+        newdeltas = [d.copy() for d in self.deltas]
+        return Term(newscalar, newsums, newtensors, newoperators, newdeltas)
+
 class ATerm(object):
     """Abstract term
 
@@ -229,7 +237,6 @@ class ATerm(object):
     """
     def __init__(self, scalar=None, sums=None, tensors=None, term=None):
         if term is not None:
-            #assert(len(term.deltas) == 0)
             assert(len(term.operators) == 0)
             if scalar is not None:
                 raise Exception("ATerm improperly initialized")
@@ -237,9 +244,9 @@ class ATerm(object):
                 raise Exception("ATerm improperly initialized")
             if tensors is not None:
                 raise Exception("ATerm improperly initialized")
-            self.scalar = deepcopy(term.scalar)
-            self.sums = deepcopy(term.sums)
-            self.tensors = deepcopy(term.tensors)
+            self.scalar = copy(term.scalar)
+            self.sums = [s.copy() for s in term.sums]
+            self.tensors = [t.copy() for t in term.tensors]
             for d in term.deltas:
                 self.tensors.append(tensor_from_delta(d))
         else:
@@ -260,7 +267,7 @@ class ATerm(object):
 
     def __mul__(self, other):
         if isinstance(other, Number):
-            new = deepcopy(self)
+            new = self.copy()
             new.scalar *= other
             return new
         elif isinstance(other, ATerm):
@@ -280,7 +287,7 @@ class ATerm(object):
 
     def __rmul__(self, other):
         if isinstance(other, Number):
-            new = deepcopy(self)
+            new = self.copy()
             new.scalar *= other
             return new
         else:
@@ -417,7 +424,7 @@ class ATerm(object):
 
         if num_ext < 2: pass
         else:
-            newtensors = deepcopy(self.tensors[num_ext:])
+            newtensors = [t.copy() for t in self.tensors[num_ext:]]
             ext_indices = []
             for t in self.tensors[:num_ext]:
                 ext_indices += t.indices
@@ -458,6 +465,12 @@ class ATerm(object):
     def transpose(self, perm):
         self.merge_external()
         self.tensors[0].transpose(perm)
+
+    def copy(self):
+        newtensors = [t.copy() for t in self.tensors]
+        newscalar = copy(self.scalar)
+        newsums = [s.copy() for s in self.sums]
+        return ATerm(scalar=newscalar, sums=newsums, tensors=newtensors)
 
 class Expression(object):
     """Operator expression
@@ -553,7 +566,7 @@ class AExpression(object):
             s = t1.scalar
             for t in tm: s += t[1]*t[0].scalar
             t1.scalar = s
-            newterms.append(deepcopy(t1))
+            newterms.append(t1.copy())
             tm = [t[0] for t in tm]
             self.terms = list(filter(lambda x: x not in tm, self.terms[1:]))
         self.terms = newterms

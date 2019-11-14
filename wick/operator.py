@@ -1,5 +1,6 @@
 import copy
 from .index import Idx
+from .index import idx_copy
 
 class FOperator(object):
     """
@@ -47,6 +48,9 @@ class FOperator(object):
     def qp_anihilation(self, occ=None):
         return not self.qp_creation(occ=occ)
 
+    def copy(self):
+        return FOperator(idx_copy(self.idx), self.ca)
+
 class BOperator(object):
     """
     Boson creation/annihilation operators
@@ -88,6 +92,9 @@ class BOperator(object):
 
     def qp_anihilation(self):
         return not self.qp_creation(occ=occ)
+
+    def copy(self):
+        return BOperator(idx_copy(self.idx), self.ca)
 
 class TensorSym(object):
     """
@@ -169,6 +176,10 @@ class Tensor(object):
             newindices.append(self.indices[p])
         self.indices = newindices
 
+    def copy(self):
+        newindices = [idx_copy(i) for i in self.indices]
+        return Tensor(newindices, self.name, self.sym)
+
 def permute(t, p):
     name = str(t.name)
     indices = [t.indices[i] for i in p]
@@ -197,6 +208,9 @@ class Sigma(object):
     def _print_str(self, imap):
         return "\sum_{" + imap[self.idx] + "}"
 
+    def copy(self):
+        return Sigma(idx_copy(self.idx))
+
 class Delta(object):
     def __init__(self, i1, i2):
         assert(i1.space == i2.space)
@@ -223,6 +237,11 @@ class Delta(object):
 
     def _print_str(self, imap):
         return "\delta_{" + imap[self.i1] + imap[self.i2] + "}"
+
+    def copy(self):
+        i1 = idx_copy(self.i1)
+        i2 = idx_copy(self.i2)
+        return Delta(i1, i2)
 
 def tensor_from_delta(d):
     sym = TensorSym([(0,1), (1,0)], [1.0, 1.0])
