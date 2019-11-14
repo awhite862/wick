@@ -4,7 +4,7 @@ from wick.wick import apply_wick
 from fractions import Fraction
 
 H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H2 = two_e("I",["occ","vir"], norder=True, compress=True)
 H = H1 + H2
 
 T1 = E1("t", ["occ"], ["vir"])

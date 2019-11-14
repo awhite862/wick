@@ -4,7 +4,7 @@ from wick.ops import *
 from wick.wick import apply_wick
 
 H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H2 = two_e("I",["occ","vir"], norder=True, compress=True)
 Hp = two_p("w") + one_p("G")
 Hep = ep11("g", ["occ", "vir"], ["nm"], norder=True)
 H = H1 + H2 + Hp + Hep

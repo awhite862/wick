@@ -33,7 +33,39 @@ def get_sym_ip2():
     return TensorSym([(0,1,2),(0,2,1)],
                 [1, -1])
 
-def two_e(name, spaces, anti=True, norder=False):
+def two_e_min(name, spaces, anti=True, norder=False):
+    if not anti:
+        raise Exception("Minimal representation of symmetric integrals is not implemented")
+    terms = []
+    sym = get_sym(anti)
+    one_half = Fraction(1,2)
+    for i1,s1 in enumerate(spaces):
+        I1 = Idx(0, s1)
+        for s2 in spaces[i1:]:
+            i = 0 if s2 != s1 else 1
+            I2 = Idx(i,s2)
+            facbra = one_half if s1 == s2 else 1
+            for i3,s3 in enumerate(spaces):
+                xx = list(filter(lambda x: x,[s3 == s for s in [s1,s2]]))
+                I3 = Idx(len(xx),s3)
+                for s4 in spaces[i3:]:
+                    xx = list(filter(lambda x: x,[s4 == s for s in [s1,s2,s3]]))
+                    I4 = Idx(len(xx),s4)
+                    operators = [FOperator(I1, True), FOperator(I2, True), FOperator(I4,False), FOperator(I3,False)]
+                    nsign = 1
+                    facket = one_half if s3 == s4 else 1
+                    fac = facbra*facket
+                    if norder:
+                        operators,nsign = normal_ordered(operators)
+                    t = Term(nsign*fac, [Sigma(I1),Sigma(I2),Sigma(I3),Sigma(I4)],
+                            [Tensor([I1,I2,I3,I4],name,sym=sym)],
+                            operators,
+                            [])
+                    terms.append(t)
+    return Expression(terms)
+
+def two_e(name, spaces, anti=True, norder=False, compress=False):
+    if compress: return two_e_min(name, spaces, anti=anti, norder=norder)
     terms = []
     sym = get_sym(anti)
     fac = Fraction(1,4) if anti else Fraction(1,2)
