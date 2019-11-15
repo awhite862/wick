@@ -376,7 +376,7 @@ def braP1E1(bspace, ospace, vspace):
     """
     Return left-projector onto a space of single excitations coupled to boson excitations
 
-    vspace (str): boson space 
+    vspace (str): boson space
     ospace (str): occupied space
     vspace (str): virtual space
     """
@@ -390,7 +390,7 @@ def braP2E1(b1space, b2space, ospace, vspace):
     """
     Return left-projector onto a space of single excitations coupled to boson excitations
 
-    vspace (str): boson space 
+    vspace (str): boson space
     ospace (str): occupied space
     vspace (str): virtual space
     """
@@ -401,6 +401,30 @@ def braP2E1(b1space, b2space, ospace, vspace):
     a = Idx(0, vspace)
     operators = [BOperator(I,False), BOperator(J,False), FOperator(i,True), FOperator(a,False)]
     return Expression([Term(1, [], [Tensor([I,J,a,i],"")], operators, [])])
+
+def braP1Eea1(bspace, vspace):
+    """
+    Return left-projector onto a space of N+1 electron states coupled to boson excitations
+
+    bspace (str): boson space
+    ospace (str): orbital space
+    """
+    I = Idx(0, bspace, fermion=False)
+    a = Idx(0, vspace)
+    operators = [BOperator(I,False), FOperator(a,False)]
+    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [])])
+
+def braP1Eip1(bspace, ospace):
+    """
+    Return left-projector onto a space of N-1 electron states coupled to boson excitations
+
+    bspace (str): boson space
+    ospace (str): orbital space
+    """
+    I = Idx(0, bspace, fermion=False)
+    i = Idx(0, ospace)
+    operators = [BOperator(I,False), FOperator(i,True)]
+    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [])])
 
 def braEip1(ospace):
     """
@@ -584,6 +608,59 @@ def ketEdip1(o1, o2):
     j = Idx(x, o2)
     operators = [FOperator(j,False), FOperator(i,False)]
     return Expression([Term(1, [], [Tensor([i,j],"")], operators, [])])
+
+def ketP1(space):
+    """
+    Return right-projection onto single Boson space
+    """
+    I = Idx(0, space, fermion=False)
+    return Expression([Term(1, [], [Tensor([I],"")], [BOperator(I, True)], [])])
+
+def ketP1E1(bspace, ospace, vspace):
+    """
+    Return right-projector onto a space of single excitations coupled to boson excitations
+
+    vspace (str): boson space
+    ospace (str): occupied space
+    vspace (str): virtual space
+    """
+    I = Idx(0, bspace, fermion=False)
+    i = Idx(0, ospace)
+    a = Idx(0, vspace)
+    operators = [BOperator(I,True), FOperator(a,True), FOperator(i,False)]
+    return Expression([Term(1, [], [Tensor([I,i,a],"")], operators, [])])
+
+def ketP1Eea1(bspace, vspace):
+    """
+    Return right-projector onto a space of electron attachment coupled to boson excitations
+
+    vspace (str): boson space
+    vspace (str): virtual space
+    """
+    I = Idx(0, bspace, fermion=False)
+    a = Idx(0, vspace)
+    operators = [BOperator(I,True), FOperator(a,True)]
+    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [])])
+
+def ketP1Eip1(bspace, ospace):
+    """
+    Return right-projector onto a space of N-1 electron states coupled to boson excitations
+
+    bspace (str): boson space
+    ospace (str): orbital space
+    """
+    I = Idx(0, bspace, fermion=False)
+    i = Idx(0, ospace)
+    operators = [BOperator(I,True), FOperator(i,False)]
+    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [])])
+
+def ketP2(space):
+    """
+    Return right-projection onto single Boson space
+    """
+    I = Idx(0, space, fermion=False)
+    J = Idx(1, space, fermion=False)
+    return Expression([Term(1, [], [Tensor([I,J],"")], [BOperator(I, True), BOperator(J, True)], [])])
 
 def commute(A, B):
     """ Return the commutator of two operators"""
