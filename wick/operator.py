@@ -6,8 +6,9 @@ class FOperator(object):
     """
     Fermion creation/annihilation operators
 
-    idx (Idx): Index of operator
-    ca (Bool): Creation operator?
+    Attributes:
+        idx (Idx): Index of operator
+        ca (Bool): Creation operator?
     """
     def __init__(self, idx, ca):
         self.idx = idx
@@ -55,8 +56,9 @@ class BOperator(object):
     """
     Boson creation/annihilation operators
 
-    idx (Idx): Index of operator
-    ca (Bool): Creation operator?
+    Attributes:
+        idx (Idx): Index of operator
+        ca (Bool): Creation operator?
     """
     def __init__(self, idx, ca):
         self.idx = idx
@@ -100,9 +102,10 @@ class TensorSym(object):
     """
     Representation of tensor permutational symmetry
 
-    plist (lsit): List of tuples representing permutations of indices
-    signs (list): List of signs representing the signes of each permutation
-    tlist (list): List of permutation, sign pairs
+    Attributes:
+        plist (lsit): List of tuples representing permutations of indices
+        signs (list): List of signs representing the signes of each permutation
+        tlist (list): List of permutation, sign pairs
     """
     def __init__(self, plist, signs):
         self.plist = plist
@@ -111,11 +114,12 @@ class TensorSym(object):
 
 class Tensor(object):
     """
-    Tensor
+    Tensor class
 
-    indices (list): List of indices
-    name (str): Name of the tensor
-    sym (TensorSym): Permutational symmetry of tensor
+    Attributes:
+        indices (list): List of indices
+        name (str): Name of the tensor
+        sym (TensorSym): Permutational symmetry of tensor
     """
     def __init__(self, indices, name, sym=None):
         self.indices = indices
@@ -187,6 +191,12 @@ def permute(t, p):
     return newt
 
 class Sigma(object):
+    """
+    Class representing a sum over an index.
+
+    Attributes:
+        idx (Idx): Summed index
+    """
     def __init__(self, idx):
         self.idx = idx
 
@@ -212,6 +222,13 @@ class Sigma(object):
         return Sigma(idx_copy(self.idx))
 
 class Delta(object):
+    """
+    Class reprenting a delta function.
+
+    Attributes:
+        i1 (Idx): First index
+        i2 (Idx): Second index
+    """
     def __init__(self, i1, i2):
         assert(i1.space == i2.space)
         self.i1 = i1
