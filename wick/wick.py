@@ -1,17 +1,20 @@
 from .operator import BOperator, FOperator, Sigma, Delta
 from .expression import Term, Expression
+from .index import is_occupied
 
 def valid_contraction(o1, o2, occ=None):
+    if o1.idx.space != o2.idx.space:
+        return False
     if isinstance(o1, FOperator) and isinstance(o2, FOperator):
-         if o1.idx.space != o2.idx.space:
-             return False
-         if (o1.idx.is_occupied(occ=occ) and o1.ca and not o2.ca) or (
-             not o1.idx.is_occupied(occ=occ) and not o1.ca and o2.ca):
+         #if o1.idx.space != o2.idx.space:
+         #    return False
+         if (is_occupied(o1.idx, occ=occ) and o1.ca and not o2.ca) or (
+             not is_occupied(o1.idx, occ=occ) and not o1.ca and o2.ca):
              return True
          return False
     elif isinstance(o1, BOperator) and isinstance(o2, BOperator):
-         if o1.idx.space != o2.idx.space:
-             return False
+         #if o1.idx.space != o2.idx.space:
+         #    return False
          if (not o1.ca and o2.ca):
              return True
          return False
@@ -24,17 +27,18 @@ def pair_list(lst,occ=None):
     assert(n%2 == 0)
     if n < 2:
         return []
-    if n == 2:
+    elif n == 2:
         if valid_contraction(lst[0],lst[1],occ=occ):
             return [[(lst[0],lst[1])],]
         else:
             return []
     else:
         plist = []
-        for i,x in enumerate(lst[1:]):
+        ltmp = lst[1:]
+        for i,x in enumerate(ltmp):
             if valid_contraction(lst[0], x):
                 p1 = [(lst[0],x),]
-                remainder = pair_list(lst[1:i+1] + lst[i+2:])
+                remainder = pair_list(ltmp[:i] + ltmp[i+1:])
                 for r in remainder:
                     plist.append(p1 + r)
         return plist
@@ -85,8 +89,8 @@ def apply_wick(e, occ=None):
                     i1 = oi.idx
                     i2 = oj.idx
                     deltas.append(Delta(i1,i2))
-                elif (oi.idx.is_occupied(occ=occ) and oi.ca and not oj.ca) or (
-                    not oi.idx.is_occupied(occ=occ) and not oi.ca and oj.ca):
+                elif (is_occupied(oi.idx, occ=occ) and oi.ca and not oj.ca) or (
+                    not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
                     i = temp.operators.index(oi)
                     j = temp.operators.index(oj)
                     ipairs.append((i,j))

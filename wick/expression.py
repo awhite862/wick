@@ -2,6 +2,7 @@ from copy import copy
 from itertools import product
 from numbers import Number
 from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
+from .index import is_occupied
 
 class TermMap(object):
     """Map indicating the contraction pattern of a given tensor expression
@@ -17,7 +18,7 @@ class TermMap(object):
             cblist = str()
             for i,iidx in enumerate(ti.indices):
                 fermion = iidx.fermion
-                occupied = False if not fermion else iidx.is_occupied(occ=occ)
+                occupied = False if not fermion else is_occupied(iidx, occ=occ)
                 for tj in tensors:
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):

@@ -1,6 +1,7 @@
 import copy
 from .index import Idx
 from .index import idx_copy
+from .index import is_occupied
 
 class FOperator(object):
     """
@@ -39,9 +40,9 @@ class FOperator(object):
             return "a_" + imap[self.idx]
 
     def qp_creation(self, occ=None):
-        if (not self.idx.is_occupied(occ=occ)) and self.ca:
+        if (not is_occupied(self.idx, occ=occ)) and self.ca:
             return True
-        elif (self.idx.is_occupied(occ=occ)) and not self.ca:
+        elif (is_occupied(self.idx, occ=occ)) and not self.ca:
             return True
         else:
             return False

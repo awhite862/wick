@@ -25,14 +25,6 @@ class Idx(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def is_occupied(self, occ=None):
-        if not self.fermion:
-            assert(False)
-        if occ is None:
-            return 'o' in self.space
-        else:
-            return self.space in occ
-
 from copy import copy
 
 def idx_copy(idx):
@@ -41,3 +33,11 @@ def idx_copy(idx):
     fermion (bool) variables and copying the reference to the space.
     """
     return Idx(copy(idx.index), idx.space, bool(idx.fermion))
+
+def is_occupied(idx, occ=None):
+    if not idx.fermion:
+        assert(False)
+    if occ is None:
+        return 'o' in idx.space
+    else:
+        return idx.space in occ
