@@ -635,3 +635,17 @@ class AExpression(object):
     def transpose(self, perm):
         for t in self.terms:
             t.transpose(perm)
+
+def contract(idx_str, E1, E2):
+    if idx_str.count(',') != 1:
+        raise Exception("""'Contract' can only contract two tensors!""")
+
+    idxA, idxBC = idx_str.split(',')
+    idxB, idxC = idxBC.split('->')
+    extern = list(idxC)
+    summed = list(set(idxA+idxB) - set(idxC))
+
+    # find summed indices in E1 and E2
+
+    # create product expression
+    raise Exception("This function is not implemented")
