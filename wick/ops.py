@@ -40,6 +40,10 @@ def get_sym_ip2():
     return TensorSym([(0,1,2),(0,2,1)],
                 [1, -1])
 
+def get_sym_ea2():
+    return TensorSym([(0,1,2),(1,0,2)],
+                [1, -1])
+
 def two_e_compressed(name, spaces, anti=True, norder=False):
     if not anti:
         raise Exception("Minimal representation of symmetric integrals is not implemented")
@@ -276,6 +280,48 @@ def Eip2(name, ospaces, vspaces):
                 terms.append(e2)
     return Expression(terms)
 
+def Eea1(name, vspaces):
+    """
+    Return the tensor representation of a Fermion attachment operator
+
+    name (string): name of the tensor
+    ospaces (list): list of virtual spaces
+    """
+    terms = []
+    for vs in vspaces:
+        a = Idx(0, vs)
+        e1 = Term(1,
+            [Sigma(a)],
+            [Tensor([a], name)],
+            [FOperator(a, True)],
+            [])
+        terms.append(e1)
+    return Expression(terms)
+
+def Eea2(name, ospaces, vspaces):
+    """
+    Return the tensor representation of a Fermion ea (trion)
+
+    name (string): name of the tensor
+    ospaces (list): list of occupied spaces
+    vspaces (list): list of virtual spaces
+    """
+    terms = []
+    sym = get_sym_ea2()
+    for i1,o1 in enumerate(ospaces):
+        for j1,v1 in enumerate(vspaces):
+            for v2 in vspaces[j1:]:
+                i = Idx(0, o1)
+                a = Idx(0, v1)
+                b = Idx(1, v2)
+                e2 = Term(Fraction('1/2'),
+                    [Sigma(i), Sigma(a), Sigma(b)],
+                    [Tensor([b, a, i], name, sym=sym)],
+                    [FOperator(b, True), FOperator(a, True), FOperator(i, False)],
+                    [])
+                terms.append(e2)
+    return Expression(terms)
+
 def P1(name, spaces):
     """
     Return the tensor representation of a Boson excitation operator
@@ -368,6 +414,50 @@ def EPS2(name, bspaces, ospaces, vspaces):
                         [BOperator(I, True), BOperator(J, True), FOperator(a, True), FOperator(i, False)],
                         [])
                     terms.append(e1)
+    return Expression(terms)
+
+def EP1ip1(name, bspaces, ospaces):
+    """
+    Return the tensor representation of a coupled
+    Fermion ionization-Boson excitation operator
+
+    name (string): name of the tensor
+    bspaces (list): list of Boson spaces
+    ospaces (list): list of occupied spaces
+    """
+    terms = []
+    for bs in bspaces:
+        for os in ospaces:
+            I = Idx(0, bs, fermion=False)
+            i = Idx(0, os)
+            e1 = Term(1,
+                [Sigma(I), Sigma(i)],
+                [Tensor([I, i], name)],
+                [BOperator(I, True), FOperator(i, False)],
+                [])
+            terms.append(e1)
+    return Expression(terms)
+
+def EP1ea1(name, bspaces, vspaces):
+    """
+    Return the tensor representation of a coupled
+    Fermion attachment-Boson excitation operator
+
+    name (string): name of the tensor
+    bspaces (list): list of Boson spaces
+    ospaces (list): list of virtial spaces
+    """
+    terms = []
+    for bs in bspaces:
+        for vs in vspaces:
+            I = Idx(0, bs, fermion=False)
+            a = Idx(0, vs)
+            e1 = Term(1,
+                [Sigma(I), Sigma(a)],
+                [Tensor([I, a], name)],
+                [BOperator(I, True), FOperator(a, True)],
+                [])
+            terms.append(e1)
     return Expression(terms)
 
 def braE1(ospace, vspace):
