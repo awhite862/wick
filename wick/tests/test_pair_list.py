@@ -2,6 +2,7 @@ import unittest
 
 from wick.wick import pair_list
 
+# Deprecated test
 class PairListTest(unittest.TestCase):
     def test_p2(self):
         lst = [0,1]

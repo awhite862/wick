@@ -636,16 +636,35 @@ class AExpression(object):
         for t in self.terms:
             t.transpose(perm)
 
-def contract(idx_str, E1, E2):
-    if idx_str.count(',') != 1:
-        raise Exception("""'Contract' can only contract two tensors!""")
-
-    idxA, idxBC = idx_str.split(',')
-    idxB, idxC = idxBC.split('->')
-    extern = list(idxC)
-    summed = list(set(idxA+idxB) - set(idxC))
-
-    # find summed indices in E1 and E2
-
-    # create product expression
-    raise Exception("This function is not implemented")
+#def contract(idx_str, T1, T2):
+#    if idx_str.count(',') != 1:
+#        raise Exception("""'Contract' can only contract two tensors!""")
+#
+#    idxA, idxBC = idx_str.split(',')
+#    idxB, idxC = idxBC.split('->')
+#    extern = list(idxC)
+#    summed = list(set(idxA+idxB) - set(idxC))
+#    sidxA = [idxA.find(s) for s in summed]
+#    sidxA = []
+#    sidxB = []
+#    for s in summed:
+#        xa = idxA.find(s)
+#        xb = idxB.find(s)
+#        if xa < len(idxA): sidxA.append(xa)
+#        if xb < len(idxB): sidxB.append(xb)
+#
+#    # get external indices of each term
+#    def get_external(tt):
+#        Si = [x.idx for x in tt.sums]
+#        e1 = []
+#        for i,t in enumerate(tt.tensors):
+#            for idx in t.indices:
+#                if idx not in Si:
+#                    e1.append(idx)
+#        return e1
+#
+#    e1 = get_external(T1)
+#    e2 = get_external(T2)
+#
+#    # create product expression
+#    raise Exception("This function is not implemented")
