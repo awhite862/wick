@@ -586,14 +586,15 @@ class AExpression(object):
     def __sub__(self, other):
         if isinstance(other, AExpression):
             return self + -1*other
+        else: return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, Number):
-            new = Expression([other*t for t in self.terms])
+            new = AExpression(terms=[other*t for t in self.terms], simplify=False)
             return new
         elif isinstance(other, AExpression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
-            return Expression(terms)
+            return AExpression(terms=terms)
         else: return NotImplemented
 
     __rmul__ = __mul__
