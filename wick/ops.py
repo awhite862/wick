@@ -4,7 +4,7 @@ from .index import Idx
 from .operator import BOperator, FOperator, TensorSym, Tensor, Sigma, normal_ordered
 from .expression import Term, Expression
 
-def one_e(name, spaces, norder=False):
+def one_e(name, spaces, norder=False, index_key=None):
     """
     Return an expression representing all pieces of a one-electron operator
 
@@ -25,7 +25,7 @@ def one_e(name, spaces, norder=False):
             t = Term(nsign, [Sigma(I1),Sigma(I2)],
                     [Tensor([I1,I2],name)],
                     operators,
-                    [])
+                    [], index_key=index_key)
             terms.append(t)
     return Expression(terms)
 
@@ -44,7 +44,7 @@ def get_sym_ea2():
     return TensorSym([(0,1,2),(1,0,2)],
                 [1, -1])
 
-def two_e_compressed(name, spaces, anti=True, norder=False):
+def two_e_compressed(name, spaces, anti=True, norder=False, index_key=None):
     if not anti:
         raise Exception("Minimal representation of symmetric integrals is not implemented")
     terms = []
@@ -71,11 +71,11 @@ def two_e_compressed(name, spaces, anti=True, norder=False):
                     t = Term(nsign*fac, [Sigma(I1),Sigma(I2),Sigma(I3),Sigma(I4)],
                             [Tensor([I1,I2,I3,I4],name,sym=sym)],
                             operators,
-                            [])
+                            [], index_key=index_key)
                     terms.append(t)
     return Expression(terms)
 
-def two_e_full(name, spaces, anti=True, norder=False, compress=False):
+def two_e_full(name, spaces, anti=True, norder=False, index_key=None):
     terms = []
     sym = get_sym(anti)
     fac = Fraction(1,4) if anti else Fraction(1,2)
@@ -97,11 +97,11 @@ def two_e_full(name, spaces, anti=True, norder=False, compress=False):
                     t = Term(nsign*fac, [Sigma(I1),Sigma(I2),Sigma(I3),Sigma(I4)],
                             [Tensor([I1,I2,I3,I4],name,sym=sym)],
                             operators,
-                            [])
+                            [], index_key=index_key)
                     terms.append(t)
     return Expression(terms)
 
-def two_e(name, spaces, anti=True, norder=False, compress=False):
+def two_e(name, spaces, anti=True, norder=False, compress=False, index_key=None):
     """
     Return expression representing a two electron operator
 
@@ -111,10 +111,10 @@ def two_e(name, spaces, anti=True, norder=False, compress=False):
     norder (bool): Return only normal-ordered part
     compress (bool): Return only unique parts
     """
-    if compress: return two_e_compressed(name, spaces, anti=anti, norder=norder)
-    else: return two_e_full(name, spaces, anti=anti, norder=norder)
+    if compress: return two_e_compressed(name, spaces, anti=anti, norder=norder, index_key=index_key)
+    else: return two_e_full(name, spaces, anti=anti, norder=norder, index_key=index_key)
 
-def one_p(name, space="nm", name2 = None):
+def one_p(name, space="nm", name2 = None, index_key=None):
     """
     Return expression representing a 1-boson operator
 
@@ -126,14 +126,14 @@ def one_p(name, space="nm", name2 = None):
     I1 = Idx(0, space, fermion=False)
     tc = Term(1, [Sigma(I1)],
             [Tensor([I1],name2)],
-            [BOperator(I1, True)],[])
+            [BOperator(I1, True)],[], index_key=index_key)
     ta = Term(1, [Sigma(I1)],
             [Tensor([I1],name)],
-            [BOperator(I1, False)],[])
+            [BOperator(I1, False)],[], index_key=index_key)
     terms = [tc,ta]
     return Expression(terms)
 
-def two_p(name, space="nm"):
+def two_p(name, space="nm", index_key=None):
     """
     Return expression representing a 1-boson operator
 
@@ -144,10 +144,10 @@ def two_p(name, space="nm"):
     I2 = Idx(1, space, fermion=False)
     t1 = Term(1, [Sigma(I1),Sigma(I2)],
             [Tensor([I1,I2],name)],
-            [BOperator(I1, True),BOperator(I2, False)],[])
+            [BOperator(I1, True),BOperator(I2, False)],[], index_key=index_key)
     return Expression([t1])
 
-def ep11(name, fspaces, bspaces, norder=False, name2=None):
+def ep11(name, fspaces, bspaces, norder=False, name2=None, index_key=None):
     """
     Return an coupled boson fermion operator
 
@@ -173,24 +173,24 @@ def ep11(name, fspaces, bspaces, norder=False, name2=None):
                 tc = Term(nsign, [Sigma(I1),Sigma(p1),Sigma(p2)],
                         [Tensor([I1,p1,p2],name2)],
                         [BOperator(I1, True)] + operators,
-                        [])
+                        [], index_key=index_key)
                 ta = Term(nsign, [Sigma(I1),Sigma(p1),Sigma(p2)],
                         [Tensor([I1,p1,p2],name)],
                         [BOperator(I1, False)] + operators,
-                        [])
+                        [], index_key=index_key)
                 terms.append(ta)
                 terms.append(tc)
     return Expression(terms)
 
-def E0(name):
+def E0(name, index_key=None):
     """
     Return constant multiplying the vacuum.
 
     name (str): Name of operator
     """
-    return Expression([Term(1,[], [Tensor([], name)], [], [])])
+    return Expression([Term(1,[], [Tensor([], name)], [], [], index_key=index_key)])
 
-def E1(name, ospaces, vspaces):
+def E1(name, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a Fermion excitation operator
 
@@ -207,11 +207,11 @@ def E1(name, ospaces, vspaces):
                 [Sigma(i), Sigma(a)],
                 [Tensor([a, i], name)],
                 [FOperator(a, True), FOperator(i, False)],
-                [])
+                [], index_key=index_key)
             terms.append(e1)
     return Expression(terms)
 
-def E2(name, ospaces, vspaces):
+def E2(name, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a Fermion excitation operator
 
@@ -238,7 +238,7 @@ def E2(name, ospaces, vspaces):
                     terms.append(e2)
     return Expression(terms)
 
-def Eip1(name, ospaces):
+def Eip1(name, ospaces, index_key=None):
     """
     Return the tensor representation of a Fermion ionization
 
@@ -252,11 +252,11 @@ def Eip1(name, ospaces):
             [Sigma(i)],
             [Tensor([i], name)],
             [FOperator(i, False)],
-            [])
+            [], index_key=index_key)
         terms.append(e1)
     return Expression(terms)
 
-def Eip2(name, ospaces, vspaces):
+def Eip2(name, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a Fermion ip (trion)
 
@@ -276,11 +276,11 @@ def Eip2(name, ospaces, vspaces):
                     [Sigma(i), Sigma(a), Sigma(j)],
                     [Tensor([a, i, j], name, sym=sym)],
                     [FOperator(a, True), FOperator(j, False), FOperator(i, False)],
-                    [])
+                    [], index_key=index_key)
                 terms.append(e2)
     return Expression(terms)
 
-def Eea1(name, vspaces):
+def Eea1(name, vspaces, index_key=None):
     """
     Return the tensor representation of a Fermion attachment operator
 
@@ -294,11 +294,11 @@ def Eea1(name, vspaces):
             [Sigma(a)],
             [Tensor([a], name)],
             [FOperator(a, True)],
-            [])
+            [], index_key=index_key)
         terms.append(e1)
     return Expression(terms)
 
-def Eea2(name, ospaces, vspaces):
+def Eea2(name, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a Fermion ea (trion)
 
@@ -318,11 +318,11 @@ def Eea2(name, ospaces, vspaces):
                     [Sigma(i), Sigma(a), Sigma(b)],
                     [Tensor([b, a, i], name, sym=sym)],
                     [FOperator(b, True), FOperator(a, True), FOperator(i, False)],
-                    [])
+                    [], index_key=index_key)
                 terms.append(e2)
     return Expression(terms)
 
-def P1(name, spaces):
+def P1(name, spaces, index_key=None):
     """
     Return the tensor representation of a Boson excitation operator
 
@@ -336,11 +336,11 @@ def P1(name, spaces):
             [Sigma(I)],
             [Tensor([I], name)],
             [BOperator(I, True)],
-            [])
+            [], index_key=index_key)
         terms.append(e1)
     return Expression(terms)
 
-def P2(name, spaces):
+def P2(name, spaces, index_key=None):
     """
     Return the tensor representation of a Boson double-excitation operator
 
@@ -358,11 +358,11 @@ def P2(name, spaces):
                 [Sigma(I),Sigma(J)],
                 [Tensor([I,J], name, sym=sym)],
                 [BOperator(I, True),BOperator(J, True)],
-                [])
+                [], index_key=index_key)
             terms.append(e2)
     return Expression(terms)
 
-def EPS1(name, bspaces, ospaces, vspaces):
+def EPS1(name, bspaces, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a coupled
     Fermion-Boson excitation operator
@@ -383,11 +383,11 @@ def EPS1(name, bspaces, ospaces, vspaces):
                     [Sigma(I), Sigma(i), Sigma(a)],
                     [Tensor([I, a, i], name)],
                     [BOperator(I, True), FOperator(a, True), FOperator(i, False)],
-                    [])
+                    [], index_key=index_key)
                 terms.append(e1)
     return Expression(terms)
 
-def EPS2(name, bspaces, ospaces, vspaces):
+def EPS2(name, bspaces, ospaces, vspaces, index_key=None):
     """
     Return the tensor representation of a coupled
     Fermion-double Boson excitation operator
@@ -412,11 +412,11 @@ def EPS2(name, bspaces, ospaces, vspaces):
                         [Sigma(I), Sigma(J), Sigma(i), Sigma(a)],
                         [Tensor([I, J, a, i], name, sym=sym)],
                         [BOperator(I, True), BOperator(J, True), FOperator(a, True), FOperator(i, False)],
-                        [])
+                        [], index_key=index_key)
                     terms.append(e1)
     return Expression(terms)
 
-def EP1ip1(name, bspaces, ospaces):
+def EP1ip1(name, bspaces, ospaces, index_key=None):
     """
     Return the tensor representation of a coupled
     Fermion ionization-Boson excitation operator
@@ -434,11 +434,11 @@ def EP1ip1(name, bspaces, ospaces):
                 [Sigma(I), Sigma(i)],
                 [Tensor([I, i], name)],
                 [BOperator(I, True), FOperator(i, False)],
-                [])
+                [], index_key=index_key)
             terms.append(e1)
     return Expression(terms)
 
-def EP1ea1(name, bspaces, vspaces):
+def EP1ea1(name, bspaces, vspaces, index_key=None):
     """
     Return the tensor representation of a coupled
     Fermion attachment-Boson excitation operator
@@ -456,11 +456,11 @@ def EP1ea1(name, bspaces, vspaces):
                 [Sigma(I), Sigma(a)],
                 [Tensor([I, a], name)],
                 [BOperator(I, True), FOperator(a, True)],
-                [])
+                [], index_key=index_key)
             terms.append(e1)
     return Expression(terms)
 
-def braE1(ospace, vspace):
+def braE1(ospace, vspace, index_key=None):
     """
     Return left-projector onto a space of single excitations
 
@@ -470,9 +470,9 @@ def braE1(ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,i],"")], operators, [], index_key=index_key)])
 
-def braE2(o1, v1, o2, v2):
+def braE2(o1, v1, o2, v2, index_key=None):
     """
     Return left-projector onto a space of double excitations
 
@@ -488,9 +488,9 @@ def braE2(o1, v1, o2, v2):
     j = Idx(x, o1)
     b = Idx(y, v1)
     operators = [FOperator(i,True), FOperator(j,True), FOperator(b,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,b,i,j],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,b,i,j],"")], operators, [], index_key=index_key)])
 
-def braEip1(ospace):
+def braEip1(ospace, index_key=None):
     """
     Return left-projector onto a space of ionized determinants
 
@@ -498,9 +498,9 @@ def braEip1(ospace):
     """
     i = Idx(0, ospace)
     operators = [FOperator(i,True)]
-    return Expression([Term(1, [], [Tensor([i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i],"")], operators, [], index_key=index_key)])
 
-def braEip2(o1, o2, v1):
+def braEip2(o1, o2, v1, index_key=None):
     """
     Return left-projector onto a space of (trion) N-1 particle determinants
 
@@ -513,9 +513,9 @@ def braEip2(o1, o2, v1):
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
     operators = [FOperator(i,True), FOperator(j,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,i,j],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,i,j],"")], operators, [], index_key=index_key)])
 
-def braEdip1(o1, o2):
+def braEdip1(o1, o2, index_key=None):
     """
     Return left-projector onto a space of N-2 particle determinants
 
@@ -526,9 +526,9 @@ def braEdip1(o1, o2):
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
     operators = [FOperator(i,True), FOperator(j,True)]
-    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [], index_key=index_key)])
 
-def braEea1(space):
+def braEea1(space, index_key=None):
     """
     Return left-projector onto a space of N+1 electron states
 
@@ -536,9 +536,9 @@ def braEea1(space):
     """
     a = Idx(0, space)
     operators = [FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a],"")], operators, [], index_key=index_key)])
 
-def braEea2(o1, v1, v2):
+def braEea2(o1, v1, v2, index_key=None):
     """
     Return left-projector onto a space of (trion) N+1 electron states
 
@@ -551,9 +551,9 @@ def braEea2(o1, v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(i, True), FOperator(b,False), FOperator(a, False)]
-    return Expression([Term(1, [], [Tensor([a,b,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,b,i],"")], operators, [], index_key=index_key)])
 
-def braEdea1(v1, v2):
+def braEdea1(v1, v2, index_key=None):
     """
     Return left-projector onto a space of N+2 electron states
 
@@ -564,18 +564,18 @@ def braEdea1(v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(b,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [], index_key=index_key)])
 
-def braP1(space):
+def braP1(space, index_key=None):
     """
     Return projection onto single Boson space
 
     space (str): Name of boson space
     """
     I = Idx(0, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([I],"")], [BOperator(I, False)], [])])
+    return Expression([Term(1, [], [Tensor([I],"")], [BOperator(I, False)], [], index_key=index_key)])
 
-def braP2(space):
+def braP2(space, index_key=None):
     """
     Return projection onto space of Boson pairs
 
@@ -583,9 +583,9 @@ def braP2(space):
     """
     I = Idx(0, space, fermion=False)
     J = Idx(1, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([I,J],"")], [BOperator(I, False), BOperator(J, False)], [])])
+    return Expression([Term(1, [], [Tensor([I,J],"")], [BOperator(I, False), BOperator(J, False)], [], index_key=index_key)])
 
-def braP1E1(bspace, ospace, vspace):
+def braP1E1(bspace, ospace, vspace, index_key=None):
     """
     Return left-projector onto a space of single excitations coupled to boson excitations
 
@@ -597,9 +597,9 @@ def braP1E1(bspace, ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [BOperator(I,False), FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([I,a,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,a,i],"")], operators, [], index_key=index_key)])
 
-def braP2E1(b1space, b2space, ospace, vspace):
+def braP2E1(b1space, b2space, ospace, vspace, index_key=None):
     """
     Return left-projector onto a space of single excitations coupled pairs of bosons
 
@@ -614,9 +614,9 @@ def braP2E1(b1space, b2space, ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [BOperator(I,False), BOperator(J,False), FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([I,J,a,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,J,a,i],"")], operators, [], index_key=index_key)])
 
-def braP1Eea1(bspace, vspace):
+def braP1Eea1(bspace, vspace, index_key=None):
     """
     Return left-projector onto a space of N+1 electron states coupled to boson excitations
 
@@ -626,9 +626,9 @@ def braP1Eea1(bspace, vspace):
     I = Idx(0, bspace, fermion=False)
     a = Idx(0, vspace)
     operators = [BOperator(I,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [], index_key=index_key)])
 
-def braP1Eip1(bspace, ospace):
+def braP1Eip1(bspace, ospace, index_key=None):
     """
     Return left-projector onto a space of N-1 electron states coupled to boson excitations
 
@@ -638,9 +638,9 @@ def braP1Eip1(bspace, ospace):
     I = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
     operators = [BOperator(I,False), FOperator(i,True)]
-    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [], index_key=index_key)])
 
-def ketE1(ospace, vspace):
+def ketE1(ospace, vspace, index_key=None):
     """
     Return right-projector onto a space of single excitations
 
@@ -650,9 +650,9 @@ def ketE1(ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [FOperator(a,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,a],"")], operators, [], index_key=index_key)])
 
-def ketE2(o1, v1, o2, v2):
+def ketE2(o1, v1, o2, v2, index_key=None):
     """
     Return right-projector onto a space of double excitations
 
@@ -668,9 +668,9 @@ def ketE2(o1, v1, o2, v2):
     j = Idx(x, o1)
     b = Idx(y, v1)
     operators = [FOperator(a,True), FOperator(b,True), FOperator(j,False), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,j,a,b],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,j,a,b],"")], operators, [], index_key=index_key)])
 
-def ketEea1(space):
+def ketEea1(space, index_key=None):
     """
     Return right-projector onto a space of N+1 electron states
 
@@ -678,9 +678,9 @@ def ketEea1(space):
     """
     a = Idx(0, space)
     operators = [FOperator(a,True)]
-    return Expression([Term(1, [], [Tensor([a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a],"")], operators, [], index_key=index_key)])
 
-def ketEea2(o1, v1, v2):
+def ketEea2(o1, v1, v2, index_key=None):
     """
     Return right-projector onto a space of trion N+1 electron states
 
@@ -693,9 +693,9 @@ def ketEea2(o1, v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(a, True), FOperator(b,True), FOperator(i, False)]
-    return Expression([Term(1, [], [Tensor([i,a,b],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,a,b],"")], operators, [], index_key=index_key)])
 
-def ketEip1(space):
+def ketEip1(space, index_key=None):
     """
     Return right-projector onto a space of N-1 electron states
 
@@ -703,9 +703,9 @@ def ketEip1(space):
     """
     i = Idx(0, space)
     operators = [FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i],"")], operators, [], index_key=index_key)])
 
-def ketEip2(o1, o2, v1):
+def ketEip2(o1, o2, v1, index_key=None):
     """
     Return right-projector onto a space of trion N-1 electron states
 
@@ -718,9 +718,9 @@ def ketEip2(o1, o2, v1):
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
     operators = [FOperator(a,True), FOperator(j, False), FOperator(i, False)]
-    return Expression([Term(1, [], [Tensor([i,j,a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,j,a],"")], operators, [], index_key=index_key)])
 
-def ketEdea1(v1, v2):
+def ketEdea1(v1, v2, index_key=None):
     """
     Return right-projector onto a space of N+2 electron states
 
@@ -731,9 +731,9 @@ def ketEdea1(v1, v2):
     y = 1 if v2 == v1 else 0
     b = Idx(y, v2)
     operators = [FOperator(a,True), FOperator(b,True)]
-    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [], index_key=index_key)])
 
-def ketEdip1(o1, o2):
+def ketEdip1(o1, o2, index_key=None):
     """
     Return right-projector onto a space of N+2 electron states
 
@@ -744,24 +744,24 @@ def ketEdip1(o1, o2):
     x = 1 if o2 == o1 else 0
     j = Idx(x, o2)
     operators = [FOperator(j,False), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [], index_key=index_key)])
 
-def ketP1(space):
+def ketP1(space, index_key=None):
     """
     Return right-projection onto single Boson space
     """
     I = Idx(0, space, fermion=False)
     return Expression([Term(1, [], [Tensor([I],"")], [BOperator(I, True)], [])])
 
-def ketP2(space):
+def ketP2(space, index_key=None):
     """
     Return right-projection onto space of Boson pairs
     """
     I = Idx(0, space, fermion=False)
     J = Idx(1, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([I,J],"")], [BOperator(I, True), BOperator(J, True)], [])])
+    return Expression([Term(1, [], [Tensor([I,J],"")], [BOperator(I, True), BOperator(J, True)], [], index_key=index_key)])
 
-def ketP1E1(bspace, ospace, vspace):
+def ketP1E1(bspace, ospace, vspace, index_key=None):
     """
     Return right-projector onto a space of single excitations coupled to boson excitations
 
@@ -773,9 +773,9 @@ def ketP1E1(bspace, ospace, vspace):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     operators = [BOperator(I,True), FOperator(a,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([I,i,a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,i,a],"")], operators, [], index_key=index_key)])
 
-def ketP1Eea1(bspace, vspace):
+def ketP1Eea1(bspace, vspace, index_key=None):
     """
     Return right-projector onto a space of electron attachment coupled to boson excitations
 
@@ -785,9 +785,9 @@ def ketP1Eea1(bspace, vspace):
     I = Idx(0, bspace, fermion=False)
     a = Idx(0, vspace)
     operators = [BOperator(I,True), FOperator(a,True)]
-    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,a],"")], operators, [], index_key=index_key)])
 
-def ketP1Eip1(bspace, ospace):
+def ketP1Eip1(bspace, ospace, index_key=None):
     """
     Return right-projector onto a space of N-1 electron states coupled to boson excitations
 
@@ -797,7 +797,7 @@ def ketP1Eip1(bspace, ospace):
     I = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
     operators = [BOperator(I,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [])])
+    return Expression([Term(1, [], [Tensor([I,i],"")], operators, [], index_key=index_key)])
 
 def commute(A, B):
     """ Return the commutator of two operators"""

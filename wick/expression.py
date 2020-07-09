@@ -34,8 +34,9 @@ class TermMap(object):
     def __eq__(self, other):
         return self.data == other.data
 
-def default_index_key():
-    return {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
+#def default_index_key():
+#    return {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
+default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
 class Term(object):
     """Term of operators
@@ -47,12 +48,13 @@ class Term(object):
         operators (list): list of creation/anihillation operators
         deltas (list): list of delta functions
     """
-    def __init__(self, scalar, sums, tensors, operators, deltas):
+    def __init__(self, scalar, sums, tensors, operators, deltas, index_key=None):
         self.scalar = scalar
         self.sums = sums
         self.tensors = tensors
         self.operators = operators
         self.deltas = deltas
+        self.index_key = index_key
 
     def resolve(self):
         dnew = []
@@ -139,7 +141,8 @@ class Term(object):
             tensors = self.tensors + new.tensors
             operators = self.operators + new.operators
             deltas = self.deltas + new.deltas
-            return Term(scalar, sums, tensors, operators, deltas)
+            index_key = other.index_key if self.index_key is None else self.index_key
+            return Term(scalar, sums, tensors, operators, deltas, index_key=index_key)
         else:
             return NotImplemented
 
@@ -169,11 +172,12 @@ class Term(object):
         tensors = [t._inc(i) for t in self.tensors]
         operators = [o._inc(i) for o in self.operators]
         deltas = [d._inc(i) for d in self.deltas]
-        return Term(self.scalar, sums, tensors, operators, deltas)
+        return Term(self.scalar, sums, tensors, operators, deltas, index_key=self.index_key)
 
     def _idx_map(self, indices=None):
-        if indices is None:
-            indices = default_index_key()
+        if self.index_key is None:
+            index_key = default_index_key
+        else: index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
@@ -185,7 +189,7 @@ class Term(object):
             else:
                 o = 0
                 off[s] = 1
-            imap[idx] = indices[s][o]
+            imap[idx] = index_key[s][o]
         return imap
 
     def _print_str(self,with_scalar=True):
@@ -226,7 +230,7 @@ class Term(object):
         newtensors = [t.copy() for t in self.tensors]
         newoperators = [o.copy() for o in self.operators]
         newdeltas = [d.copy() for d in self.deltas]
-        return Term(newscalar, newsums, newtensors, newoperators, newdeltas)
+        return Term(newscalar, newsums, newtensors, newoperators, newdeltas, index_key=self.index_key)
 
 class ATerm(object):
     """Abstract term
@@ -236,7 +240,7 @@ class ATerm(object):
         sums (list): list of Sums in the term
         tensors (list): list of Tensors
     """
-    def __init__(self, scalar=None, sums=None, tensors=None, term=None):
+    def __init__(self, scalar=None, sums=None, tensors=None, index_key=None, term=None):
         if term is not None:
             assert(len(term.operators) == 0)
             if scalar is not None:
@@ -245,11 +249,14 @@ class ATerm(object):
                 raise Exception("ATerm improperly initialized")
             if tensors is not None:
                 raise Exception("ATerm improperly initialized")
+            if index_key is not None:
+                raise Exception("ATerm improperly initialized")
             self.scalar = copy(term.scalar)
             self.sums = [s.copy() for s in term.sums]
             self.tensors = [t.copy() for t in term.tensors]
             for d in term.deltas:
                 self.tensors.append(tensor_from_delta(d))
+            self.index_key = term.index_key
         else:
             if scalar is None: scalar = 1
             if sums is None or tensors is None:
@@ -257,6 +264,7 @@ class ATerm(object):
             self.scalar = scalar
             self.sums = sums
             self.tensors = tensors
+            self.index_key = index_key
 
     def __repr__(self):
         out = str(self.scalar)
@@ -282,7 +290,7 @@ class ATerm(object):
             scalar = self.scalar*new.scalar
             sums = self.sums + new.sums
             tensors = self.tensors + new.tensors
-            return ATerm(scalar=scalar, sums=sums, tensors=tensors)
+            return ATerm(scalar=scalar, sums=sums, tensors=tensors, index_key=self.index_key)
         else:
             return NotImplemented
 
@@ -318,11 +326,12 @@ class ATerm(object):
     def _inc(self, i):
         sums = [s._inc(i) for s in self.sums]
         tensors = [t._inc(i) for t in self.tensors]
-        return Term(scalar=self.scalar, sums=sums, tensors=tensors)
+        return ATerm(scalar=self.scalar, sums=sums, tensors=tensors, index_key=self.index_key)
 
-    def _idx_map(self, indices=None):
-        if indices is None:
-            indices = default_index_key()
+    def _idx_map(self):
+        if self.index_key is None:
+            index_key = default_index_key
+        else: index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
@@ -334,7 +343,7 @@ class ATerm(object):
             else:
                 o = 0
                 off[s] = 1
-            imap[idx] = indices[s][o]
+            imap[idx] = index_key[s][o]
         return imap
 
     def _print_str(self,with_scalar=True):
@@ -471,7 +480,7 @@ class ATerm(object):
         newtensors = [t.copy() for t in self.tensors]
         newscalar = copy(self.scalar)
         newsums = [s.copy() for s in self.sums]
-        return ATerm(scalar=newscalar, sums=newsums, tensors=newtensors)
+        return ATerm(scalar=newscalar, sums=newsums, tensors=newtensors, index_key=self.index_key)
 
 class Expression(object):
     """Operator expression

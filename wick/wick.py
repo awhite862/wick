@@ -107,7 +107,7 @@ def apply_wick(e, occ=None):
                         [s.copy() for s in temp.sums],
                         [t.copy() for t in temp.tensors],
                         [],
-                        deltas + [d.copy() for d in temp.deltas])
+                        deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
                 to.append(t1)
         
     o = Expression(to)
