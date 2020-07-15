@@ -2,7 +2,7 @@ from copy import copy
 from itertools import product
 from numbers import Number
 from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
-from .index import is_occupied
+from .index import is_occupied, Idx
 
 class TermMap(object):
     """Map indicating the contraction pattern of a given tensor expression
@@ -32,8 +32,6 @@ class TermMap(object):
     def __eq__(self, other):
         return self.data == other.data
 
-#def default_index_key():
-#    return {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
 class Term(object):
@@ -441,7 +439,7 @@ class ATerm(object):
 
     def connected(self):
         ll = []
-        rtensors = [t for t in self.tensors if t.name]
+        rtensors = [t for t in self.tensors if (t.name and t.indices)]
         for s in self.sums:
             ll.append(s.idx)
         adj = []
@@ -469,6 +467,27 @@ class ATerm(object):
             nb = nb2
             i += 1
         return len(set(blue)) == len(rtensors)
+
+    def reducible(self):
+        if not self.connected(): return True
+        for i,so in enumerate(self.sums):
+            new = self.copy()
+            new._inc(1)
+            sn = new.sums[i]
+            i1 = sn.idx
+            i2 = Idx(0, i1.space)
+            new.sums = list(filter(lambda s: s != sn, self.sums))
+            m = 0
+            for t in new.tensors:
+                for ix in t.indices:
+                    if ix == i1:
+                        if m == 0:
+                            ix = i2
+                        m += 1
+            assert(m == 2)
+            if not new.connected(): return True
+
+        return False
 
     def transpose(self, perm):
         self.merge_external()

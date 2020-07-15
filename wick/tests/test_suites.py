@@ -1,4 +1,5 @@
 import unittest
+import test_aterm
 import test_operators
 import test_pair_list
 import test_term
@@ -26,6 +27,9 @@ def run_suite():
     suite.addTest(test_term.TermTest("test_mul"))
     suite.addTest(test_term.TermTest("test_mul2"))
     suite.addTest(test_term.TermTest("test_term_map"))
+
+    suite.addTest(test_aterm.ATermTest("test_connected"))
+    suite.addTest(test_aterm.ATermTest("test_reducible"))
 
     return suite
 
