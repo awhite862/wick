@@ -1,0 +1,73 @@
+Constant:
+ + 1.0f_{ai}
+
+Linear:
+ - 1.0\sum_{j}f_{ji}t_{aj}
+ - 1.0\sum_{I}f_{Ii}t_{aI}
+ + 1.0\sum_{A}f_{aA}t_{Ai}
+ + 1.0\sum_{b}f_{ab}t_{bi}
+ + 1.0\sum_{jA}f_{jA}t_{Aaji}
+ - 1.0\sum_{jb}f_{jb}t_{abji}
+ - 1.0\sum_{IA}f_{IA}t_{AaiI}
+ + 1.0\sum_{Ib}f_{Ib}t_{abiI}
+ - 1.0\sum_{jA}I_{jaiA}t_{Aj}
+ - 1.0\sum_{jb}I_{jaib}t_{bj}
+ - 1.0\sum_{IA}I_{IaiA}t_{AI}
+ - 1.0\sum_{Ib}I_{Iaib}t_{bI}
+ - 0.5\sum_{jkA}I_{jkiA}t_{Aakj}
+ + 0.5\sum_{jkb}I_{jkib}t_{abkj}
+ + 1.0\sum_{jIA}I_{jIiA}t_{AajI}
+ - 1.0\sum_{jIb}I_{jIib}t_{abjI}
+ - 0.5\sum_{jAB}I_{jaAB}t_{BAji}
+ + 1.0\sum_{jAb}I_{jaAb}t_{Abji}
+ - 0.5\sum_{jbc}I_{jabc}t_{cbji}
+ - 0.5\sum_{IJA}I_{IJiA}t_{AaJI}
+ + 0.5\sum_{IJb}I_{IJib}t_{abJI}
+ + 0.5\sum_{IAB}I_{IaAB}t_{BAiI}
+ - 1.0\sum_{IAb}I_{IaAb}t_{AbiI}
+ + 0.5\sum_{Ibc}I_{Iabc}t_{cbiI}
+
+Quadratic:
+ - 1.0\sum_{j}f_{ji}t_{aj}
+ - 1.0\sum_{I}f_{Ii}t_{aI}
+ + 1.0\sum_{A}f_{aA}t_{Ai}
+ + 1.0\sum_{b}f_{ab}t_{bi}
+ + 1.0\sum_{jA}f_{jA}t_{Aaji}
+ - 1.0\sum_{jb}f_{jb}t_{abji}
+ - 1.0\sum_{IA}f_{IA}t_{AaiI}
+ + 1.0\sum_{Ib}f_{Ib}t_{abiI}
+ - 1.0\sum_{jA}I_{jaiA}t_{Aj}
+ - 1.0\sum_{jb}I_{jaib}t_{bj}
+ - 1.0\sum_{IA}I_{IaiA}t_{AI}
+ - 1.0\sum_{Ib}I_{Iaib}t_{bI}
+ - 0.5\sum_{jkA}I_{jkiA}t_{Aakj}
+ + 0.5\sum_{jkb}I_{jkib}t_{abkj}
+ + 1.0\sum_{jIA}I_{jIiA}t_{AajI}
+ - 1.0\sum_{jIb}I_{jIib}t_{abjI}
+ - 0.5\sum_{jAB}I_{jaAB}t_{BAji}
+ + 1.0\sum_{jAb}I_{jaAb}t_{Abji}
+ - 0.5\sum_{jbc}I_{jabc}t_{cbji}
+ - 0.5\sum_{IJA}I_{IJiA}t_{AaJI}
+ + 0.5\sum_{IJb}I_{IJib}t_{abJI}
+ + 0.5\sum_{IAB}I_{IaAB}t_{BAiI}
+ - 1.0\sum_{IAb}I_{IaAb}t_{AbiI}
+ + 0.5\sum_{Ibc}I_{Iabc}t_{cbiI}
+
+Cubic:
+ - 1.0\sum_{jkAB}I_{jkAB}t_{Bi}t_{Aj}t_{ak}
+ - 1.0\sum_{jkAb}I_{jkAb}t_{Ai}t_{aj}t_{bk}
+ - 1.0\sum_{jkAb}I_{jkAb}t_{Aj}t_{bi}t_{ak}
+ + 1.0\sum_{jkbc}I_{jkbc}t_{ci}t_{aj}t_{bk}
+ - 1.0\sum_{jIAB}I_{jIAB}t_{Bi}t_{Aj}t_{aI}
+ + 1.0\sum_{jIAB}I_{jIAB}t_{Bi}t_{aj}t_{AI}
+ - 1.0\sum_{jIAb}I_{jIAb}t_{Ai}t_{aj}t_{bI}
+ + 1.0\sum_{jIAb}I_{jIAb}t_{Ai}t_{bj}t_{aI}
+ - 1.0\sum_{jIAb}I_{jIAb}t_{Aj}t_{bi}t_{aI}
+ + 1.0\sum_{jIAb}I_{jIAb}t_{bi}t_{aj}t_{AI}
+ + 1.0\sum_{jIbc}I_{jIbc}t_{ci}t_{aj}t_{bI}
+ - 1.0\sum_{jIbc}I_{jIbc}t_{ci}t_{bj}t_{aI}
+ - 1.0\sum_{IJAB}I_{IJAB}t_{Bi}t_{AI}t_{aJ}
+ - 1.0\sum_{IJAb}I_{IJAb}t_{Ai}t_{aI}t_{bJ}
+ - 1.0\sum_{IJAb}I_{IJAb}t_{bi}t_{AI}t_{aJ}
+ + 1.0\sum_{IJbc}I_{IJbc}t_{ci}t_{aI}t_{bJ}
+

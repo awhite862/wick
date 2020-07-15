@@ -1,9 +1,9 @@
 #!/bin/bash
-FILES="ccsd_1rdm ccsd_T1 ccsd_T2 ccs_T1 cid_N cisd_N cis_full cis_N epccsd1s1_T1 p1_test ccsd_Heff HF_deriv"
+FILES="ccsd_1rdm ccsd_T1 ccsd_T2 ccs_T1 cid_N cisd_N cis_full cis_N epccsd1s1_T1 p1_test ccsd_Heff HF_deriv tccsd_T1"
 for f in $FILES
 do
     echo $f
-    python "$f".py > test.out
+    python3 "$f".py > test.out
     diff test.out  $f.out
     rm test.out
 done

@@ -2,6 +2,7 @@ import unittest
 import test_operators
 import test_pair_list
 import test_term
+import test_term_map
 import test_test
 
 def run_suite():
@@ -17,6 +18,9 @@ def run_suite():
     #suite.addTest(test_pair_list.PairListTest("test_p2"))
     #suite.addTest(test_pair_list.PairListTest("test_p4"))
     #suite.addTest(test_pair_list.PairListTest("test_p6"))
+
+    suite.addTest(test_term_map.TermMapTest("test_null"))
+    suite.addTest(test_term_map.TermMapTest("test_label"))
 
     suite.addTest(test_term.TermTest("test_scalar_mul"))
     suite.addTest(test_term.TermTest("test_mul"))

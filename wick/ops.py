@@ -229,7 +229,10 @@ def E2(name, ospaces, vspaces, index_key=None):
                     a = Idx(0, v1)
                     j = Idx(1, o2)
                     b = Idx(1, v2)
-                    e2 = Term(Fraction(1,4),
+                    scalar = 1
+                    if o1 == o2: scalar *= Fraction(1,2)
+                    if v1 == v2: scalar *= Fraction(1,2)
+                    e2 = Term(scalar,
                         [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
                         [Tensor([a, b, i, j], name, sym=sym)],
                         [FOperator(a, True), FOperator(b, True),

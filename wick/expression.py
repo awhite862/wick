@@ -13,23 +13,21 @@ class TermMap(object):
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
         for ti in tensors:
-            colist = str()
-            cvlist = str()
-            cblist = str()
+            strs = {}
             for i,iidx in enumerate(ti.indices):
-                fermion = iidx.fermion
-                occupied = False if not fermion else is_occupied(iidx, occ=occ)
+                space = iidx.space
+                if space not in strs:
+                    strs[space] = ""
                 for tj in tensors:
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):
                         if iidx == jidx:
                             tjname = tj.name if tj.name else "!"
                             cstr = str(i) + tjname + str(j)
-                            if occupied: colist += cstr
-                            elif fermion: cvlist += cstr
-                            else: cblist += cstr
+                            strs[space] += cstr
             tiname = ti.name if ti.name else "!"
-            self.data.add((tiname,colist,cvlist,cblist))
+            lll = [(k,v) for k,v in sorted(strs.items())]
+            self.data.add((tiname,tuple(lll)))
 
     def __eq__(self, other):
         return self.data == other.data
@@ -638,9 +636,9 @@ class AExpression(object):
             if not t.connected(): return False
         return True
 
-    def get_connected(self):
+    def get_connected(self, simplify=True):
         newterms = [t for t in self.terms if t.connected()]
-        return AExpression(terms=newterms)
+        return AExpression(terms=newterms, simplify=simplify)
 
     def transpose(self, perm):
         for t in self.terms:
