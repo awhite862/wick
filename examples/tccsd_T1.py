@@ -1,6 +1,6 @@
 from fractions import Fraction
 from wick.expression import AExpression
-from wick.ops import *
+from wick.convenience import *
 from wick.wick import apply_wick
 
 

@@ -1,6 +1,6 @@
 import unittest
 from wick.expression import *
-from wick.ops import *
+from wick.convenience import *
 from wick.wick import apply_wick
 
 class TermMapTest(unittest.TestCase):

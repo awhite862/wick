@@ -1,7 +1,7 @@
 from fractions import Fraction
 from wick.index import Idx
 from wick.expression import AExpression
-from wick.ops import *#one_e, two_e, E1, E2, commute
+from wick.convenience import *
 from wick.wick import apply_wick
 
 i = Idx(0,"occ")
