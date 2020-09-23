@@ -1,3 +1,5 @@
+# Copyright (c) 2020 Alec White
+# Licensed under the MIT License (see LICENSE for details)
 from .operator import BOperator, FOperator, Sigma, Delta
 from .expression import Term, Expression
 from .index import is_occupied

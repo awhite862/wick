@@ -1,3 +1,5 @@
+# Copyright (c) 2020 Alec White
+# Licensed under the MIT License (see LICENSE for details)
 from copy import copy
 from itertools import product
 from numbers import Number

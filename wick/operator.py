@@ -1,3 +1,5 @@
+# Copyright (c) 2020 Alec White
+# Licensed under the MIT License (see LICENSE for details)
 import copy
 from .index import Idx
 from .index import idx_copy
