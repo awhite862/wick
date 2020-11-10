@@ -5,6 +5,34 @@ from .index import Idx
 from .index import idx_copy
 from .index import is_occupied
 
+class Projector(object):
+    """
+    Projector onto the vacuum
+    """
+    def __init__(self):
+        pass
+
+    def __eq__(self, other):
+        return isinstance(other, Projector)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __repr__(self):
+        return "P"
+
+    def _inc(self, i):
+        pass
+
+    def _print_str(self, imap):
+        return "P"
+
+    def copy(self):
+        return self
+
+    def dagger(self):
+        return self
+
 class FOperator(object):
     """
     Fermion creation/annihilation operators
