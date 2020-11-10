@@ -54,5 +54,18 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(D1 == D3)
         self.assertTrue(D1 != D4)
 
+    def test_dagger(self):
+        i = Idx(0,"occ")
+        O1 = FOperator(i, False)
+        O2 = FOperator(i, True)
+        self.assertTrue(O1.dagger() == O2)
+        self.assertTrue(O2.dagger() == O1)
+
+        x = Idx(0,"nm",fermion=False)
+        Ob1 = BOperator(x, False)
+        Ob2 = BOperator(x, True)
+        self.assertTrue(Ob1.dagger() == Ob2)
+        self.assertTrue(Ob2.dagger() == Ob1)
+
 if __name__ == '__main__':
     unittest.main()

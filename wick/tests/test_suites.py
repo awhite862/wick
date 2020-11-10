@@ -15,6 +15,7 @@ def run_suite():
     suite.addTest(test_operators.OperatorTest("test_tensor"))
     suite.addTest(test_operators.OperatorTest("test_sigma"))
     suite.addTest(test_operators.OperatorTest("test_delta"))
+    suite.addTest(test_operators.OperatorTest("test_dagger"))
 
     #suite.addTest(test_pair_list.PairListTest("test_p2"))
     #suite.addTest(test_pair_list.PairListTest("test_p4"))

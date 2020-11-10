@@ -55,6 +55,9 @@ class FOperator(object):
     def copy(self):
         return FOperator(idx_copy(self.idx), self.ca)
 
+    def dagger(self):
+        return FOperator(idx_copy(self.idx), not self.ca)
+
 class BOperator(object):
     """
     Boson creation/annihilation operators
@@ -100,6 +103,9 @@ class BOperator(object):
 
     def copy(self):
         return BOperator(idx_copy(self.idx), self.ca)
+
+    def dagger(self):
+        return BOperator(idx_copy(self.idx), not self.ca)
 
 class TensorSym(object):
     """
