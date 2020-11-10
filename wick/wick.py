@@ -1,6 +1,6 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
-from .operator import BOperator, FOperator, Sigma, Delta
+from .operator import BOperator, FOperator, Projector, Sigma, Delta
 from .expression import Term, Expression
 from .index import is_occupied
 
@@ -64,53 +64,68 @@ def get_sign(ipairs):
     ncross = ncross//2
     return 1 if ncross%2 == 0 else -1
 
+def split_operators(ops):
+    ps = []
+    for i,op in enumerate(ops):
+        if isinstance(op, Projector): ps.append(i)
+
+    if len(ps) == 0: return [ops]
+    starts = [0] + [x + 1 for x in ps]
+    ends = ps + [len(ops)]
+    olists = []
+    for s,e in zip(starts, ends):
+        olists.append(ops[s:e])
+    return olists
+
 def apply_wick(e, occ=None):
     to = []
     # loop over terms
     for temp in e.terms:
-        # if there is an odd number of operators, then we are done
-        if len(temp.operators)%2 != 0:
-            continue
-        if len(temp.operators) == 0:
-            to.append(temp.copy())
-            continue
-        # loop to find a contraction
-        plist = pair_list(temp.operators)
-        for pairs in plist:
-            good = bool(pairs)
-            ipairs = []
-            deltas = []
-            for p in pairs:
-                oi,oj = p
-                if oi.idx.space != oj.idx.space:
-                    good = False
-                    break
-                if not oi.idx.fermion:
-                    i = temp.operators.index(oi)
-                    j = temp.operators.index(oj)
-                    i1 = oi.idx
-                    i2 = oj.idx
-                    deltas.append(Delta(i1,i2))
-                elif (is_occupied(oi.idx, occ=occ) and oi.ca and not oj.ca) or (
-                    not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
-                    i = temp.operators.index(oi)
-                    j = temp.operators.index(oj)
-                    ipairs.append((i,j))
-                    i1 = oi.idx
-                    i2 = oj.idx
-                    deltas.append(Delta(i1,i2))
-                else:
-                    good = False
-                    break
-            # append to output
-            if good:
-                sign = get_sign(ipairs)
-                t1 = Term(sign*temp.scalar,
-                        [s.copy() for s in temp.sums],
-                        [t.copy() for t in temp.tensors],
-                        [],
-                        deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
-                to.append(t1)
+        olists = split_operators(temp.operators)
+        for operators in olists:
+            # if there is an odd number of operators, then we are done
+            if len(operators)%2 != 0:
+                continue
+            if len(operators) == 0:
+                to.append(temp.copy())
+                continue
+            # loop to find a contraction
+            plist = pair_list(operators)
+            for pairs in plist:
+                good = bool(pairs)
+                ipairs = []
+                deltas = []
+                for p in pairs:
+                    oi,oj = p
+                    if oi.idx.space != oj.idx.space:
+                        good = False
+                        break
+                    if not oi.idx.fermion:
+                        i = operators.index(oi)
+                        j = operators.index(oj)
+                        i1 = oi.idx
+                        i2 = oj.idx
+                        deltas.append(Delta(i1,i2))
+                    elif (is_occupied(oi.idx, occ=occ) and oi.ca and not oj.ca) or (
+                        not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
+                        i = operators.index(oi)
+                        j = operators.index(oj)
+                        ipairs.append((i,j))
+                        i1 = oi.idx
+                        i2 = oj.idx
+                        deltas.append(Delta(i1,i2))
+                    else:
+                        good = False
+                        break
+                # append to output
+                if good:
+                    sign = get_sign(ipairs)
+                    t1 = Term(sign*temp.scalar,
+                            [s.copy() for s in temp.sums],
+                            [t.copy() for t in temp.tensors],
+                            [],
+                            deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
+                    to.append(t1)
         
     o = Expression(to)
     if o.are_operators():

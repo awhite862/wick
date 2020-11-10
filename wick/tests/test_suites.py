@@ -1,10 +1,10 @@
 import unittest
 import test_aterm
 import test_operators
-import test_pair_list
 import test_term
 import test_term_map
 import test_test
+import test_wick
 
 def run_suite():
     suite = unittest.TestSuite()
@@ -17,10 +17,6 @@ def run_suite():
     suite.addTest(test_operators.OperatorTest("test_delta"))
     suite.addTest(test_operators.OperatorTest("test_dagger"))
 
-    #suite.addTest(test_pair_list.PairListTest("test_p2"))
-    #suite.addTest(test_pair_list.PairListTest("test_p4"))
-    #suite.addTest(test_pair_list.PairListTest("test_p6"))
-
     suite.addTest(test_term_map.TermMapTest("test_null"))
     suite.addTest(test_term_map.TermMapTest("test_label"))
 
@@ -31,6 +27,11 @@ def run_suite():
 
     suite.addTest(test_aterm.ATermTest("test_connected"))
     suite.addTest(test_aterm.ATermTest("test_reducible"))
+
+    suite.addTest(test_wick.WickTest("test_valid_contraction"))
+    suite.addTest(test_wick.WickTest("test_pair_list"))
+    suite.addTest(test_wick.WickTest("test_get_sign"))
+    suite.addTest(test_wick.WickTest("test_split_operators"))
 
     return suite
 
