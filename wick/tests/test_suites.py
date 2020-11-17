@@ -32,6 +32,7 @@ def run_suite():
     suite.addTest(test_wick.WickTest("test_pair_list"))
     suite.addTest(test_wick.WickTest("test_get_sign"))
     suite.addTest(test_wick.WickTest("test_split_operators"))
+    suite.addTest(test_wick.WickTest("test_projector"))
 
     return suite
 

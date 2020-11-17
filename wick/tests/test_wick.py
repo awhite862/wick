@@ -3,7 +3,7 @@ import unittest
 from wick.expression import *
 from wick.convenience import *
 from wick.operator import *
-from wick.wick import valid_contraction, pair_list, get_sign, split_operators
+from wick.wick import valid_contraction, pair_list, get_sign, split_operators, apply_wick
 
 class WickTest(unittest.TestCase):
     def test_valid_contraction(self):
@@ -72,6 +72,22 @@ class WickTest(unittest.TestCase):
         self.assertTrue(olists[0] == [O1, O2])
         self.assertTrue(olists[1] == [O3])
         self.assertTrue(olists[2] == [O4])
+
+    def test_projector(self):
+        O1 = one_e("f", ["occ", "vir"])
+        O2 = one_e("g", ["occ", "vir"])
+        ref1 = apply_wick(O1)
+        ref2 = apply_wick(O2)
+        ref1.resolve()
+        ref2.resolve()
+        ref = AExpression(Ex=ref1*ref2)
+
+        P = Expression([Term(1, [], [], [Projector()], [])])
+        out1 = apply_wick(O1*P*O2)
+        out1.resolve()
+        out = AExpression(Ex=out1)
+        self.assertTrue(ref.pmatch(ref))
+
 
 if __name__ == '__main__':
     unittest.main()

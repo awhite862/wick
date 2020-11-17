@@ -302,9 +302,9 @@ class ATerm(object):
 
     def __eq__(self, other):
         if isinstance(other, ATerm):
-            return self.scalar == other.scalar \
-                    and set(self.sums) == set(other.sums) \
-                    and set(self.tensors) == set(other.tensors)
+            return (self.scalar == other.scalar
+                    and set(self.sums) == set(other.sums)
+                    and set(self.tensors) == set(other.tensors))
         else:
             return NotImplemented
 
@@ -627,6 +627,19 @@ class AExpression(object):
 
     __rmul__ = __mul__
 
+    def __eq__(self, other):
+        if isinstance(other, AExpression):
+            # NOTE: This compares in fixed order with fixed indices
+            if len(self.terms) != len(other.terms): return False
+            for t1,t2 in zip(self.terms, other.terms):
+                if t1 != t2: return False
+            return True
+        else:
+            return NotImplemented
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
+
     def _print_str(self):
         out = str()
         for t in self.terms:
@@ -660,6 +673,20 @@ class AExpression(object):
     def get_connected(self, simplify=True):
         newterms = [t for t in self.terms if t.connected()]
         return AExpression(terms=newterms, simplify=simplify)
+
+    def pmatch(self, other):
+        if isinstance(other, AExpression):
+            if len(self.terms) != len(other.terms): return False
+            for t1 in self.terms:
+                matched = False
+                for t2 in other.terms:
+                    if t2.pmatch(t1):
+                        matched = True
+                        break
+                if not matched: return False
+            return True
+        else:
+            return NotImplemented
 
     def transpose(self, perm):
         for t in self.terms:

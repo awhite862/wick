@@ -1,5 +1,6 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
+from itertools import product
 from .operator import BOperator, FOperator, Projector, Sigma, Delta
 from .expression import Term, Expression
 from .index import is_occupied
@@ -82,6 +83,9 @@ def apply_wick(e, occ=None):
     # loop over terms
     for temp in e.terms:
         olists = split_operators(temp.operators)
+        #operators = temp.operators
+        dos = []
+        sos = []
         for operators in olists:
             # if there is an odd number of operators, then we are done
             if len(operators)%2 != 0:
@@ -91,6 +95,8 @@ def apply_wick(e, occ=None):
                 continue
             # loop to find a contraction
             plist = pair_list(operators)
+            ds = []
+            ss = []
             for pairs in plist:
                 good = bool(pairs)
                 ipairs = []
@@ -119,13 +125,28 @@ def apply_wick(e, occ=None):
                         break
                 # append to output
                 if good:
-                    sign = get_sign(ipairs)
-                    t1 = Term(sign*temp.scalar,
-                            [s.copy() for s in temp.sums],
-                            [t.copy() for t in temp.tensors],
-                            [],
-                            deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
-                    to.append(t1)
+                    ds.append(deltas)
+                    #sign = get_sign(ipairs)
+                    ss.append(get_sign(ipairs))
+
+            dos.append(ds)
+            sos.append(ss)
+        if not sos:
+            assert(len(dos) == 0)
+            continue
+        for di,si in zip(product(*dos),product(*sos)):
+            assert(si)
+            assert(di)
+            sign = 1
+            for s in si: sign *= s
+            deltas = []
+            for d in di: deltas += d
+            t1 = Term(sign*temp.scalar,
+                    [s.copy() for s in temp.sums],
+                    [t.copy() for t in temp.tensors],
+                    [],
+                    deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
+            to.append(t1)
         
     o = Expression(to)
     if o.are_operators():

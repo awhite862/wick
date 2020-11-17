@@ -10,7 +10,7 @@ class Projector(object):
     Projector onto the vacuum
     """
     def __init__(self):
-        pass
+        self.idx = None
 
     def __eq__(self, other):
         return isinstance(other, Projector)
@@ -22,7 +22,7 @@ class Projector(object):
         return "P"
 
     def _inc(self, i):
-        pass
+        return self
 
     def _print_str(self, imap):
         return "P"
@@ -298,7 +298,7 @@ class Delta(object):
         return Delta(i1, i2)
 
 def tensor_from_delta(d):
-    sym = TensorSym([(0,1), (1,0)], [1.0, 1.0])
+    sym = TensorSym([(0,1), (1,0)], [1, 1])
     t = Tensor([d.i1, d.i2], "delta", sym=sym)
     return t
 
