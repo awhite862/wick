@@ -97,11 +97,11 @@ class Term(object):
 
             for oo in self.operators:
                 if case == 1:
-                    if oo.index == i1:
-                        oo.index = i2
+                    if oo.idx == i1:
+                        oo.idx = i2
                 else:
-                    if oo.index == i2:
-                        oo.index = i1
+                    if oo.idx == i2:
+                        oo.idx = i1
 
             if case == 0 and i1 != i2:
                 dnew.append(dd)
@@ -207,7 +207,7 @@ class Term(object):
         ilist = []
         for oo in self.operators:
             idx = oo.idx
-            if idx not in ilist: ilist.append(idx)
+            if (idx is not None) and (idx not in ilist): ilist.append(idx)
         for tt in self.tensors:
             itlst = tt.ilist()
             for ii in itlst:
