@@ -36,6 +36,65 @@ class TermMap(object):
 
 default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
+def _resolve(sums, tensors, operators, deltas):
+    dnew = []
+    newsums = [s.copy() for s in sums]
+    newtens = [t.copy() for t in tensors]
+    newops = [o.copy() for o in operators]
+
+    # get unique deltas
+    deltas = list(set(deltas))
+    cases = []
+    for dd in deltas:
+        i2 = dd.i2
+        i1 = dd.i1
+        assert(i1.space == i2.space)
+
+        ## Cases ##
+        # 0 sums over neither index
+        # 1 sums over 1st index
+        # 2 sums over 2nd index
+        # 3 sums over both indices
+        case = 0
+        for i,s in enumerate(sums):
+            idx = s.idx
+            if i2 == idx: case = 3 if case == 1 else 2
+            elif i1 == idx: case = 3 if case == 2 else 1
+        cases.append(case)
+
+    # loop over deltas
+    for dd,case in zip(deltas, cases):
+        i2 = dd.i2
+        i1 = dd.i1
+
+        if case == 1:
+            dindx = newsums.index(Sigma(i1))
+            del newsums[dindx]
+        elif case > 1:
+            dindx = newsums.index(Sigma(i2))
+            del newsums[dindx]
+
+        for tt in newtens:
+            for k in range(len(tt.indices)):
+                if case == 1:
+                    if tt.indices[k] == i1:
+                        tt.indices[k] = i2
+                else:
+                    if tt.indices[k] == i2:
+                        tt.indices[k] = i1
+
+        for oo in newops:
+            if case == 1:
+                if oo.idx == i1:
+                    oo.idx = i2
+            else:
+                if oo.idx == i2:
+                    oo.idx = i1
+
+        if case == 0 and i1 != i2:
+            dnew.append(dd)
+    return newsums, newtens, newops, dnew
+
 class Term(object):
     """Term of operators
 
@@ -55,57 +114,11 @@ class Term(object):
         self.index_key = index_key
 
     def resolve(self):
-        dnew = []
-
-        # get unique deltas
-        self.deltas = list(set(self.deltas))
-        
-        # loop over deltas
-        for dd in self.deltas:
-            i2 = dd.i2
-            i1 = dd.i1
-            assert(i1.space == i2.space)
-
-            ## Cases ##
-            # 0 sums over neither index
-            # 1 sums over 1st index
-            # 2 sums over 2nd index
-            # 3 sums over both indices
-            case = 0
-
-            dindx = -1 # index of sum to delete
-            for i,s in enumerate(self.sums):
-                idx = s.idx
-                if i2 == idx:
-                    dindx = i
-                    case = 3 if case == 1 else 2
-                elif i1 == idx:
-                    case = 3 if case == 2 else 1
-                    if case != 3: dindx = i
-
-            if dindx >= 0:
-                del self.sums[dindx]
-
-            for tt in self.tensors:
-                for k in range(len(tt.indices)):
-                    if case == 1:
-                        if tt.indices[k] == i1:
-                            tt.indices[k] = i2
-                    else:
-                        if tt.indices[k] == i2:
-                            tt.indices[k] = i1
-
-            for oo in self.operators:
-                if case == 1:
-                    if oo.idx == i1:
-                        oo.idx = i2
-                else:
-                    if oo.idx == i2:
-                        oo.idx = i1
-
-            if case == 0 and i1 != i2:
-                dnew.append(dd)
-
+        newsums, newtens, newops, dnew = _resolve(
+                self.sums, self.tensors, self.operators, self.deltas)
+        self.sums = newsums
+        self.tensors = newtens
+        self.operators = newops
         self.deltas = dnew
 
     def __repr__(self):

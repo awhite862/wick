@@ -83,7 +83,6 @@ def apply_wick(e, occ=None):
     # loop over terms
     for temp in e.terms:
         olists = split_operators(temp.operators)
-        #operators = temp.operators
         dos = []
         sos = []
         for operators in olists:
@@ -123,14 +122,16 @@ def apply_wick(e, occ=None):
                     else:
                         good = False
                         break
+
                 # append to output
                 if good:
                     ds.append(deltas)
-                    #sign = get_sign(ipairs)
                     ss.append(get_sign(ipairs))
 
             dos.append(ds)
             sos.append(ss)
+
+        # If there are no contractions, continue
         if not sos:
             assert(len(dos) == 0)
             continue
