@@ -36,16 +36,17 @@ class TermMap(object):
 
 default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
+# TODO: simplify this!
 def _resolve(sums, tensors, operators, deltas):
-    dnew = []
+    newdel = [d.copy() for d in deltas]
     newsums = [s.copy() for s in sums]
     newtens = [t.copy() for t in tensors]
     newops = [o.copy() for o in operators]
 
     # get unique deltas
-    deltas = list(set(deltas))
+    newdel = list(set(newdel))
     cases = []
-    for dd in deltas:
+    for dd in newdel:
         i2 = dd.i2
         i1 = dd.i1
         assert(i1.space == i2.space)
@@ -62,24 +63,49 @@ def _resolve(sums, tensors, operators, deltas):
             elif i1 == idx: case = 3 if case == 2 else 1
         cases.append(case)
 
-    # loop over deltas
-    for dd,case in zip(deltas, cases):
+    rs = []
+    # loop over deltas for case 1 and 2
+    for dd,case in zip(newdel, cases):
         i2 = dd.i2
         i1 = dd.i1
 
+        if case == 3: continue
         if case == 1:
             dindx = newsums.index(Sigma(i1))
             del newsums[dindx]
-        elif case > 1:
+        elif case == 2:
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
+        else: assert(case == 0)
+
+        for i,(ddd,ccc) in enumerate(zip(newdel,cases)):
+            if case == 1 and ddd.i1 == i1:
+                newdel[i].i1 = i2
+                if ccc == 3: cases[i] = 2
+                elif ccc == 1: cases[i] = 0
+                else: assert(False)
+            elif case == 1 and ddd.i2 == i1:
+                newdel[i].i2 = i2
+                if ccc == 3: cases[i] = 1
+                elif ccc == 2: cases[i] = 0
+                else: assert(False)
+            elif case == 2 and ddd.i2 == i2:
+                newdel[i].i2 = i1
+                if ccc == 3: cases[i] = 1
+                elif ccc == 2: cases[i] = 0
+                else: assert(False)
+            elif case == 2 and ddd.i1 == i2:
+                newdel[i].i1 = i1
+                if ccc == 3: cases[i] = 2
+                elif ccc == 1: cases[i] = 0
+                else: assert(False)
 
         for tt in newtens:
             for k in range(len(tt.indices)):
                 if case == 1:
                     if tt.indices[k] == i1:
                         tt.indices[k] = i2
-                else:
+                elif case > 1:
                     if tt.indices[k] == i2:
                         tt.indices[k] = i1
 
@@ -87,13 +113,47 @@ def _resolve(sums, tensors, operators, deltas):
             if case == 1:
                 if oo.idx == i1:
                     oo.idx = i2
-            else:
+            elif case > 1:
                 if oo.idx == i2:
                     oo.idx = i1
 
-        if case == 0 and i1 != i2:
-            dnew.append(dd)
-    return newsums, newtens, newops, dnew
+        if not (case == 0 and i1 != i2): rs.append(dd)
+
+    for d in rs:
+        dindx = newdel.index(d)
+        del newdel[dindx]
+        del cases[dindx]
+
+    for c in cases:
+        if c == 1 or c == 2: return _resolve(newsums, newtens, newops, newdel)
+
+    # loop over case 3 deltas
+    rs = []
+    for dd,case in zip(newdel, cases):
+        i2 = dd.i2
+        i1 = dd.i1
+
+        if case == 3:
+            dindx = newsums.index(Sigma(i2))
+            del newsums[dindx]
+        elif case < 3: assert(case == 0)
+        else: assert(False)
+
+        for tt in newtens:
+            for k in range(len(tt.indices)):
+                if tt.indices[k] == i2:
+                    tt.indices[k] = i1
+
+        for oo in newops:
+            if oo.idx == i2:
+                oo.idx = i1
+
+        if not (case == 0 and i1 != i2): rs.append(dd)
+
+    for d in rs:
+        dindx = newdel.index(d)
+        del newdel[dindx]
+    return newsums, newtens, newops, newdel
 
 class Term(object):
     """Term of operators
@@ -402,7 +462,7 @@ class ATerm(object):
                 for x in xs: sign *= x[1]
                 newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors)
-                if TM1 == TM2: 
+                if TM1 == TM2:
                     return sign
             return None
         else: return NotImplemented
