@@ -1,5 +1,5 @@
 #!/bin/bash
-FILES="ccsd_1rdm ccsd_T1 ccsd_T2 ccs_T1 cid_N cisd_N cis_full cis_N epccsd1s1_T1 p1_test ccsd_Heff HF_deriv tccsd_T1"
+FILES="ccsd_1rdm ccsd_L1 ccsd_L2 ccsd_T1 ccsd_T2 ccs_T1 cid_N cisd_N cis_full cis_N epccsd1s1_T1 p1_test ccsd_Heff HF_deriv tccsd_T1"
 for f in $FILES
 do
     echo $f

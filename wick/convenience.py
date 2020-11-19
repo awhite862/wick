@@ -3,7 +3,7 @@
 from itertools import product
 from fractions import Fraction
 from .index import Idx
-from .operator import BOperator, FOperator, TensorSym, Tensor, Sigma, normal_ordered
+from .operator import Projector, BOperator, FOperator, TensorSym, Tensor, Sigma, normal_ordered
 from .expression import Term, Expression
 
 def one_e(name, spaces, norder=False, index_key=None):
@@ -803,6 +803,20 @@ def ketP1Eip1(bspace, ospace, index_key=None):
     i = Idx(0, ospace)
     operators = [BOperator(I,True), FOperator(i,False)]
     return Expression([Term(1, [], [Tensor([I,i],"")], operators, [], index_key=index_key)])
+
+def PE1(ospace, vspace, index_key=None):
+    """
+    Return the projector onto a space of single excitations
+
+    ospace (str): occupied space
+    vspace (str): virtual space
+    """
+    i = Idx(0, ospace)
+    a = Idx(0, vspace)
+    P = Projector()
+    operators = [FOperator(a,True), FOperator(i,False), P, FOperator(i,True), FOperator(a,False)]
+    exp = Expression([Term(1, [Sigma(i), Sigma(a)], [], operators, [], index_key=index_key)])
+    return exp
 
 def commute(A, B):
     """ Return the commutator of two operators"""
