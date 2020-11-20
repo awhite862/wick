@@ -277,23 +277,18 @@ class Term(object):
         return out
 
     def ilist(self):
-        ilist = []
+        ilist = set()
         for oo in self.operators:
-            idx = oo.idx
-            if (idx is not None) and (idx not in ilist): ilist.append(idx)
+            if oo.idx is not None: ilist.add(oo.idx)
         for tt in self.tensors:
-            itlst = tt.ilist()
-            for ii in itlst:
-                if ii not in ilist: ilist.append(ii)
+            itlst = set(tt.ilist())
+            ilist |= itlst
         for ss in self.sums:
-            idx = ss.idx
-            if idx not in ilist: ilist.append(idx)
+            ilist.add(ss.idx)
         for dd in self.deltas:
-            ii1 = dd.i1
-            ii2 = dd.i2
-            if ii1 not in ilist: ilist.append(ii1)
-            if ii2 not in ilist: ilist.append(ii2)
-        return ilist
+            ilist.add(dd.i1)
+            ilist.add(dd.i2)
+        return list(ilist)
 
     def copy(self):
         newscalar = copy(self.scalar)

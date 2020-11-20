@@ -6,18 +6,12 @@ from .expression import Term, Expression
 from .index import is_occupied
 
 def valid_contraction(o1, o2, occ=None):
-    if o1.idx.space != o2.idx.space:
-        return False
+    if o1.idx.space != o2.idx.space: return False
     if isinstance(o1, FOperator) and isinstance(o2, FOperator):
-         #if o1.idx.space != o2.idx.space:
-         #    return False
-         if (is_occupied(o1.idx, occ=occ) and o1.ca and not o2.ca) or (
-             not is_occupied(o1.idx, occ=occ) and not o1.ca and o2.ca):
-             return True
-         return False
+        if is_occupied(o1.idx, occ=occ) and o1.ca and not o2.ca: return True
+        if not is_occupied(o1.idx, occ=occ) and not o1.ca and o2.ca: return True
+        return False
     elif isinstance(o1, BOperator) and isinstance(o2, BOperator):
-         #if o1.idx.space != o2.idx.space:
-         #    return False
          if (not o1.ca and o2.ca):
              return True
          return False

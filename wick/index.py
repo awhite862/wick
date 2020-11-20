@@ -37,9 +37,5 @@ def idx_copy(idx):
     return Idx(copy(idx.index), idx.space, bool(idx.fermion))
 
 def is_occupied(idx, occ=None):
-    if not idx.fermion:
-        assert(False)
-    if occ is None:
-        return 'o' in idx.space
-    else:
-        return idx.space in occ
+    if occ is None: return 'o' in idx.space
+    else: return idx.space in occ
