@@ -81,11 +81,8 @@ def apply_wick(e, occ=None):
         sos = []
         for operators in olists:
             # if there is an odd number of operators, then we are done
-            if len(operators)%2 != 0:
-                continue
-            if len(operators) == 0:
-                to.append(temp.copy())
-                continue
+            if len(operators)%2 != 0: continue
+            if len(operators) == 0: continue
             # loop to find a contraction
             plist = pair_list(operators)
             ds = []
