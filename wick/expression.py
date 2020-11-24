@@ -56,11 +56,14 @@ def _resolve(sums, tensors, operators, deltas):
         # 1 sums over 1st index
         # 2 sums over 2nd index
         # 3 sums over both indices
+        islist = set()
+        for s in sums: islist.add(s.idx)
+        is1 = i1 in islist
+        is2 = i2 in islist
         case = 0
-        for i,s in enumerate(sums):
-            idx = s.idx
-            if i2 == idx: case = 3 if case == 1 else 2
-            elif i1 == idx: case = 3 if case == 2 else 1
+        if is1: case = 1
+        if is2: case = (2 if case == 0 else 3)
+
         cases.append(case)
 
     rs = []
@@ -103,20 +106,15 @@ def _resolve(sums, tensors, operators, deltas):
         for tt in newtens:
             for k in range(len(tt.indices)):
                 if case == 1:
-                    if tt.indices[k] == i1:
-                        tt.indices[k] = i2
-                elif case > 1:
-                    if tt.indices[k] == i2:
-                        tt.indices[k] = i1
+                    if tt.indices[k] == i1: tt.indices[k] = i2
+                elif case == 2:
+                    if tt.indices[k] == i2: tt.indices[k] = i1
 
         for oo in newops:
             if case == 1:
-                if oo.idx == i1:
-                    oo.idx = i2
-            elif case > 1:
-                if oo.idx == i2:
-                    oo.idx = i1
-
+                if oo.idx == i1: oo.idx = i2
+            elif case == 2:
+                if oo.idx == i2: oo.idx = i1
         if not (case == 0 and i1 != i2): rs.append(dd)
 
     for d in rs:
@@ -141,12 +139,10 @@ def _resolve(sums, tensors, operators, deltas):
 
         for tt in newtens:
             for k in range(len(tt.indices)):
-                if tt.indices[k] == i2:
-                    tt.indices[k] = i1
+                if tt.indices[k] == i2: tt.indices[k] = i1
 
         for oo in newops:
-            if oo.idx == i2:
-                oo.idx = i1
+            if oo.idx == i2: oo.idx = i1
 
         if not (case == 0 and i1 != i2): rs.append(dd)
 
