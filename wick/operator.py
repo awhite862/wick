@@ -287,7 +287,7 @@ class Delta(object):
         return "\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
 
     def _inc(self, i):
-        return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + 1, self.i2.space))
+        return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + i, self.i2.space))
 
     def _print_str(self, imap):
         return "\delta_{" + imap[self.i1] + imap[self.i2] + "}"
