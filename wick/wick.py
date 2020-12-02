@@ -1,6 +1,6 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
-from itertools import product
+from itertools import product, chain
 from .operator import BOperator, FOperator, Projector, Sigma, Delta
 from .expression import Term, Expression
 from .index import is_occupied
@@ -30,20 +30,19 @@ def pair_list(lst,occ=None):
         else:
             return []
     else:
-        plist = []
         ltmp = lst[1:]
+        yy = lst[0]
+        plist = []
         for i,x in enumerate(ltmp):
-            if valid_contraction(lst[0], x):
+            if valid_contraction(yy, x):
                 p1 = [(lst[0],x),]
                 remainder = pair_list(ltmp[:i] + ltmp[i+1:])
-                for r in remainder:
-                    plist.append(p1 + r)
+                plist += [r + p1 for r in remainder]
         return plist
 
 def find_pair(i, ipairs):
     for p in ipairs:
-        if p[0] == i or p[1] ==i:
-            return p
+        if p[0] == i or p[1] == i: return p
 
 def get_sign(ipairs):
     ncross = 0
