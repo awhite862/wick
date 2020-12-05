@@ -36,7 +36,6 @@ class TermMap(object):
 
 default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
-# TODO: simplify this!
 def _resolve(sums, tensors, operators, deltas):
     newdel = [d.copy() for d in deltas]
     newsums = [s.copy() for s in sums]
@@ -45,26 +44,27 @@ def _resolve(sums, tensors, operators, deltas):
 
     # get unique deltas
     newdel = list(set(newdel))
-    cases = []
-    for dd in newdel:
+
+    ## Cases ##
+    # 0 sums over neither index
+    # 1 sums over 1st index
+    # 2 sums over 2nd index
+    # 3 sums over both indices
+    def get_case(dd):
         i2 = dd.i2
         i1 = dd.i1
         assert(i1.space == i2.space)
 
-        ## Cases ##
-        # 0 sums over neither index
-        # 1 sums over 1st index
-        # 2 sums over 2nd index
-        # 3 sums over both indices
-        islist = set()
-        for s in sums: islist.add(s.idx)
+        islist = set([s.idx for s in sums])
+        #for s in sums: islist.add(s.idx)
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
         if is1: case = 1
         if is2: case = (2 if case == 0 else 3)
+        return case
 
-        cases.append(case)
+    cases = [get_case(dd) for dd in newdel]
 
     rs = []
     # loop over deltas for case 1 and 2
@@ -104,7 +104,7 @@ def _resolve(sums, tensors, operators, deltas):
                 else: assert(False)
 
         for tt in newtens:
-            for k in range(len(tt.indices)):
+            for k,ti in enumerate(tt.indices):
                 if case == 1:
                     if tt.indices[k] == i1: tt.indices[k] = i2
                 elif case == 2:
@@ -115,6 +115,7 @@ def _resolve(sums, tensors, operators, deltas):
                 if oo.idx == i1: oo.idx = i2
             elif case == 2:
                 if oo.idx == i2: oo.idx = i1
+
         if not (case == 0 and i1 != i2): rs.append(dd)
 
     for d in rs:
@@ -122,8 +123,8 @@ def _resolve(sums, tensors, operators, deltas):
         del newdel[dindx]
         del cases[dindx]
 
-    for c in cases:
-        if c == 1 or c == 2: return _resolve(newsums, newtens, newops, newdel)
+    # recur if deltas of type 1 or 2 remain
+    if 1 in cases or 2 in cases: return _resolve(newsums, newtens, newops, newdel)
 
     # loop over case 3 deltas
     rs = []
@@ -136,9 +137,10 @@ def _resolve(sums, tensors, operators, deltas):
             del newsums[dindx]
         elif case < 3: assert(case == 0)
         else: assert(False)
+        if case == 0: continue
 
         for tt in newtens:
-            for k in range(len(tt.indices)):
+            for k,ti in enumerate(tt.indices):
                 if tt.indices[k] == i2: tt.indices[k] = i1
 
         for oo in newops:
