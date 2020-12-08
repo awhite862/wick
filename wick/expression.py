@@ -655,15 +655,19 @@ class AExpression(object):
 
         # compress all symmetry-related terms
         newterms = []
+        test = lambda x: x[1] is not None
         while self.terms:
             t1 = self.terms[0]
-            tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
+            #tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
+            remaining = self.terms[1:]
+            tm = list(filter(test,[(t,t1.pmatch(t),i) for i,t in enumerate(remaining)]))
             s = t1.scalar
             for t in tm: s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(t1.copy())
-            tm = [t[0] for t in tm]
-            self.terms = list(filter(lambda x: x not in tm, self.terms[1:]))
+            tmi = [t[2] for t in tm]
+            indices = list(filter(lambda i: i not in tmi, range(0,len(remaining))))
+            self.terms = [remaining[i] for i in indices]
         self.terms = newterms
 
         # get rid of terms that are zero after compression
