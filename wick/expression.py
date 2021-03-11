@@ -16,10 +16,11 @@ class TermMap(object):
         self.data = set()
         for ti in tensors:
             strs = {}
+            ilist = ti.ilist()
+            for idx in ilist:
+                if idx.space not in strs: strs[idx.space] = ""
             for i,iidx in enumerate(ti.indices):
                 space = iidx.space
-                if space not in strs:
-                    strs[space] = ""
                 for tj in tensors:
                     if tj == ti: continue
                     for j,jidx in enumerate(tj.indices):
@@ -495,7 +496,6 @@ class ATerm(object):
             if not t.name: num_ext = num_ext + 1
 
         # check for symmetry in external indices
-
         if num_ext < 2: pass
         else:
             newtensors = [t.copy() for t in self.tensors[num_ext:]]
@@ -658,7 +658,6 @@ class AExpression(object):
         test = lambda x: x[1] is not None
         while self.terms:
             t1 = self.terms[0]
-            #tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
             remaining = self.terms[1:]
             tm = list(filter(test,[(t,t1.pmatch(t),i) for i,t in enumerate(remaining)]))
             s = t1.scalar
