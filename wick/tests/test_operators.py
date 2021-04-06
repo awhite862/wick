@@ -25,8 +25,8 @@ class OperatorTest(unittest.TestCase):
         T4 = Tensor([a,i], "f")
         self.assertTrue(T2 == T3)
         self.assertTrue(T2 != T4)
-        self.assertTrue(T1 != T3) 
-        self.assertTrue(T1 != T4) 
+        self.assertTrue(T1 != T3)
+        self.assertTrue(T1 != T4)
 
     def test_sigma(self):
         i = Idx(0,"occ")

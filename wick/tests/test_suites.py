@@ -23,6 +23,7 @@ def run_suite():
     suite.addTest(test_term.TermTest("test_scalar_mul"))
     suite.addTest(test_term.TermTest("test_mul"))
     suite.addTest(test_term.TermTest("test_mul2"))
+    suite.addTest(test_term.TermTest("test_ilist"))
     suite.addTest(test_term.TermTest("test_term_map"))
 
     suite.addTest(test_aterm.ATermTest("test_connected"))

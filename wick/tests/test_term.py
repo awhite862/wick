@@ -32,7 +32,7 @@ class TermTest(unittest.TestCase):
 
         sum3 = sum2 + sum1
         ten3 = ten1 + ten2
-        ops3 = ops1 + ops2 
+        ops3 = ops1 + ops2
         ref = Term(1.0, sum3, ten3, ops3, [])
 
         out = t1*t2
@@ -84,22 +84,20 @@ class TermTest(unittest.TestCase):
         tensors = [Tensor([i,j], 'f'),Tensor([k,l], 'f')]
         operators = [FOperator(i, True), FOperator(j, False),
                 FOperator(k, True), FOperator(l, False)]
-        #print(t3)
         ttest = Term(s, sums, tensors, operators, [])
         self.assertTrue(t3 == ttest)
 
-    def test_tensor_sort(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        a = Idx(0,"vir")
-        tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
-        sigmas = [Sigma(j)]
-        tt = ATerm(scalar=1.0, sums=sigmas, tensors = tensors)
-        print(tt._print_str())
-        tt.sort_tensors()
-        print(tt._print_str())
-        self.assertTrue(True)
-
+    #def test_tensor_sort(self):
+    #    i = Idx(0,"occ")
+    #    j = Idx(1,"occ")
+    #    a = Idx(0,"vir")
+    #    tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
+    #    sigmas = [Sigma(j)]
+    #    tt = ATerm(scalar=1.0, sums=sigmas, tensors = tensors)
+    #    print(tt._print_str())
+    #    tt.sort_tensors()
+    #    print(tt._print_str())
+    #    self.assertTrue(True)
 
 if __name__ == '__main__':
     unittest.main()
