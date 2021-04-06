@@ -15,7 +15,7 @@ see the [examples](../master/examples)
 We don't currently have very good test coverage for this library.
 In the meantime, the shell scripts in the [examples](../master/examples)
 directory can be run to compare output text to the expected results in the
-`examples/*.out' files.
+`examples/*.out` files.
 
 The tests we do have can be run as follows:
   - Individually from the `wick/tests` subdirectory

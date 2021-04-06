@@ -1,0 +1,4 @@
+[run]
+branch = True
+source = wick
+omit = wick/tests/*.py
