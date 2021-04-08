@@ -76,6 +76,10 @@ def apply_wick(e, occ=None):
     # loop over terms
     for temp in e.terms:
         olists = split_operators(temp.operators)
+        if not any(olists):
+            to.append(temp.copy())
+            continue
+
         dos = []
         sos = []
         for operators in olists:

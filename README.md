@@ -1,6 +1,8 @@
 # WICK
 Symbolic manipulation of operator strings for quantum chemistry appliciations
 
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org)
+
 ## Features
 WICK is a pure python library for applying Wick's theorem, manipulating, and simplifying arbitrary strings of second-quantized operators.
 Some features include:
