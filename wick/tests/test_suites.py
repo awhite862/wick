@@ -1,5 +1,6 @@
 import unittest
 import test_aterm
+import test_idx
 import test_operators
 import test_term
 import test_term_map
@@ -10,6 +11,13 @@ def run_suite():
     suite = unittest.TestSuite()
 
     suite.addTest(test_test.TestTest("test_framework"))
+
+    suite.addTest(test_aterm.ATermTest("test_connected"))
+    suite.addTest(test_aterm.ATermTest("test_reducible"))
+
+    suite.addTest(test_idx.IdxTest("test_idx"))
+    suite.addTest(test_idx.IdxTest("test_idx_str"))
+    suite.addTest(test_idx.IdxTest("test_idx_occ"))
 
     suite.addTest(test_operators.OperatorTest("test_operator"))
     suite.addTest(test_operators.OperatorTest("test_tensor"))
@@ -25,9 +33,6 @@ def run_suite():
     suite.addTest(test_term.TermTest("test_mul2"))
     suite.addTest(test_term.TermTest("test_ilist"))
     suite.addTest(test_term.TermTest("test_term_map"))
-
-    suite.addTest(test_aterm.ATermTest("test_connected"))
-    suite.addTest(test_aterm.ATermTest("test_reducible"))
 
     suite.addTest(test_wick.WickTest("test_valid_contraction"))
     suite.addTest(test_wick.WickTest("test_pair_list"))
