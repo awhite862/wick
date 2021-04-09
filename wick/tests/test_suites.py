@@ -29,6 +29,11 @@ def run_suite():
     suite.addTest(test_sc_rules.SCRulesTest("test_0d0"))
     suite.addTest(test_sc_rules.SCRulesTest("test_0d1"))
     suite.addTest(test_sc_rules.SCRulesTest("test_0d2"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_1d0"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_1d1"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_1d2"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_2d1"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_2d2"))
 
     suite.addTest(test_term_map.TermMapTest("test_null"))
     suite.addTest(test_term_map.TermMapTest("test_label"))
