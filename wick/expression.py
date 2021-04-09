@@ -13,40 +13,22 @@ class TermMap(object):
     Attributes:
         data (set): set of tuples indicating a contraction pattern of a tensor expression
     """
-    #def __init__(self, sums, tensors, occ=None):
-    #    self.data = set()
-    #    for ti in tensors:
-    #        ilist = ti.ilist()
-    #        strs = {idx.space: "" for idx in ilist}
-    #        tensors2 = list(filter(lambda x: x != ti, tensors))
-    #        for i,iidx in enumerate(ti.indices):
-    #            space = iidx.space
-    #            istr = str(i)
-    #            for tj in tensors2:
-    #                tjname = tj.name if tj.name else "!"
-    #                for j,jidx in enumerate(tj.indices):
-    #                    if iidx == jidx:
-    #                        tjname = tj.name if tj.name else "!"
-    #                        cstr = str(i) + tjname + str(j)
-    #                        strs[space] += cstr
-    #        tiname = ti.name if ti.name else "!"
-    #        lll = [(k,v) for k,v in sorted(strs.items())]
-    #        self.data.add((tiname,tuple(lll)))
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
         for ti in tensors:
             ilist = ti.ilist()
-            strs = {idx.space: "" for idx in ilist}
-            tensors2 = list(filter(lambda x: x != ti, tensors))
+            #strs = {idx.space: "" for idx in ilist}
+            strs = {idx.space: frozenset() for idx in ilist}
             for i,iidx in enumerate(ti.indices):
                 space = iidx.space
                 istr = str(i)
-                for tj in tensors2:
+                for tj in tensors:
                     tjname = tj.name if tj.name else "!"
                     def make_str(x):
                         return istr + tjname + x[0]
                     jts = [(str(j),jidx) for j,jidx in enumerate(tj.indices) if jidx == iidx]
-                    if jts: strs[space] += reduce(lambda a,b: a + b, [make_str(x) for x in jts])
+                    #if jts: strs[space] += reduce(lambda a,b: a + b, [make_str(x) for x in jts])
+                    if jts: strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
             tiname = ti.name if ti.name else "!"
             lll = [(k,v) for k,v in sorted(strs.items())]
             self.data.add((tiname,tuple(lll)))
@@ -628,6 +610,19 @@ class Expression(object):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return Expression(terms)
         else: return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, Expression):
+            # NOTE: This compares in fixed order with fixed indices
+            if len(self.terms) != len(other.terms): return False
+            for t1,t2 in zip(self.terms, other.terms):
+                if t1 != t2: return False
+            return True
+        else:
+            return NotImplemented
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
 
     __rmul__ = __mul__
 
