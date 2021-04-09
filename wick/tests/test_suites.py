@@ -2,6 +2,7 @@ import unittest
 import test_aterm
 import test_idx
 import test_operators
+import test_sc_rules
 import test_term
 import test_term_map
 import test_test
@@ -24,6 +25,10 @@ def run_suite():
     suite.addTest(test_operators.OperatorTest("test_sigma"))
     suite.addTest(test_operators.OperatorTest("test_delta"))
     suite.addTest(test_operators.OperatorTest("test_dagger"))
+
+    suite.addTest(test_sc_rules.SCRulesTest("test_0d0"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_0d1"))
+    suite.addTest(test_sc_rules.SCRulesTest("test_0d2"))
 
     suite.addTest(test_term_map.TermMapTest("test_null"))
     suite.addTest(test_term_map.TermMapTest("test_label"))
