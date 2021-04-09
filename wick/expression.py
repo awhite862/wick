@@ -235,7 +235,7 @@ class Term(object):
         else:
             return NotImplemented
 
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
 
     def _inc(self, i):
@@ -376,7 +376,7 @@ class ATerm(object):
         else:
             return NotImplemented
 
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
 
     def __lt__(self, other):
@@ -621,7 +621,7 @@ class Expression(object):
         else:
             return NotImplemented
 
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
 
     __rmul__ = __mul__
@@ -720,7 +720,7 @@ class AExpression(object):
         else:
             return NotImplemented
 
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
 
     def _print_str(self):

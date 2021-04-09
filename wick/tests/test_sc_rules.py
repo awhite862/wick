@@ -205,6 +205,5 @@ class SCRulesTest(unittest.TestCase):
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
-
 if __name__ == '__main__':
     unittest.main()
