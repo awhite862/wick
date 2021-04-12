@@ -2,6 +2,7 @@ import unittest
 
 from wick.index import Idx
 from wick.expression import *
+from wick.operator import FOperator
 
 class TermTest(unittest.TestCase):
     def test_scalar_mul(self):

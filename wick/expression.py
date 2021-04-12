@@ -3,9 +3,8 @@
 from copy import copy
 from itertools import product
 from numbers import Number
-from functools import reduce
-from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
-from .index import is_occupied, Idx
+from .operator import Sigma, Delta, Tensor, permute, tensor_from_delta
+from .index import Idx
 
 class TermMap(object):
     """Map indicating the contraction pattern of a given tensor expression

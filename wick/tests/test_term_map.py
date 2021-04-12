@@ -1,7 +1,7 @@
 import unittest
 from wick.expression import *
 from wick.convenience import *
-from wick.wick import apply_wick
+#from wick.wick import apply_wick
 
 class TermMapTest(unittest.TestCase):
     def test_null(self):

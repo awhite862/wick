@@ -1,6 +1,5 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
-from itertools import product
 from fractions import Fraction
 from .index import Idx
 from .operator import Projector, BOperator, FOperator, TensorSym, Tensor, Sigma, normal_ordered
