@@ -54,7 +54,7 @@ class FOperator(object):
 
     def __repr__(self):
         if self.ca:
-            return "a^{\dagger}_" + str(self.idx)
+            return "a^{\\dagger}_" + str(self.idx)
         else:
             return "a_" + str(self.idx)
 
@@ -64,7 +64,7 @@ class FOperator(object):
 
     def _print_str(self, imap):
         if self.ca:
-            return "a^{\dagger}_" + imap[self.idx]
+            return "a^{\\dagger}_" + imap[self.idx]
         else:
             return "a_" + imap[self.idx]
 
@@ -107,7 +107,7 @@ class BOperator(object):
 
     def __repr__(self):
         if self.ca:
-            return "b^{\dagger}_" + str(self.idx)
+            return "b^{\\dagger}_" + str(self.idx)
         else:
             return "b_" + str(self.idx)
 
@@ -117,7 +117,7 @@ class BOperator(object):
 
     def _print_str(self, imap):
         if self.ca:
-            return "b^{\dagger}_" + imap[self.idx]
+            return "b^{\\dagger}_" + imap[self.idx]
         else:
             return "b_" + imap[self.idx]
 
@@ -246,13 +246,13 @@ class Sigma(object):
         return hash(str(self.idx))
 
     def __repr__(self):
-        return "\sum_{" + str(self.idx.index) + "}"
+        return "\\sum_{" + str(self.idx.index) + "}"
 
     def _inc(self, i):
         return Sigma(Idx(self.idx.index + i, self.idx.space))
 
     def _print_str(self, imap):
-        return "\sum_{" + imap[self.idx] + "}"
+        return "\\sum_{" + imap[self.idx] + "}"
 
     def copy(self):
         return Sigma(idx_copy(self.idx))
@@ -283,13 +283,13 @@ class Delta(object):
         return hash(''.join(sorted(str(self.i1.index) + str(self.i2.index))))
 
     def __repr__(self):
-        return "\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
+        return "\\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
 
     def _inc(self, i):
         return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + i, self.i2.space))
 
     def _print_str(self, imap):
-        return "\delta_{" + imap[self.i1] + imap[self.i2] + "}"
+        return "\\delta_{" + imap[self.i1] + imap[self.i2] + "}"
 
     def copy(self):
         i1 = idx_copy(self.i1)

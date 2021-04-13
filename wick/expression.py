@@ -418,7 +418,7 @@ class ATerm(object):
         for ss in self.sums:
             iis += imap[ss.idx]
         if iis:
-            out += "\sum_{" + iis + "}"
+            out += "\\sum_{" + iis + "}"
         for tt in self.tensors:
             out += tt._print_str(imap)
         return out

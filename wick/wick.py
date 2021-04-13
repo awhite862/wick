@@ -142,10 +142,9 @@ def apply_wick(e, occ=None):
                     [],
                     deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
             to.append(t1)
-        
+
     o = Expression(to)
     if o.are_operators():
         raise Exception("Application of Wick's theorem has failed!")
     else:
         return o
-
