@@ -126,7 +126,7 @@ class BOperator(object):
         else: return False
 
     def qp_anihilation(self):
-        return not self.qp_creation(occ=occ)
+        return not self.qp_creation()
 
     def copy(self):
         return BOperator(idx_copy(self.idx), self.ca)
