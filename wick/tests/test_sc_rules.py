@@ -107,8 +107,8 @@ class SCRulesTest(unittest.TestCase):
         self.assertTrue(ref.pmatch(out))
 
     def test_1d2b(self):
-        # 1 difference, 2-electron operator
-        e = two_e("I", ["occ","vir"])
+        # 1 difference, 2-electron operator (compressed)
+        e = two_e("I", ["occ","vir"], compress=True)
         bra = braE1("occ", "vir")
         x = apply_wick(bra*e)
         x.resolve()
@@ -156,8 +156,8 @@ class SCRulesTest(unittest.TestCase):
         self.assertTrue(len(x.terms) == 0)
 
     def test_2d2b(self):
-        # 2 differences, 2-electron operator
-        e = two_e("I", ["occ","vir"])
+        # 2 differences, 2-electron operator (compressed)
+        e = two_e("I", ["occ","vir"], compress=True)
         bra = braE2("occ", "vir", "occ", "vir")
         x = apply_wick(bra*e)
         x.resolve()

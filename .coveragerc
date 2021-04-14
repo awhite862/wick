@@ -2,3 +2,7 @@
 branch = True
 source = wick
 omit = wick/tests/*.py
+
+[report]
+exclude_lines = 
+    return NotImplemented

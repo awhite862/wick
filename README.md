@@ -2,6 +2,7 @@
 Symbolic manipulation of operator strings for quantum chemistry appliciations
 
 [![Build](https://github.com/awhite862/wick/workflows/Build/badge.svg)](https://github.com/awhite862/wick/actions/workflows/python-package.yml)
+[![codecov](https://codecov.io/gh/awhite862/wick/branch/master/graph/badge.svg)](https://codecov.io/gh/awhite862/wick)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org)
 
 ## Features
