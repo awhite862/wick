@@ -76,7 +76,7 @@ class FOperator(object):
         else:
             return False
 
-    def qp_anihilation(self, occ=None):
+    def qp_annihilation(self, occ=None):
         return not self.qp_creation(occ=occ)
 
     def copy(self):
@@ -125,7 +125,7 @@ class BOperator(object):
         if self.ca: return True
         else: return False
 
-    def qp_anihilation(self):
+    def qp_annihilation(self):
         return not self.qp_creation()
 
     def copy(self):

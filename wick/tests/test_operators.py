@@ -4,7 +4,7 @@ from wick.index import Idx
 from wick.operator import *
 
 class OperatorTest(unittest.TestCase):
-    def test_operator(self):
+    def test_foperator(self):
         i = Idx(0,"occ")
         j = Idx(1,"occ")
         O1 = FOperator(i, False)
@@ -15,6 +15,29 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(O1 != O3)
         self.assertTrue(O1 != O4)
         self.assertTrue(O2 != O4)
+        self.assertTrue(O1.qp_creation())
+        self.assertTrue(O4.qp_annihilation())
+
+    def test_boperator(self):
+        I = Idx(0,"nm", fermion=False)
+        J = Idx(1,"nm", fermion=False)
+        O1 = BOperator(I, False)
+        O2 = BOperator(I, False)
+        O3 = BOperator(J, False)
+        O4 = BOperator(J, True)
+        self.assertTrue(O1 == O2)
+        self.assertTrue(O1 != O3)
+        self.assertTrue(O1 != O4)
+        self.assertTrue(O2 != O4)
+        self.assertTrue(O4.qp_creation())
+        self.assertTrue(O1.qp_annihilation())
+
+    def test_projector(self):
+        P1 = Projector()
+        P2 = Projector()
+        self.assertTrue(not (P1 != P2))
+        self.assertTrue(str(P1) == "P")
+        self.assertTrue(P1.dagger() == P2)
 
     def test_tensor(self):
         i = Idx(0,"occ")

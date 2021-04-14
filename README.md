@@ -1,6 +1,7 @@
 # WICK
 Symbolic manipulation of operator strings for quantum chemistry appliciations
 
+[![Build](https://github.com/awhite862/wick/workflows/Build/badge.svg)](https://github.com/awhite862/wick/actions/workflows/python-package.yml)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org)
 
 ## Features

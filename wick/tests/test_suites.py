@@ -20,7 +20,9 @@ def run_suite():
     suite.addTest(test_idx.IdxTest("test_idx_str"))
     suite.addTest(test_idx.IdxTest("test_idx_occ"))
 
-    suite.addTest(test_operators.OperatorTest("test_operator"))
+    suite.addTest(test_operators.OperatorTest("test_foperator"))
+    suite.addTest(test_operators.OperatorTest("test_boperator"))
+    suite.addTest(test_operators.OperatorTest("test_projector"))
     suite.addTest(test_operators.OperatorTest("test_tensor"))
     suite.addTest(test_operators.OperatorTest("test_sigma"))
     suite.addTest(test_operators.OperatorTest("test_delta"))
