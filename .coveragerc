@@ -6,3 +6,5 @@ omit = wick/tests/*.py
 [report]
 exclude_lines = 
     return NotImplemented
+    else: assert(False)
+    assert(False)

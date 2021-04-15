@@ -1,5 +1,6 @@
 from wick.tests.test_aterm import *
 from wick.tests.test_expression import *
+from wick.tests.test_full import *
 from wick.tests.test_idx import *
 from wick.tests.test_operators import *
 from wick.tests.test_sc_rules import *

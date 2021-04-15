@@ -1,6 +1,7 @@
 import unittest
 import test_aterm
 import test_expression
+import test_full
 import test_idx
 import test_operators
 import test_sc_rules
@@ -19,7 +20,11 @@ def run_suite():
 
     suite.addTest(test_expression.ExpressionTest("test_resolve0"))
     suite.addTest(test_expression.ExpressionTest("test_resolve1"))
+    suite.addTest(test_expression.ExpressionTest("test_resolve2"))
     suite.addTest(test_expression.ExpressionTest("test_resolve3"))
+
+    suite.addTest(test_full.FullTest("test_ccsd_T1"))
+    suite.addTest(test_full.FullTest("test_p2"))
 
     suite.addTest(test_idx.IdxTest("test_idx"))
     suite.addTest(test_idx.IdxTest("test_idx_str"))
