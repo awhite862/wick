@@ -179,7 +179,6 @@ class Tensor(object):
         return hash(ss)
 
     def __repr__(self):
-        temp = self.name
         istr = str()
         for idx in self.indices:
             istr += str(idx.index)

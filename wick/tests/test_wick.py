@@ -47,7 +47,6 @@ class WickTest(unittest.TestCase):
         pl = pair_list(os)
         self.assertTrue(len(pl) == 1)
 
-
     def test_get_sign(self):
         ipairs = [(0,1), (2,3)]
         self.assertTrue(get_sign(ipairs) == 1)
@@ -86,7 +85,7 @@ class WickTest(unittest.TestCase):
         out1 = apply_wick(O1*P*O2)
         out1.resolve()
         out = AExpression(Ex=out1)
-        self.assertTrue(ref.pmatch(ref))
+        self.assertTrue(ref.pmatch(out))
 
 
 if __name__ == '__main__':

@@ -106,7 +106,7 @@ def apply_wick(e, occ=None):
                         i2 = oj.idx
                         deltas.append(Delta(i1,i2))
                     elif (is_occupied(oi.idx, occ=occ) and oi.ca and not oj.ca) or (
-                        not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
+                            not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
                         i = operators.index(oi)
                         j = operators.index(oj)
                         ipairs.append((i,j))

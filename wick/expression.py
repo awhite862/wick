@@ -192,7 +192,6 @@ class Term(object):
             out += str(oo)
         return out
 
-
     def __mul__(self, other):
         if isinstance(other, Number):
             new = self.copy()
@@ -252,7 +251,7 @@ class Term(object):
         off = {}
         imap = {}
         for idx in ilist:
-            n,s = idx.index,idx.space
+            s = idx.space
             if s in off:
                 o = off[s]
                 off[s] += 1
@@ -401,7 +400,7 @@ class ATerm(object):
         off = {}
         imap = {}
         for idx in ilist:
-            n,s = idx.index,idx.space
+            s = idx.space
             if s in off:
                 o = off[s]
                 off[s] += 1

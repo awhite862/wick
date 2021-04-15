@@ -59,7 +59,7 @@ class OperatorTest(unittest.TestCase):
         S2 = Sigma(i)
         S3 = Sigma(j)
         S4 = Sigma(a)
-        self.assertTrue(S2 == S2)
+        self.assertTrue(S2 == S1)
         self.assertTrue(S2 != S3)
         self.assertTrue(S2 != S4)
         self.assertTrue(S3 != S4)
