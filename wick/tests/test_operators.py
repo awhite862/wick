@@ -3,10 +3,11 @@ import unittest
 from wick.index import Idx
 from wick.operator import *
 
+
 class OperatorTest(unittest.TestCase):
     def test_foperator(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
         O1 = FOperator(i, False)
         O2 = FOperator(i, False)
         O3 = FOperator(j, False)
@@ -19,8 +20,8 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(O4.qp_annihilation())
 
     def test_boperator(self):
-        I = Idx(0,"nm", fermion=False)
-        J = Idx(1,"nm", fermion=False)
+        I = Idx(0, "nm", fermion=False)
+        J = Idx(1, "nm", fermion=False)
         O1 = BOperator(I, False)
         O2 = BOperator(I, False)
         O3 = BOperator(J, False)
@@ -40,8 +41,8 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(P1.dagger() == P2)
 
     def test_tensor(self):
-        i = Idx(0,"occ")
-        a = Idx(0,"vir")
+        i = Idx(0, "occ")
+        a = Idx(0, "vir")
         T1 = Tensor([i,a], "g")
         T2 = Tensor([i,a], "f")
         T3 = Tensor([i,a], "f")
@@ -52,9 +53,9 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(T1 != T4)
 
     def test_sigma(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        a = Idx(0,"vir")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
         S1 = Sigma(i)
         S2 = Sigma(i)
         S3 = Sigma(j)
@@ -65,30 +66,31 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(S3 != S4)
 
     def test_delta(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        a = Idx(0,"vir")
-        b = Idx(1,"vir")
-        D1 = Delta(i,j)
-        D2 = Delta(i,j)
-        D3 = Delta(j,i)
-        D4 = Delta(a,b)
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
+        D1 = Delta(i, j)
+        D2 = Delta(i, j)
+        D3 = Delta(j, i)
+        D4 = Delta(a, b)
         self.assertTrue(D1 == D2)
         self.assertTrue(D1 == D3)
         self.assertTrue(D1 != D4)
 
     def test_dagger(self):
-        i = Idx(0,"occ")
+        i = Idx(0, "occ")
         O1 = FOperator(i, False)
         O2 = FOperator(i, True)
         self.assertTrue(O1.dagger() == O2)
         self.assertTrue(O2.dagger() == O1)
 
-        x = Idx(0,"nm",fermion=False)
+        x = Idx(0, "nm", fermion=False)
         Ob1 = BOperator(x, False)
         Ob2 = BOperator(x, True)
         self.assertTrue(Ob1.dagger() == Ob2)
         self.assertTrue(Ob2.dagger() == Ob1)
+
 
 if __name__ == '__main__':
     unittest.main()

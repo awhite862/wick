@@ -8,6 +8,7 @@ from wick.wick import apply_wick
 from wick.convenience import one_e, two_e, get_sym
 from wick.convenience import ketE1, ketE2, braE1, braE2
 
+
 class SCRulesTest(unittest.TestCase):
     def test_0d0(self):
         # 0 differences, constant
@@ -23,8 +24,9 @@ class SCRulesTest(unittest.TestCase):
         x.resolve()
         out = AExpression(Ex=x)
         i = Idx(0, "occ")
-        tr1 = ATerm(scalar=1, sums=[Sigma(i)],
-                tensors=[Tensor([i,i], "f")])
+        tr1 = ATerm(
+            scalar=1, sums=[Sigma(i)],
+            tensors=[Tensor([i,i], "f")])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -38,8 +40,9 @@ class SCRulesTest(unittest.TestCase):
 
         i = Idx(0, "occ")
         j = Idx(1, "occ")
-        tr1 = ATerm(scalar=Fraction(1,2), sums=[Sigma(i), Sigma(j)],
-                tensors=[Tensor([i,j,i,j], "I", sym=get_sym(True))])
+        tr1 = ATerm(
+            scalar=Fraction(1,2), sums=[Sigma(i), Sigma(j)],
+            tensors=[Tensor([i,j,i,j], "I", sym=get_sym(True))])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -61,8 +64,9 @@ class SCRulesTest(unittest.TestCase):
 
         i = Idx(0, "occ")
         a = Idx(0, "vir")
-        tr1 = ATerm(scalar=1, sums=[],
-                tensors=[Tensor([i,a], "f"),Tensor([i,a],"")])
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([i,a], "f"),Tensor([i,a], "")])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -77,9 +81,10 @@ class SCRulesTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         a = Idx(0, "vir")
-        tr1 = ATerm(scalar=1, sums=[Sigma(j)],
-                tensors=[Tensor([i,j,a,j], "I", sym=get_sym(True)),
-                    Tensor([i,a],"")])
+        tr1 = ATerm(
+            scalar=1, sums=[Sigma(j)],
+            tensors=[Tensor([i,j,a,j], "I", sym=get_sym(True)),
+                     Tensor([i,a], "")])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -101,8 +106,9 @@ class SCRulesTest(unittest.TestCase):
 
         i = Idx(0, "occ")
         a = Idx(0, "vir")
-        tr1 = ATerm(scalar=1, sums=[],
-                tensors=[Tensor([a,i],""), Tensor([a,i], "f")])
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([a,i], ""), Tensor([a,i], "f")])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -117,9 +123,10 @@ class SCRulesTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         a = Idx(0, "vir")
-        tr1 = ATerm(scalar=1, sums=[Sigma(j)],
-                tensors=[Tensor([a,i],""),
-                    Tensor([a,j,i,j], "I", sym=get_sym(True))])
+        tr1 = ATerm(
+            scalar=1, sums=[Sigma(j)],
+            tensors=[Tensor([a,i], ""),
+                     Tensor([a,j,i,j], "I", sym=get_sym(True))])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -142,9 +149,10 @@ class SCRulesTest(unittest.TestCase):
         j = Idx(1, "occ")
         a = Idx(0, "vir")
         b = Idx(1, "vir")
-        tr1 = ATerm(scalar=1, sums=[],
-                tensors=[Tensor([i,j,a,b], "I", sym=get_sym(True)),
-                    Tensor([i,j,a,b],"", sym=get_sym(True))])
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([i,j,a,b], "I", sym=get_sym(True)),
+                     Tensor([i,j,a,b], "", sym=get_sym(True))])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -167,9 +175,10 @@ class SCRulesTest(unittest.TestCase):
         j = Idx(1, "occ")
         a = Idx(0, "vir")
         b = Idx(1, "vir")
-        tr1 = ATerm(scalar=1, sums=[],
-                tensors=[Tensor([a,b,i,j],"", sym=get_sym(True)),
-                    Tensor([a,b,i,j], "I", sym=get_sym(True))])
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([a,b,i,j], "", sym=get_sym(True)),
+                     Tensor([a,b,i,j], "I", sym=get_sym(True))])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
 
@@ -181,7 +190,7 @@ class SCRulesTest(unittest.TestCase):
         x = apply_wick(bra*e*ket)
         x.resolve()
         out = AExpression(Ex=x)
-        out = out.get_connected() # terms with truly 2 differences
+        out = out.get_connected()  # terms with truly 2 differences
         self.assertTrue(len(out.terms) == 0)
 
     def test_2d2c(self):
@@ -198,12 +207,14 @@ class SCRulesTest(unittest.TestCase):
         j = Idx(1, "occ")
         a = Idx(0, "vir")
         b = Idx(1, "vir")
-        tr1 = ATerm(scalar=1, sums=[],
-                tensors=[Tensor([a,i],""),
-                    Tensor([a,j,i,b], "I", sym=get_sym(True)),
-                    Tensor([j,b],"")])
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([a,i], ""),
+                     Tensor([a,j,i,b], "I", sym=get_sym(True)),
+                     Tensor([j,b], "")])
         ref = AExpression(terms=[tr1])
         self.assertTrue(ref.pmatch(out))
+
 
 if __name__ == '__main__':
     unittest.main()

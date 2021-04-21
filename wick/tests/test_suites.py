@@ -10,6 +10,7 @@ import test_term_map
 import test_test
 import test_wick
 
+
 def run_suite():
     suite = unittest.TestSuite()
 
@@ -62,6 +63,7 @@ def run_suite():
     suite.addTest(test_term.TermTest("test_mul2"))
     suite.addTest(test_term.TermTest("test_ilist"))
     suite.addTest(test_term.TermTest("test_term_map"))
+    suite.addTest(test_term.TermTest("test_tensor_sort"))
 
     suite.addTest(test_wick.WickTest("test_valid_contraction"))
     suite.addTest(test_wick.WickTest("test_pair_list"))
@@ -70,6 +72,7 @@ def run_suite():
     suite.addTest(test_wick.WickTest("test_projector"))
 
     return suite
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()

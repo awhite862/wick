@@ -4,11 +4,12 @@ from wick.index import Idx
 from wick.expression import *
 from wick.operator import FOperator
 
+
 class TermTest(unittest.TestCase):
     def test_scalar_mul(self):
         s = 1.0
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
@@ -18,10 +19,10 @@ class TermTest(unittest.TestCase):
         self.assertTrue(t1 == t2)
 
     def test_mul(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        a = Idx(0,"vir")
-        b = Idx(1,"vir")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
         sum1 = [Sigma(i), Sigma(j)]
         ten1 = [Tensor([i,j], 'f')]
         ops1 = [FOperator(i, True), FOperator(j, False)]
@@ -41,8 +42,8 @@ class TermTest(unittest.TestCase):
 
     def test_term_map(self):
         s = 1.0
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         t1 = ATerm(s, sums, tensors)
@@ -59,8 +60,8 @@ class TermTest(unittest.TestCase):
 
     def test_ilist(self):
         s = 1.0
-        i = Idx("i","occ")
-        j = Idx("j","occ")
+        i = Idx("i", "occ")
+        j = Idx("j", "occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
@@ -71,34 +72,35 @@ class TermTest(unittest.TestCase):
 
     def test_mul2(self):
         s = 1.0
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
         tensors = [Tensor([i,j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
         t1 = Term(s, sums, tensors, operators, [])
 
         t3 = t1*t1
-        k = Idx(2,"occ")
-        l = Idx(3,"occ")
+        k = Idx(2, "occ")
+        l = Idx(3, "occ")
         sums = [Sigma(i), Sigma(j), Sigma(k), Sigma(l)]
         tensors = [Tensor([i,j], 'f'),Tensor([k,l], 'f')]
         operators = [FOperator(i, True), FOperator(j, False),
-                FOperator(k, True), FOperator(l, False)]
+                     FOperator(k, True), FOperator(l, False)]
         ttest = Term(s, sums, tensors, operators, [])
         self.assertTrue(t3 == ttest)
 
-    #def test_tensor_sort(self):
-    #    i = Idx(0,"occ")
-    #    j = Idx(1,"occ")
-    #    a = Idx(0,"vir")
-    #    tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
-    #    sigmas = [Sigma(j)]
-    #    tt = ATerm(scalar=1.0, sums=sigmas, tensors = tensors)
-    #    print(tt._print_str())
-    #    tt.sort_tensors()
-    #    print(tt._print_str())
-    #    self.assertTrue(True)
+    def test_tensor_sort(self):
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
+        st = [tensors[1], tensors[0], tensors[2]]
+        sigmas = [Sigma(j)]
+        tt = ATerm(scalar=1.0, sums=sigmas, tensors=tensors)
+        tt.sort_tensors()
+        for ref, out in zip(st, tt.tensors):
+            self.assertTrue(ref == out)
+
 
 if __name__ == '__main__':
     unittest.main()

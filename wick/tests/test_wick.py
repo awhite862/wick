@@ -3,37 +3,39 @@ import unittest
 from wick.expression import *
 from wick.convenience import *
 from wick.operator import *
-from wick.wick import valid_contraction, pair_list, get_sign, split_operators, apply_wick
+from wick.wick import valid_contraction, pair_list
+from wick.wick import get_sign, split_operators, apply_wick
+
 
 class WickTest(unittest.TestCase):
     def test_valid_contraction(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        a = Idx(0,"vir")
-        b = Idx(1,"vir")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
         O1 = FOperator(i, False)
         O2 = FOperator(j, True)
         O3 = FOperator(a, False)
         O4 = FOperator(b, True)
-        self.assertTrue(valid_contraction(O2,O1))
-        self.assertTrue(not valid_contraction(O1,O2))
-        self.assertTrue(valid_contraction(O3,O4))
-        self.assertTrue(not valid_contraction(O4,O3))
-        self.assertTrue(not valid_contraction(O1,O3))
+        self.assertTrue(valid_contraction(O2, O1))
+        self.assertTrue(not valid_contraction(O1, O2))
+        self.assertTrue(valid_contraction(O3, O4))
+        self.assertTrue(not valid_contraction(O4, O3))
+        self.assertTrue(not valid_contraction(O1, O3))
 
-        x = Idx(0,"nm",fermion=False)
-        y = Idx(1,"nm",fermion=False)
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
         Ob1 = BOperator(x, False)
         Ob2 = BOperator(y, True)
-        self.assertTrue(not valid_contraction(Ob2,Ob1))
-        self.assertTrue(valid_contraction(Ob1,Ob2))
-        self.assertTrue(not valid_contraction(Ob2,O1))
+        self.assertTrue(not valid_contraction(Ob2, Ob1))
+        self.assertTrue(valid_contraction(Ob1, Ob2))
+        self.assertTrue(not valid_contraction(Ob2, O1))
 
     def test_pair_list(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        k = Idx(2,"occ")
-        l = Idx(3,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        k = Idx(2, "occ")
+        l = Idx(3, "occ")
         O1 = FOperator(i, False)
         O2 = FOperator(j, True)
         O3 = FOperator(k, False)
@@ -55,10 +57,10 @@ class WickTest(unittest.TestCase):
         self.assertTrue(get_sign(ipairs) == -1)
 
     def test_split_operators(self):
-        i = Idx(0,"occ")
-        j = Idx(1,"occ")
-        k = Idx(3,"occ")
-        l = Idx(4,"occ")
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        k = Idx(3, "occ")
+        l = Idx(4, "occ")
         O1 = FOperator(i, False)
         O2 = FOperator(j, False)
         O3 = FOperator(k, False)
