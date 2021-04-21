@@ -122,8 +122,10 @@ class BOperator(object):
             return "b_" + imap[self.idx]
 
     def qp_creation(self):
-        if self.ca: return True
-        else: return False
+        if self.ca:
+            return True
+        else:
+            return False
 
     def qp_annihilation(self):
         return not self.qp_creation()
@@ -191,7 +193,8 @@ class Tensor(object):
     def ilist(self):
         ilist = []
         for idx in self.indices:
-            if idx not in ilist: ilist.append(idx)
+            if idx not in ilist:
+                ilist.append(idx)
         return ilist
 
     def _istr(self, imap):
@@ -202,7 +205,8 @@ class Tensor(object):
 
     def _print_str(self, imap):
         temp = self.name
-        if len(temp) == 0: return str()
+        if len(temp) == 0:
+            return str()
         istr = str()
         for idx in self.indices:
             istr += imap[idx]
@@ -303,8 +307,10 @@ def tensor_from_delta(d):
 def is_normal_ordered(operators, occ):
     fa = None
     for i,op in enumerate(operators):
-        if fa is None and (not op.qp_creation(occ)): fa = i
-        if fa is not None and op.qp_creation(occ): return False
+        if fa is None and (not op.qp_creation(occ)):
+            fa = i
+        if fa is not None and op.qp_creation(occ):
+            return False
     return True
 
 def normal_ordered(operators,occ=None,sign=1):
@@ -314,12 +320,13 @@ def normal_ordered(operators,occ=None,sign=1):
     swap = None
     for i,op in enumerate(operators):
         assert(type(op) is FOperator)
-        if fa is None and (not op.qp_creation(occ)): fa = i
+        if fa is None and (not op.qp_creation(occ)):
+            fa = i
         if fa is not None and op.qp_creation(occ):
             swap = i
             break
     assert(swap is not None)
     newops = operators[:fa] + [operators[swap]] + operators[fa:swap] + operators[swap+1:]
-    newsign = 1 if len(operators[fa:swap])%2 == 0 else -1
+    newsign = 1 if len(operators[fa:swap]) % 2 == 0 else -1
     sign = sign*newsign
     return normal_ordered(newops,sign=sign)

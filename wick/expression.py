@@ -27,7 +27,8 @@ class TermMap(object):
                         return istr + tjname + x[0]
                     jts = [(str(j),jidx) for j,jidx in enumerate(tj.indices) if jidx == iidx]
                     #if jts: strs[space] += reduce(lambda a,b: a + b, [make_str(x) for x in jts])
-                    if jts: strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
+                    if jts:
+                        strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
             tiname = ti.name if ti.name else "!"
             lll = [(k,v) for k,v in sorted(strs.items())]
             self.data.add((tiname,tuple(lll)))
@@ -61,8 +62,10 @@ def _resolve(sums, tensors, operators, deltas):
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
-        if is1: case = 1
-        if is2: case = (2 if case == 0 else 3)
+        if is1:
+            case = 1
+        if is2:
+            case = (2 if case == 0 else 3)
         return case
 
     cases = [get_case(dd) for dd in newdel]
@@ -73,36 +76,50 @@ def _resolve(sums, tensors, operators, deltas):
         i2 = dd.i2
         i1 = dd.i1
 
-        if case == 3: continue
+        if case == 3:
+            continue
         if case == 1:
             dindx = newsums.index(Sigma(i1))
             del newsums[dindx]
         elif case == 2:
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
-        else: assert(case == 0)
+        else:
+            assert(case == 0)
 
         for i,(ddd,ccc) in enumerate(zip(newdel,cases)):
             if case == 1 and ddd.i1 == i1:
                 newdel[i].i1 = i2
-                if ccc == 3: cases[i] = 2
-                elif ccc == 1: cases[i] = 0
-                else: assert(False)
+                if ccc == 3:
+                    cases[i] = 2
+                elif ccc == 1:
+                    cases[i] = 0
+                else:
+                    assert(False)
             elif case == 1 and ddd.i2 == i1:
                 newdel[i].i2 = i2
-                if ccc == 3: cases[i] = 1
-                elif ccc == 2: cases[i] = 0
-                else: assert(False)
+                if ccc == 3:
+                    cases[i] = 1
+                elif ccc == 2:
+                    cases[i] = 0
+                else:
+                    assert(False)
             elif case == 2 and ddd.i2 == i2:
                 newdel[i].i2 = i1
-                if ccc == 3: cases[i] = 1
-                elif ccc == 2: cases[i] = 0
-                else: assert(False)
+                if ccc == 3:
+                    cases[i] = 1
+                elif ccc == 2:
+                    cases[i] = 0
+                else:
+                    assert(False)
             elif case == 2 and ddd.i1 == i2:
                 newdel[i].i1 = i1
-                if ccc == 3: cases[i] = 2
-                elif ccc == 1: cases[i] = 0
-                else: assert(False)
+                if ccc == 3:
+                    cases[i] = 2
+                elif ccc == 1:
+                    cases[i] = 0
+                else:
+                    assert(False)
 
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
@@ -125,7 +142,8 @@ def _resolve(sums, tensors, operators, deltas):
         del cases[dindx]
 
     # recur if deltas of type 1 or 2 remain
-    if 1 in cases or 2 in cases: return _resolve(newsums, newtens, newops, newdel)
+    if 1 in cases or 2 in cases:
+        return _resolve(newsums, newtens, newops, newdel)
 
     # loop over case 3 deltas
     rs = []
@@ -136,9 +154,13 @@ def _resolve(sums, tensors, operators, deltas):
         if case == 3:
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
-        elif case < 3: assert(case == 0)
-        else: assert(False)
-        if case == 0: continue
+        elif case < 3:
+            assert(case == 0)
+        else:
+            assert(False)
+
+        if case == 0:
+            continue
 
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
@@ -147,7 +169,8 @@ def _resolve(sums, tensors, operators, deltas):
         for oo in newops:
             if oo.idx == i2: oo.idx = i1
 
-        if not (case == 0 and i1 != i2): rs.append(dd)
+        if not (case == 0 and i1 != i2):
+            rs.append(dd)
 
     for d in rs:
         dindx = newdel.index(d)

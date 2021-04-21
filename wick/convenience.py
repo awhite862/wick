@@ -112,8 +112,10 @@ def two_e(name, spaces, anti=True, norder=False, compress=False, index_key=None)
     norder (bool): Return only normal-ordered part
     compress (bool): Return only unique parts
     """
-    if compress: return two_e_compressed(name, spaces, anti=anti, norder=norder, index_key=index_key)
-    else: return two_e_full(name, spaces, anti=anti, norder=norder, index_key=index_key)
+    if compress:
+        return two_e_compressed(name, spaces, anti=anti, norder=norder, index_key=index_key)
+    else:
+        return two_e_full(name, spaces, anti=anti, norder=norder, index_key=index_key)
 
 def one_p(name, space="nm", name2 = None, index_key=None):
     """
@@ -123,7 +125,8 @@ def one_p(name, space="nm", name2 = None, index_key=None):
     space (str): Name of boson space
     name2 (str): Name of creation piece if different from name
     """
-    if name2 is None: name2 = name
+    if name2 is None:
+        name2 = name
     I1 = Idx(0, space, fermion=False)
     tc = Term(1, [Sigma(I1)],
             [Tensor([I1],name2)],
@@ -159,7 +162,8 @@ def ep11(name, fspaces, bspaces, norder=False, name2=None, index_key=None):
     name2 (str): Name of boson creation piece if different
     """
     terms = []
-    if name2 is None: name2 = name
+    if name2 is None:
+        name2 = name
     for sb in bspaces:
         x = Idx(0, sb, fermion=False)
         for s1 in fspaces:
@@ -231,8 +235,10 @@ def E2(name, ospaces, vspaces, index_key=None):
                     j = Idx(1, o2)
                     b = Idx(1, v2)
                     scalar = 1
-                    if o1 == o2: scalar *= Fraction(1,2)
-                    if v1 == v2: scalar *= Fraction(1,2)
+                    if o1 == o2:
+                        scalar *= Fraction(1,2)
+                    if v1 == v2:
+                        scalar *= Fraction(1,2)
                     e2 = Term(scalar,
                         [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
                         [Tensor([a, b, i, j], name, sym=sym)],
