@@ -38,6 +38,7 @@ def run_suite():
     suite.addTest(test_operators.OperatorTest("test_sigma"))
     suite.addTest(test_operators.OperatorTest("test_delta"))
     suite.addTest(test_operators.OperatorTest("test_dagger"))
+    suite.addTest(test_operators.OperatorTest("test_string"))
 
     suite.addTest(test_sc_rules.SCRulesTest("test_0d0"))
     suite.addTest(test_sc_rules.SCRulesTest("test_0d1"))

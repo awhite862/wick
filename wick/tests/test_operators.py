@@ -37,7 +37,6 @@ class OperatorTest(unittest.TestCase):
         P1 = Projector()
         P2 = Projector()
         self.assertTrue(not (P1 != P2))
-        self.assertTrue(str(P1) == "P")
         self.assertTrue(P1.dagger() == P2)
 
     def test_tensor(self):
@@ -90,6 +89,46 @@ class OperatorTest(unittest.TestCase):
         Ob2 = BOperator(x, True)
         self.assertTrue(Ob1.dagger() == Ob2)
         self.assertTrue(Ob2.dagger() == Ob1)
+
+    def test_string(self):
+        P1 = Projector()
+        self.assertTrue(str(P1) == "P")
+
+        i = Idx(0, "occ")
+        a = Idx(0, "vir")
+        O1 = FOperator(i, False)
+        O2 = FOperator(i, True)
+        O3 = FOperator(a, False)
+        O4 = FOperator(a, True)
+        so1 = "a_0(occ)"
+        so2 = "a^{\\dagger}_0(occ)"
+        so3 = "a_0(vir)"
+        so4 = "a^{\\dagger}_0(vir)"
+        self.assertTrue(str(O1) == so1)
+        self.assertTrue(str(O2) == so2)
+        self.assertTrue(str(O3) == so3)
+        self.assertTrue(str(O4) == so4)
+
+        x = Idx(0, "nm", fermion=False)
+        Ob1 = BOperator(x, False)
+        Ob2 = BOperator(x, True)
+        sob1 = "b_0(nm)"
+        sob2 = "b^{\\dagger}_0(nm)"
+        self.assertTrue(str(Ob1) == sob1)
+        self.assertTrue(str(Ob2) == sob2)
+
+        T1 = Tensor([i,a], "g")
+        st1 = "g_{00}"
+        self.assertTrue(str(T1) == st1)
+
+        S1 = Sigma(i)
+        ss1 = "\\sum_{0}"
+        self.assertTrue(str(S1) == ss1)
+
+        j = Idx(1, "occ")
+        D1 = Delta(i, j)
+        sd1 = "\\delta_{0,1}"
+        self.assertTrue(str(D1) == sd1)
 
 
 if __name__ == '__main__':
