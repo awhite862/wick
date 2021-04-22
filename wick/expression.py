@@ -3,7 +3,7 @@
 from copy import copy
 from itertools import product
 from numbers import Number
-from .operator import Sigma, Delta, Tensor, permute, tensor_from_delta
+from .operator import Sigma, Tensor, permute, tensor_from_delta
 from .index import Idx
 
 class TermMap(object):
@@ -36,7 +36,7 @@ class TermMap(object):
     def __eq__(self, other):
         return self.data == other.data
 
-default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
+default_index_key = {"occ": "ijklmno", "vir": "abcdefg", "nm": "IJKLMNOP"}
 
 def _resolve(sums, tensors, operators, deltas):
     newdel = [d.copy() for d in deltas]
@@ -124,17 +124,22 @@ def _resolve(sums, tensors, operators, deltas):
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
                 if case == 1:
-                    if tt.indices[k] == i1: tt.indices[k] = i2
+                    if tt.indices[k] == i1:
+                        tt.indices[k] = i2
                 elif case == 2:
-                    if tt.indices[k] == i2: tt.indices[k] = i1
+                    if tt.indices[k] == i2:
+                        tt.indices[k] = i1
 
         for oo in newops:
             if case == 1:
-                if oo.idx == i1: oo.idx = i2
+                if oo.idx == i1:
+                    oo.idx = i2
             elif case == 2:
-                if oo.idx == i2: oo.idx = i1
+                if oo.idx == i2:
+                    oo.idx = i1
 
-        if not (case == 0 and i1 != i2): rs.append(dd)
+        if not (case == 0 and i1 != i2):
+            rs.append(dd)
 
     for d in rs:
         dindx = newdel.index(d)
@@ -164,10 +169,12 @@ def _resolve(sums, tensors, operators, deltas):
 
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
-                if tt.indices[k] == i2: tt.indices[k] = i1
+                if tt.indices[k] == i2:
+                    tt.indices[k] = i1
 
         for oo in newops:
-            if oo.idx == i2: oo.idx = i1
+            if oo.idx == i2:
+                oo.idx = i1
 
         if not (case == 0 and i1 != i2):
             rs.append(dd)
@@ -269,7 +276,8 @@ class Term(object):
     def _idx_map(self, indices=None):
         if self.index_key is None:
             index_key = default_index_key
-        else: index_key = self.index_key
+        else:
+            index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
@@ -300,7 +308,8 @@ class Term(object):
     def ilist(self):
         ilist = set()
         for oo in self.operators:
-            if oo.idx is not None: ilist.add(oo.idx)
+            if oo.idx is not None:
+                ilist.add(oo.idx)
         for tt in self.tensors:
             itlst = set(tt.ilist())
             ilist |= itlst
@@ -345,7 +354,8 @@ class ATerm(object):
                 self.tensors.append(tensor_from_delta(d))
             self.index_key = term.index_key
         else:
-            if scalar is None: scalar = 1
+            if scalar is None:
+                scalar = 1
             if sums is None or tensors is None:
                 raise Exception("Improper initialization of ATerm")
             self.scalar = scalar
@@ -402,7 +412,8 @@ class ATerm(object):
 
     def __lt__(self, other):
         if isinstance(other, ATerm):
-            if len(self.tensors) < len(other.tensors): return True
+            if len(self.tensors) < len(other.tensors):
+                return True
             elif len(self.tensors) == len(other.tensors):
                 return len(self.sums) < len(other.sums)
             else:
@@ -418,7 +429,8 @@ class ATerm(object):
     def _idx_map(self):
         if self.index_key is None:
             index_key = default_index_key
-        else: index_key = self.index_key
+        else:
+            index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
@@ -470,28 +482,34 @@ class ATerm(object):
     def pmatch(self, other):
         if isinstance(other, ATerm):
             tlists = [t.sym.tlist for t in other.tensors]
-            if len(other.tensors) != len(self.tensors): return None
-            if len(self.sums) != len(other.sums): return None
+            if len(other.tensors) != len(self.tensors):
+                return None
+            if len(self.sums) != len(other.sums):
+                return None
             TM1 = TermMap(self.sums, self.tensors)
             for xs in product(*tlists):
                 sign = 1
-                for x in xs: sign *= x[1]
+                for x in xs:
+                    sign *= x[1]
                 newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors)
                 if TM1 == TM2:
                     return sign
             return None
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     def ilist(self):
         ilist = []
         for tt in self.tensors:
             itlst = tt.ilist()
             for ii in itlst:
-                if ii not in ilist: ilist.append(ii)
+                if ii not in ilist:
+                    ilist.append(ii)
         for ss in self.sums:
             idx = ss.idx
-            if idx not in ilist: ilist.append(idx)
+            if idx not in ilist:
+                ilist.append(idx)
         return ilist
 
     def nidx(self):
@@ -510,15 +528,18 @@ class ATerm(object):
         for t in self.tensors:
             if ext == False and not t.name:
                 raise Exception("Cannot merge external indices in unsorted term")
-            if t.name: ext = False
+            if t.name:
+                ext = False
 
         # for the sorted term find the number of tensors
         num_ext = 0
         for t in self.tensors:
-            if not t.name: num_ext = num_ext + 1
+            if not t.name:
+                num_ext = num_ext + 1
 
         # check for symmetry in external indices
-        if num_ext < 2: pass
+        if num_ext < 2:
+            pass
         else:
             newtensors = [t.copy() for t in self.tensors[num_ext:]]
             ext_indices = []
@@ -541,7 +562,8 @@ class ATerm(object):
             adj.append(xx)
 
         # If there are fewer than two tensors, there is no adjacency
-        if not adj: return (len(rtensors) < 2)
+        if not adj:
+            return (len(rtensors) < 2)
         blue = set(adj[0])
         nb = len(blue)
         maxiter = 300000
@@ -550,16 +572,19 @@ class ATerm(object):
             for b in blue:
                 for ad in adj:
                     if b in ad:
-                        for a in ad: newtensors.append(a)
+                        for a in ad:
+                            newtensors.append(a)
             blue = blue.union(set(newtensors))
             nb2 = len(blue)
-            if nb2 == nb: break
+            if nb2 == nb:
+                break
             nb = nb2
             i += 1
         return len(set(blue)) == len(rtensors)
 
     def reducible(self):
-        if not self.connected(): return True
+        if not self.connected():
+            return True
         for i,so in enumerate(self.sums):
             new = self.copy()
             new._inc(1)
@@ -575,7 +600,8 @@ class ATerm(object):
                             ix = i2
                         m += 1
             assert(m == 2)
-            if not new.connected(): return True
+            if not new.connected():
+                return True
 
         return False
 
@@ -610,14 +636,15 @@ class Expression(object):
     def __repr__(self):
         out = str()
         for t in self.terms:
-           out += str(t)
-           out += " + "
+            out += str(t)
+            out += " + "
         return out[:-2]
 
     def __add__(self, other):
         if isinstance(other, Expression):
             return Expression(self.terms + other.terms)
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, Expression):
@@ -630,14 +657,17 @@ class Expression(object):
         elif isinstance(other, Expression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return Expression(terms)
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     def __eq__(self, other):
         if isinstance(other, Expression):
             # NOTE: This compares in fixed order with fixed indices
-            if len(self.terms) != len(other.terms): return False
+            if len(self.terms) != len(other.terms):
+                return False
             for t1,t2 in zip(self.terms, other.terms):
-                if t1 != t2: return False
+                if t1 != t2:
+                    return False
             return True
         else:
             return NotImplemented
@@ -696,7 +726,8 @@ class AExpression(object):
             remaining = self.terms[1:]
             tm = list(filter(test,[(t,t1.pmatch(t),i) for i,t in enumerate(remaining)]))
             s = t1.scalar
-            for t in tm: s += t[1]*t[0].scalar
+            for t in tm:
+                s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(t1.copy())
             tmi = [t[2] for t in tm]
@@ -713,12 +744,14 @@ class AExpression(object):
     def __add__(self, other):
         if isinstance(other, AExpression):
             return AExpression(self.terms + other.terms)
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, AExpression):
             return self + -1*other
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -727,16 +760,19 @@ class AExpression(object):
         elif isinstance(other, AExpression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return AExpression(terms=terms)
-        else: return NotImplemented
+        else:
+            return NotImplemented
 
     __rmul__ = __mul__
 
     def __eq__(self, other):
         if isinstance(other, AExpression):
             # NOTE: This compares in fixed order with fixed indices
-            if len(self.terms) != len(other.terms): return False
+            if len(self.terms) != len(other.terms):
+                return False
             for t1,t2 in zip(self.terms, other.terms):
-                if t1 != t2: return False
+                if t1 != t2:
+                    return False
             return True
         else:
             return NotImplemented
@@ -771,7 +807,8 @@ class AExpression(object):
 
     def connected(self):
         for t in self.terms:
-            if not t.connected(): return False
+            if not t.connected():
+                return False
         return True
 
     def get_connected(self, simplify=True):
@@ -780,14 +817,16 @@ class AExpression(object):
 
     def pmatch(self, other):
         if isinstance(other, AExpression):
-            if len(self.terms) != len(other.terms): return False
+            if len(self.terms) != len(other.terms):
+                return False
             for t1 in self.terms:
                 matched = False
                 for t2 in other.terms:
                     if t2.pmatch(t1):
                         matched = True
                         break
-                if not matched: return False
+                if not matched:
+                    return False
             return True
         else:
             return NotImplemented

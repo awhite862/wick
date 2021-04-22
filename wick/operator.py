@@ -274,10 +274,8 @@ class Delta(object):
         self.i2 = i2
 
     def __eq__(self, other):
-        return (self.i1 == other.i1 and
-                self.i2 == other.i2) or (
-                self.i1 == other.i2 and
-                self.i2 == other.i1)
+        return (self.i1 == other.i1 and self.i2 == other.i2) or (
+                    self.i1 == other.i2 and self.i2 == other.i1)
 
     def __ne__(self, other):
         return not self.__eq__(other)

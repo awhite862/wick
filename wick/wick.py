@@ -16,9 +16,9 @@ def valid_contraction(o1, o2, occ=None):
             return True
         return False
     elif isinstance(o1, BOperator) and isinstance(o2, BOperator):
-         if (not o1.ca and o2.ca):
-             return True
-         return False
+        if (not o1.ca and o2.ca):
+            return True
+        return False
     elif type(o1) is not type(o1):
         return False
     else:

@@ -1,5 +1,8 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
+from copy import copy
+
+
 class Idx(object):
     """
     Index class
@@ -27,7 +30,6 @@ class Idx(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-from copy import copy
 
 def idx_copy(idx):
     """

@@ -1,5 +1,6 @@
 import unittest
 
+from wick.operator import *
 from wick.expression import *
 from wick.convenience import *
 
