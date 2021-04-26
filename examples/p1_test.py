@@ -1,4 +1,4 @@
-from wick.expression import Expression, Term, AExpression
+from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 

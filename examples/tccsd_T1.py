@@ -5,10 +5,10 @@ from wick.wick import apply_wick
 
 
 index_key = {
-        "occ" : "ijklmno", 
-        "oa" : "IJKLMNO",
-        "va" : "ABCDEFG",
-        "vir" : "abcdefg"}
+    "occ": "ijklmno",
+    "oa": "IJKLMNO",
+    "va": "ABCDEFG",
+    "vir": "abcdefg"}
 
 H1 = one_e("f",["occ","oa","va","vir"], norder=True, index_key=index_key)
 H2 = two_e("I",["occ","oa","va","vir"], norder=True, index_key=index_key)

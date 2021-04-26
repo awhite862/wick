@@ -1,11 +1,11 @@
 # Copyright (c) 2020 Alec White
 # Licensed under the MIT License (see LICENSE for details)
+import functools
 from copy import copy
 from itertools import product
 from numbers import Number
-from .operator import Sigma, Tensor, permute, tensor_from_delta
-from .index import Idx
-
+from .operator import Sigma, Delta, BOperator, FOperator, Tensor, permute, tensor_from_delta
+from .index import is_occupied, Idx
 
 class TermMap(object):
     """Map indicating the contraction pattern of a given tensor expression
@@ -15,23 +15,37 @@ class TermMap(object):
     """
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
+        def get_cstr(istr, tjname, j):
+            tjname2 = tjname if tjname else "!"
+            return istr + tjname2 + str(j)
+        def loop(tensors, ti, i, iidx):
+            temp = ""
+            istr = str(i)
+            t2 = list(filter(lambda t: t != ti, tensors))
+            for tj in t2:
+                #if tj == ti: continue
+                jindics = filter(lambda jidx: jidx == iidx, tj.indices)
+                js = filter(lambda j: tj.indices[j] == iidx, range(len(tj.indices)))
+                for j,jidx in zip(js, jindics):
+                    #tjname = tj.name if tj.name else "!"
+                    #cstr = istr + tjname + str(j)
+                    #temp += cstr
+                    temp += get_cstr(istr, tj.name, j)
+                #for j,jidx in enumerate(tj.indices):
+                #    if iidx == jidx:
+                #        tjname = tj.name if tj.name else "!"
+                #        cstr = istr + tjname + str(j)
+                #        temp += cstr
+            return temp
         for ti in tensors:
-            ilist = ti.ilist()
-            #strs = {idx.space: "" for idx in ilist}
-            strs = {idx.space: frozenset() for idx in ilist}
+            strs = {}
             for i,iidx in enumerate(ti.indices):
                 space = iidx.space
-                istr = str(i)
-                for tj in tensors:
-                    tjname = tj.name if tj.name else "!"
-
-                    def make_str(x):
-                        return istr + tjname + x[0]
-
-                    jts = [(str(j),jidx) for j,jidx in enumerate(tj.indices) if jidx == iidx]
-                    #if jts: strs[space] += reduce(lambda a,b: a + b, [make_str(x) for x in jts])
-                    if jts:
-                        strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
+                temp = loop(tensors, ti, i, iidx)
+                if space not in strs:
+                    strs[space] = temp
+                else:
+                    strs[space] += temp
             tiname = ti.name if ti.name else "!"
             lll = [(k,v) for k,v in sorted(strs.items())]
             self.data.add((tiname,tuple(lll)))
@@ -39,9 +53,7 @@ class TermMap(object):
     def __eq__(self, other):
         return self.data == other.data
 
-
-default_index_key = {"occ": "ijklmno", "vir": "abcdefg", "nm": "IJKLMNOP"}
-
+default_index_key = {"occ" : "ijklmno", "vir" : "abcdefg", "nm" : "IJKLMNOP"}
 
 def _resolve(sums, tensors, operators, deltas):
     newdel = [d.copy() for d in deltas]
@@ -52,11 +64,11 @@ def _resolve(sums, tensors, operators, deltas):
     # get unique deltas
     newdel = list(set(newdel))
 
-    # Cases:
-    #   0 sums over neither index
-    #   1 sums over 1st index
-    #   2 sums over 2nd index
-    #   3 sums over both indices
+    ## Cases ##
+    # 0 sums over neither index
+    # 1 sums over 1st index
+    # 2 sums over 2nd index
+    # 3 sums over both indices
     def get_case(dd):
         i2 = dd.i2
         i1 = dd.i1
@@ -67,10 +79,8 @@ def _resolve(sums, tensors, operators, deltas):
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
-        if is1:
-            case = 1
-        if is2:
-            case = (2 if case == 0 else 3)
+        if is1: case = 1
+        if is2: case = (2 if case == 0 else 3)
         return case
 
     cases = [get_case(dd) for dd in newdel]
@@ -81,70 +91,51 @@ def _resolve(sums, tensors, operators, deltas):
         i2 = dd.i2
         i1 = dd.i1
 
-        if case == 3:
-            continue
+        if case == 3: continue
         if case == 1:
             dindx = newsums.index(Sigma(i1))
             del newsums[dindx]
         elif case == 2:
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
-        else:
-            assert(case == 0)
+        else: assert(case == 0)
 
         for i,(ddd,ccc) in enumerate(zip(newdel,cases)):
             if case == 1 and ddd.i1 == i1:
                 newdel[i].i1 = i2
-                if ccc == 3:
-                    cases[i] = 2
-                elif ccc == 1:
-                    cases[i] = 0
-                else:
-                    assert(False)
+                if ccc == 3: cases[i] = 2
+                elif ccc == 1: cases[i] = 0
+                else: assert(False)
             elif case == 1 and ddd.i2 == i1:
                 newdel[i].i2 = i2
-                if ccc == 3:
-                    cases[i] = 1
-                elif ccc == 2:
-                    cases[i] = 0
-                else:
-                    assert(False)
+                if ccc == 3: cases[i] = 1
+                elif ccc == 2: cases[i] = 0
+                else: assert(False)
             elif case == 2 and ddd.i2 == i2:
                 newdel[i].i2 = i1
-                if ccc == 3:
-                    cases[i] = 1
-                elif ccc == 2:
-                    cases[i] = 0
-                else:
-                    assert(False)
+                if ccc == 3: cases[i] = 1
+                elif ccc == 2: cases[i] = 0
+                else: assert(False)
             elif case == 2 and ddd.i1 == i2:
                 newdel[i].i1 = i1
-                if ccc == 3:
-                    cases[i] = 2
-                elif ccc == 1:
-                    cases[i] = 0
-                else:
-                    assert(False)
+                if ccc == 3: cases[i] = 2
+                elif ccc == 1: cases[i] = 0
+                else: assert(False)
 
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
                 if case == 1:
-                    if tt.indices[k] == i1:
-                        tt.indices[k] = i2
+                    if tt.indices[k] == i1: tt.indices[k] = i2
                 elif case == 2:
-                    if tt.indices[k] == i2:
-                        tt.indices[k] = i1
+                    if tt.indices[k] == i2: tt.indices[k] = i1
 
         for oo in newops:
             if case == 1:
-                if oo.idx == i1:
-                    oo.idx = i2
+                if oo.idx == i1: oo.idx = i2
             elif case == 2:
-                if oo.idx == i2:
-                    oo.idx = i1
+                if oo.idx == i2: oo.idx = i1
 
-        if not (case == 0 and i1 != i2):
-            rs.append(dd)
+        if not (case == 0 and i1 != i2): rs.append(dd)
 
     for d in rs:
         dindx = newdel.index(d)
@@ -152,8 +143,7 @@ def _resolve(sums, tensors, operators, deltas):
         del cases[dindx]
 
     # recur if deltas of type 1 or 2 remain
-    if 1 in cases or 2 in cases:
-        return _resolve(newsums, newtens, newops, newdel)
+    if 1 in cases or 2 in cases: return _resolve(newsums, newtens, newops, newdel)
 
     # loop over case 3 deltas
     rs = []
@@ -164,31 +154,23 @@ def _resolve(sums, tensors, operators, deltas):
         if case == 3:
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
-        elif case < 3:
-            assert(case == 0)
-        else:
-            assert(False)
-
-        if case == 0:
-            continue
+        elif case < 3: assert(case == 0)
+        else: assert(False)
+        if case == 0: continue
 
         for tt in newtens:
             for k,ti in enumerate(tt.indices):
-                if tt.indices[k] == i2:
-                    tt.indices[k] = i1
+                if tt.indices[k] == i2: tt.indices[k] = i1
 
         for oo in newops:
-            if oo.idx == i2:
-                oo.idx = i1
+            if oo.idx == i2: oo.idx = i1
 
-        if not (case == 0 and i1 != i2):
-            rs.append(dd)
+        if not (case == 0 and i1 != i2): rs.append(dd)
 
     for d in rs:
         dindx = newdel.index(d)
         del newdel[dindx]
     return newsums, newtens, newops, newdel
-
 
 class Term(object):
     """Term of operators
@@ -210,7 +192,7 @@ class Term(object):
 
     def resolve(self):
         newsums, newtens, newops, dnew = _resolve(
-            self.sums, self.tensors, self.operators, self.deltas)
+                self.sums, self.tensors, self.operators, self.deltas)
         self.sums = newsums
         self.tensors = newtens
         self.operators = newops
@@ -227,6 +209,7 @@ class Term(object):
         for oo in self.operators:
             out += str(oo)
         return out
+
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -262,14 +245,14 @@ class Term(object):
     def __eq__(self, other):
         if isinstance(other, Term):
             return self.scalar == other.scalar \
-                and set(self.sums) == set(other.sums) \
-                and set(self.tensors) == set(other.tensors) \
-                and self.operators == other.operators \
-                and set(self.deltas) == set(other.deltas)
+                    and set(self.sums) == set(other.sums) \
+                    and set(self.tensors) == set(other.tensors) \
+                    and self.operators == other.operators \
+                    and set(self.deltas) == set(other.deltas)
         else:
             return NotImplemented
 
-    def __ne__(self, other):
+    def __neq__(self, other):
         return not self.__eq__(other)
 
     def _inc(self, i):
@@ -282,13 +265,12 @@ class Term(object):
     def _idx_map(self, indices=None):
         if self.index_key is None:
             index_key = default_index_key
-        else:
-            index_key = self.index_key
+        else: index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
         for idx in ilist:
-            s = idx.space
+            n,s = idx.index,idx.space
             if s in off:
                 o = off[s]
                 off[s] += 1
@@ -314,8 +296,7 @@ class Term(object):
     def ilist(self):
         ilist = set()
         for oo in self.operators:
-            if oo.idx is not None:
-                ilist.add(oo.idx)
+            if oo.idx is not None: ilist.add(oo.idx)
         for tt in self.tensors:
             itlst = set(tt.ilist())
             ilist |= itlst
@@ -333,7 +314,6 @@ class Term(object):
         newoperators = [o.copy() for o in self.operators]
         newdeltas = [d.copy() for d in self.deltas]
         return Term(newscalar, newsums, newtensors, newoperators, newdeltas, index_key=self.index_key)
-
 
 class ATerm(object):
     """Abstract term
@@ -361,8 +341,7 @@ class ATerm(object):
                 self.tensors.append(tensor_from_delta(d))
             self.index_key = term.index_key
         else:
-            if scalar is None:
-                scalar = 1
+            if scalar is None: scalar = 1
             if sums is None or tensors is None:
                 raise Exception("Improper initialization of ATerm")
             self.scalar = scalar
@@ -414,13 +393,12 @@ class ATerm(object):
         else:
             return NotImplemented
 
-    def __ne__(self, other):
+    def __neq__(self, other):
         return not self.__eq__(other)
 
     def __lt__(self, other):
         if isinstance(other, ATerm):
-            if len(self.tensors) < len(other.tensors):
-                return True
+            if len(self.tensors) < len(other.tensors): return True
             elif len(self.tensors) == len(other.tensors):
                 return len(self.sums) < len(other.sums)
             else:
@@ -436,13 +414,12 @@ class ATerm(object):
     def _idx_map(self):
         if self.index_key is None:
             index_key = default_index_key
-        else:
-            index_key = self.index_key
+        else: index_key = self.index_key
         ilist = self.ilist()
         off = {}
         imap = {}
         for idx in ilist:
-            s = idx.space
+            n,s = idx.index,idx.space
             if s in off:
                 o = off[s]
                 off[s] += 1
@@ -489,34 +466,28 @@ class ATerm(object):
     def pmatch(self, other):
         if isinstance(other, ATerm):
             tlists = [t.sym.tlist for t in other.tensors]
-            if len(other.tensors) != len(self.tensors):
-                return None
-            if len(self.sums) != len(other.sums):
-                return None
+            if len(other.tensors) != len(self.tensors): return None
+            if len(self.sums) != len(other.sums): return None
             TM1 = TermMap(self.sums, self.tensors)
             for xs in product(*tlists):
                 sign = 1
-                for x in xs:
-                    sign *= x[1]
+                for x in xs: sign *= x[1]
                 newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors)
                 if TM1 == TM2:
                     return sign
             return None
-        else:
-            return NotImplemented
+        else: return NotImplemented
 
     def ilist(self):
         ilist = []
         for tt in self.tensors:
             itlst = tt.ilist()
             for ii in itlst:
-                if ii not in ilist:
-                    ilist.append(ii)
+                if ii not in ilist: ilist.append(ii)
         for ss in self.sums:
             idx = ss.idx
-            if idx not in ilist:
-                ilist.append(idx)
+            if idx not in ilist: ilist.append(idx)
         return ilist
 
     def nidx(self):
@@ -533,20 +504,18 @@ class ATerm(object):
         # check for sorting of external indices
         ext = True
         for t in self.tensors:
-            if not ext and not t.name:
+            if ext == False and not t.name:
                 raise Exception("Cannot merge external indices in unsorted term")
-            if t.name:
-                ext = False
+            if t.name: ext = False
 
         # for the sorted term find the number of tensors
         num_ext = 0
         for t in self.tensors:
-            if not t.name:
-                num_ext = num_ext + 1
+            if not t.name: num_ext = num_ext + 1
 
         # check for symmetry in external indices
-        if num_ext < 2:
-            pass
+
+        if num_ext < 2: pass
         else:
             newtensors = [t.copy() for t in self.tensors[num_ext:]]
             ext_indices = []
@@ -569,8 +538,7 @@ class ATerm(object):
             adj.append(xx)
 
         # If there are fewer than two tensors, there is no adjacency
-        if not adj:
-            return (len(rtensors) < 2)
+        if not adj: return (len(rtensors) < 2)
         blue = set(adj[0])
         nb = len(blue)
         maxiter = 300000
@@ -579,19 +547,16 @@ class ATerm(object):
             for b in blue:
                 for ad in adj:
                     if b in ad:
-                        for a in ad:
-                            newtensors.append(a)
+                        for a in ad: newtensors.append(a)
             blue = blue.union(set(newtensors))
             nb2 = len(blue)
-            if nb2 == nb:
-                break
+            if nb2 == nb: break
             nb = nb2
             i += 1
         return len(set(blue)) == len(rtensors)
 
     def reducible(self):
-        if not self.connected():
-            return True
+        if not self.connected(): return True
         for i,so in enumerate(self.sums):
             new = self.copy()
             new._inc(1)
@@ -607,8 +572,7 @@ class ATerm(object):
                             ix = i2
                         m += 1
             assert(m == 2)
-            if not new.connected():
-                return True
+            if not new.connected(): return True
 
         return False
 
@@ -621,7 +585,6 @@ class ATerm(object):
         newscalar = copy(self.scalar)
         newsums = [s.copy() for s in self.sums]
         return ATerm(scalar=newscalar, sums=newsums, tensors=newtensors, index_key=self.index_key)
-
 
 class Expression(object):
     """Operator expression
@@ -644,15 +607,14 @@ class Expression(object):
     def __repr__(self):
         out = str()
         for t in self.terms:
-            out += str(t)
-            out += " + "
+           out += str(t)
+           out += " + "
         return out[:-2]
 
     def __add__(self, other):
         if isinstance(other, Expression):
             return Expression(self.terms + other.terms)
-        else:
-            return NotImplemented
+        else: return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, Expression):
@@ -665,23 +627,7 @@ class Expression(object):
         elif isinstance(other, Expression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return Expression(terms)
-        else:
-            return NotImplemented
-
-    def __eq__(self, other):
-        if isinstance(other, Expression):
-            # NOTE: This compares in fixed order with fixed indices
-            if len(self.terms) != len(other.terms):
-                return False
-            for t1,t2 in zip(self.terms, other.terms):
-                if t1 != t2:
-                    return False
-            return True
-        else:
-            return NotImplemented
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
+        else: return NotImplemented
 
     __rmul__ = __mul__
 
@@ -699,7 +645,6 @@ class Expression(object):
             if len(self.terms[i].operators) > 0:
                 return True
         return False
-
 
 class AExpression(object):
     """Abstract tensor expression
@@ -729,17 +674,14 @@ class AExpression(object):
 
         # compress all symmetry-related terms
         newterms = []
-
-        def test(x):
-            return (x[1] is not None)
-
+        test = lambda x: x[1] is not None
         while self.terms:
             t1 = self.terms[0]
+            #tm = list(filter(lambda x: x[1] is not None,[(t,t1.pmatch(t)) for t in self.terms[1:]]))
             remaining = self.terms[1:]
             tm = list(filter(test,[(t,t1.pmatch(t),i) for i,t in enumerate(remaining)]))
             s = t1.scalar
-            for t in tm:
-                s += t[1]*t[0].scalar
+            for t in tm: s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(t1.copy())
             tmi = [t[2] for t in tm]
@@ -756,14 +698,12 @@ class AExpression(object):
     def __add__(self, other):
         if isinstance(other, AExpression):
             return AExpression(self.terms + other.terms)
-        else:
-            return NotImplemented
+        else: return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, AExpression):
             return self + -1*other
-        else:
-            return NotImplemented
+        else: return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -772,24 +712,21 @@ class AExpression(object):
         elif isinstance(other, AExpression):
             terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
             return AExpression(terms=terms)
-        else:
-            return NotImplemented
+        else: return NotImplemented
 
     __rmul__ = __mul__
 
     def __eq__(self, other):
         if isinstance(other, AExpression):
             # NOTE: This compares in fixed order with fixed indices
-            if len(self.terms) != len(other.terms):
-                return False
+            if len(self.terms) != len(other.terms): return False
             for t1,t2 in zip(self.terms, other.terms):
-                if t1 != t2:
-                    return False
+                if t1 != t2: return False
             return True
         else:
             return NotImplemented
 
-    def __ne__(self, other):
+    def __neq__(self, other):
         return not self.__eq__(other)
 
     def _print_str(self):
@@ -819,8 +756,7 @@ class AExpression(object):
 
     def connected(self):
         for t in self.terms:
-            if not t.connected():
-                return False
+            if not t.connected(): return False
         return True
 
     def get_connected(self, simplify=True):
@@ -829,16 +765,14 @@ class AExpression(object):
 
     def pmatch(self, other):
         if isinstance(other, AExpression):
-            if len(self.terms) != len(other.terms):
-                return False
+            if len(self.terms) != len(other.terms): return False
             for t1 in self.terms:
                 matched = False
                 for t2 in other.terms:
                     if t2.pmatch(t1):
                         matched = True
                         break
-                if not matched:
-                    return False
+                if not matched: return False
             return True
         else:
             return NotImplemented
@@ -854,7 +788,7 @@ class AExpression(object):
 #    idxA, idxBC = idx_str.split(',')
 #    idxB, idxC = idxBC.split('->')
 #    extern = list(idxC)
-#    summed = list(set(idxA + idxB) - set(idxC))
+#    summed = list(set(idxA+idxB) - set(idxC))
 #    sidxA = [idxA.find(s) for s in summed]
 #    sidxA = []
 #    sidxB = []

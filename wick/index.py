@@ -25,7 +25,7 @@ class Idx(object):
 
     def __eq__(self, other):
         return self.index == other.index\
-                and self.space == other.space
+            and self.space == other.space
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -37,6 +37,7 @@ def idx_copy(idx):
     fermion (bool) variables and copying the reference to the space.
     """
     return Idx(copy(idx.index), idx.space, bool(idx.fermion))
+
 
 def is_occupied(idx, occ=None):
     if occ is None:

@@ -5,6 +5,7 @@ from .operator import BOperator, FOperator, Projector, Delta
 from .expression import Term, Expression
 from .index import is_occupied
 
+
 def valid_contraction(o1, o2, occ=None):
     if o1.idx.space != o2.idx.space:
         return False
@@ -24,6 +25,7 @@ def valid_contraction(o1, o2, occ=None):
     else:
         return True
 
+
 def pair_list(lst,occ=None):
     n = len(lst)
     assert(n % 2 == 0)
@@ -41,20 +43,22 @@ def pair_list(lst,occ=None):
         for i,x in enumerate(ltmp):
             if valid_contraction(yy, x):
                 p1 = [(lst[0],x),]
-                remainder = pair_list(ltmp[:i] + ltmp[i+1:])
+                remainder = pair_list(ltmp[:i] + ltmp[i + 1:])
                 plist += [r + p1 for r in remainder]
         return plist
+
 
 def find_pair(i, ipairs):
     for p in ipairs:
         if p[0] == i or p[1] == i:
             return p
 
+
 def get_sign(ipairs):
     ncross = 0
     for p in ipairs:
         i,j = p
-        for x1 in range(i+1,j):
+        for x1 in range(i + 1,j):
             p1 = find_pair(x1, ipairs)
             if p1 is None:
                 continue
@@ -65,6 +69,7 @@ def get_sign(ipairs):
     assert(ncross % 2 == 0)
     ncross = ncross//2
     return 1 if ncross % 2 == 0 else -1
+
 
 def split_operators(ops):
     ps = []
@@ -80,6 +85,7 @@ def split_operators(ops):
     for s,e in zip(starts, ends):
         olists.append(ops[s:e])
     return olists
+
 
 def apply_wick(e, occ=None):
     to = []
@@ -150,11 +156,12 @@ def apply_wick(e, occ=None):
             deltas = []
             for d in di:
                 deltas += d
-            t1 = Term(sign*temp.scalar,
-                    [s.copy() for s in temp.sums],
-                    [t.copy() for t in temp.tensors],
-                    [],
-                    deltas + [d.copy() for d in temp.deltas], index_key=temp.index_key)
+            t1 = Term(
+                sign*temp.scalar,
+                [s.copy() for s in temp.sums],
+                [t.copy() for t in temp.tensors],
+                [], deltas + [d.copy() for d in temp.deltas],
+                index_key=temp.index_key)
             to.append(t1)
 
     o = Expression(to)

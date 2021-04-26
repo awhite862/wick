@@ -48,4 +48,3 @@ ex2 = AExpression(Ex=out2)
 ex2 = ex2.get_connected()
 ex2.sort_tensors()
 print(ex1 - ex2)
-

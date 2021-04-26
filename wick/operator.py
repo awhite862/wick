@@ -4,6 +4,7 @@ from .index import Idx
 from .index import idx_copy
 from .index import is_occupied
 
+
 class Projector(object):
     """
     Projector onto the vacuum
@@ -32,6 +33,7 @@ class Projector(object):
     def dagger(self):
         return self
 
+
 class FOperator(object):
     """
     Fermion creation/annihilation operators
@@ -46,8 +48,8 @@ class FOperator(object):
         self.ca = ca
 
     def __eq__(self, other):
-        return self.idx == other.idx and \
-                self.ca == other.ca
+        return self.idx == other.idx\
+            and self.ca == other.ca
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -85,6 +87,7 @@ class FOperator(object):
     def dagger(self):
         return FOperator(idx_copy(self.idx), not self.ca)
 
+
 class BOperator(object):
     """
     Boson creation/annihilation operators
@@ -99,8 +102,8 @@ class BOperator(object):
         self.ca = ca
 
     def __eq__(self, other):
-        return self.idx == other.idx and \
-                self.ca == other.ca
+        return self.idx == other.idx\
+            and self.ca == other.ca
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -136,6 +139,7 @@ class BOperator(object):
     def dagger(self):
         return BOperator(idx_copy(self.idx), not self.ca)
 
+
 class TensorSym(object):
     """
     Representation of tensor permutational symmetry
@@ -149,6 +153,7 @@ class TensorSym(object):
         self.plist = plist
         self.signs = signs
         self.tlist = [(p,s) for p,s in zip(plist,signs)]
+
 
 class Tensor(object):
     """
@@ -169,7 +174,7 @@ class Tensor(object):
 
     def __eq__(self, other):
         return self.indices == other.indices \
-                and self.name == other.name
+            and self.name == other.name
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -223,11 +228,13 @@ class Tensor(object):
         newindices = [idx_copy(i) for i in self.indices]
         return Tensor(newindices, self.name, self.sym)
 
+
 def permute(t, p):
     name = str(t.name)
     indices = [t.indices[i] for i in p]
     newt = Tensor(indices, name, sym=t.sym)
     return newt
+
 
 class Sigma(object):
     """
@@ -260,6 +267,7 @@ class Sigma(object):
     def copy(self):
         return Sigma(idx_copy(self.idx))
 
+
 class Delta(object):
     """
     Class reprenting a delta function.
@@ -275,7 +283,7 @@ class Delta(object):
 
     def __eq__(self, other):
         return (self.i1 == other.i1 and self.i2 == other.i2) or (
-                    self.i1 == other.i2 and self.i2 == other.i1)
+            self.i1 == other.i2 and self.i2 == other.i1)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -297,10 +305,12 @@ class Delta(object):
         i2 = idx_copy(self.i2)
         return Delta(i1, i2)
 
+
 def tensor_from_delta(d):
     sym = TensorSym([(0,1), (1,0)], [1, 1])
     t = Tensor([d.i1, d.i2], "delta", sym=sym)
     return t
+
 
 def is_normal_ordered(operators, occ):
     fa = None
@@ -310,6 +320,7 @@ def is_normal_ordered(operators, occ):
         if fa is not None and op.qp_creation(occ):
             return False
     return True
+
 
 def normal_ordered(operators,occ=None,sign=1):
     if is_normal_ordered(operators, occ):
