@@ -298,7 +298,7 @@ class Term(object):
             imap[idx] = index_key[s][o]
         return imap
 
-    def _print_str(self,with_scalar=True):
+    def _print_str(self, with_scalar=True):
         imap = self._idx_map()
         out = str(self.scalar) if with_scalar else str()
         for ss in self.sums:
@@ -452,7 +452,7 @@ class ATerm(object):
             imap[idx] = index_key[s][o]
         return imap
 
-    def _print_str(self,with_scalar=True):
+    def _print_str(self, with_scalar=True):
         imap = self._idx_map()
         out = str(float(self.scalar)) if with_scalar else str()
         iis = str()

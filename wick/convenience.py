@@ -19,13 +19,13 @@ def one_e(name, spaces, norder=False, index_key=None):
         p = Idx(0, s1)
         for s2 in spaces:
             i = 0 if s2 != s1 else 1
-            q = Idx(i,s2)
+            q = Idx(i, s2)
             operators = [FOperator(p, True), FOperator(q, False)]
             nsign = 1
             if norder:
                 operators,nsign = normal_ordered([FOperator(p, True), FOperator(q, False)])
             t = Term(
-                nsign, [Sigma(p),Sigma(q)], [Tensor([p,q],name)],
+                nsign, [Sigma(p),Sigma(q)], [Tensor([p,q], name)],
                 operators, [], index_key=index_key)
             terms.append(t)
     return Expression(terms)
@@ -52,20 +52,20 @@ def two_e_compressed(name, spaces, anti=True, norder=False, index_key=None):
         raise Exception("Minimal representation of symmetric integrals is not implemented")
     terms = []
     sym = get_sym(anti)
-    one_half = Fraction(1,2)
+    one_half = Fraction(1, 2)
     for i1,s1 in enumerate(spaces):
         p = Idx(0, s1)
         for s2 in spaces[i1:]:
             i = 0 if s2 != s1 else 1
-            q = Idx(i,s2)
+            q = Idx(i, s2)
             facbra = one_half if s1 == s2 else 1
             for i3,s3 in enumerate(spaces):
                 xx = list(filter(lambda x: x,[s3 == s for s in [s1,s2]]))
-                r = Idx(len(xx),s3)
+                r = Idx(len(xx), s3)
                 for s4 in spaces[i3:]:
                     xx = list(filter(lambda x: x,[s4 == s for s in [s1,s2,s3]]))
-                    s = Idx(len(xx),s4)
-                    operators = [FOperator(p, True), FOperator(q, True), FOperator(s,False), FOperator(r,False)]
+                    s = Idx(len(xx), s4)
+                    operators = [FOperator(p, True), FOperator(q, True), FOperator(s, False), FOperator(r, False)]
                     nsign = 1
                     facket = one_half if s3 == s4 else 1
                     fac = facbra*facket
@@ -73,7 +73,7 @@ def two_e_compressed(name, spaces, anti=True, norder=False, index_key=None):
                         operators,nsign = normal_ordered(operators)
                     t = Term(
                         nsign*fac, [Sigma(p),Sigma(q),Sigma(r),Sigma(s)],
-                        [Tensor([p,q,r,s],name,sym=sym)],
+                        [Tensor([p,q,r,s], name, sym=sym)],
                         operators, [], index_key=index_key)
                     terms.append(t)
     return Expression(terms)
@@ -82,25 +82,25 @@ def two_e_compressed(name, spaces, anti=True, norder=False, index_key=None):
 def two_e_full(name, spaces, anti=True, norder=False, index_key=None):
     terms = []
     sym = get_sym(anti)
-    fac = Fraction(1,4) if anti else Fraction(1,2)
+    fac = Fraction(1, 4) if anti else Fraction(1, 2)
     for s1 in spaces:
         p = Idx(0, s1)
         for s2 in spaces:
             i = 0 if s2 != s1 else 1
-            q = Idx(i,s2)
+            q = Idx(i, s2)
             for s3 in spaces:
                 xx = list(filter(lambda x: x,[s3 == s for s in [s1,s2]]))
-                r = Idx(len(xx),s3)
+                r = Idx(len(xx), s3)
                 for s4 in spaces:
                     xx = list(filter(lambda x: x,[s4 == s for s in [s1,s2,s3]]))
-                    s = Idx(len(xx),s4)
-                    operators = [FOperator(p, True), FOperator(q, True), FOperator(s,False), FOperator(r,False)]
+                    s = Idx(len(xx), s4)
+                    operators = [FOperator(p, True), FOperator(q, True), FOperator(s, False), FOperator(r, False)]
                     nsign = 1
                     if norder:
                         operators,nsign = normal_ordered(operators)
                     t = Term(
                         nsign*fac, [Sigma(p),Sigma(q),Sigma(r),Sigma(s)],
-                        [Tensor([p,q,r,s],name,sym=sym)],
+                        [Tensor([p,q,r,s], name, sym=sym)],
                         operators, [], index_key=index_key)
                     terms.append(t)
     return Expression(terms)
@@ -134,10 +134,10 @@ def one_p(name, space="nm", name2=None, index_key=None):
         name2 = name
     I1 = Idx(0, space, fermion=False)
     tc = Term(
-        1, [Sigma(I1)], [Tensor([I1],name2)],
+        1, [Sigma(I1)], [Tensor([I1], name2)],
         [BOperator(I1, True)],[], index_key=index_key)
     ta = Term(
-        1, [Sigma(I1)], [Tensor([I1],name)],
+        1, [Sigma(I1)], [Tensor([I1], name)],
         [BOperator(I1, False)],[], index_key=index_key)
     terms = [tc,ta]
     return Expression(terms)
@@ -153,7 +153,7 @@ def two_p(name, space="nm", index_key=None):
     x = Idx(0, space, fermion=False)
     y = Idx(1, space, fermion=False)
     t1 = Term(
-        1, [Sigma(x),Sigma(y)], [Tensor([x,y],name)],
+        1, [Sigma(x),Sigma(y)], [Tensor([x,y], name)],
         [BOperator(x, True),BOperator(y, False)],[], index_key=index_key)
     return Expression([t1])
 
@@ -177,19 +177,19 @@ def ep11(name, fspaces, bspaces, norder=False, name2=None, index_key=None):
             p1 = Idx(0, s1)
             for s2 in fspaces:
                 i = 0 if s2 != s1 else 1
-                p2 = Idx(i,s2)
+                p2 = Idx(i, s2)
                 operators = [FOperator(p1, True), FOperator(p2, False)]
                 nsign = 1
                 if norder:
                     operators,nsign = normal_ordered([FOperator(p1, True), FOperator(p2, False)])
                 tc = Term(
                     nsign, [Sigma(x),Sigma(p1),Sigma(p2)],
-                    [Tensor([x,p1,p2],name2)],
+                    [Tensor([x,p1,p2], name2)],
                     [BOperator(x, True)] + operators,
                     [], index_key=index_key)
                 ta = Term(
                     nsign, [Sigma(x),Sigma(p1),Sigma(p2)],
-                    [Tensor([x,p1,p2],name)],
+                    [Tensor([x,p1,p2], name)],
                     [BOperator(x, False)] + operators,
                     [], index_key=index_key)
                 terms.append(ta)
@@ -203,7 +203,7 @@ def E0(name, index_key=None):
 
     name (str): Name of operator
     """
-    return Expression([Term(1,[], [Tensor([], name)], [], [], index_key=index_key)])
+    return Expression([Term(1, [], [Tensor([], name)], [], [], index_key=index_key)])
 
 
 def E1(name, ospaces, vspaces, index_key=None):
@@ -248,9 +248,9 @@ def E2(name, ospaces, vspaces, index_key=None):
                     b = Idx(1, v2)
                     scalar = 1
                     if o1 == o2:
-                        scalar *= Fraction(1,2)
+                        scalar *= Fraction(1, 2)
                     if v1 == v2:
-                        scalar *= Fraction(1,2)
+                        scalar *= Fraction(1, 2)
                     e2 = Term(
                         scalar, [Sigma(i), Sigma(a), Sigma(j), Sigma(b)],
                         [Tensor([a, b, i, j], name, sym=sym)],
@@ -502,8 +502,8 @@ def braE1(ospace, vspace, index_key=None):
     """
     i = Idx(0, ospace)
     a = Idx(0, vspace)
-    operators = [FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,i],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a,i], "")], operators, [], index_key=index_key)])
 
 
 def braE2(o1, v1, o2, v2, index_key=None):
@@ -521,8 +521,8 @@ def braE2(o1, v1, o2, v2, index_key=None):
     bx = 1 if v2 == v1 else 0
     j = Idx(jx, o1)
     b = Idx(bx, v1)
-    operators = [FOperator(i,True), FOperator(j,True), FOperator(b,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,b,i,j],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True), FOperator(j, True), FOperator(b, False), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a,b,i,j], "")], operators, [], index_key=index_key)])
 
 
 def braEip1(ospace, index_key=None):
@@ -532,8 +532,8 @@ def braEip1(ospace, index_key=None):
     ospace (str): occupied space
     """
     i = Idx(0, ospace)
-    operators = [FOperator(i,True)]
-    return Expression([Term(1, [], [Tensor([i],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True)]
+    return Expression([Term(1, [], [Tensor([i], "")], operators, [], index_key=index_key)])
 
 
 def braEip2(o1, o2, v1, index_key=None):
@@ -548,8 +548,8 @@ def braEip2(o1, o2, v1, index_key=None):
     a = Idx(0, v1)
     jx = 1 if o2 == o1 else 0
     j = Idx(jx, o2)
-    operators = [FOperator(i,True), FOperator(j,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,i,j],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True), FOperator(j, True), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a,i,j], "")], operators, [], index_key=index_key)])
 
 
 def braEdip1(o1, o2, index_key=None):
@@ -562,8 +562,8 @@ def braEdip1(o1, o2, index_key=None):
     i = Idx(0, o1)
     jx = 1 if o2 == o1 else 0
     j = Idx(jx, o2)
-    operators = [FOperator(i,True), FOperator(j,True)]
-    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True), FOperator(j, True)]
+    return Expression([Term(1, [], [Tensor([i,j], "")], operators, [], index_key=index_key)])
 
 
 def braEea1(space, index_key=None):
@@ -573,8 +573,8 @@ def braEea1(space, index_key=None):
     space (str): orbital space
     """
     a = Idx(0, space)
-    operators = [FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a], "")], operators, [], index_key=index_key)])
 
 
 def braEea2(o1, v1, v2, index_key=None):
@@ -589,8 +589,8 @@ def braEea2(o1, v1, v2, index_key=None):
     a = Idx(0, v1)
     bx = 1 if v2 == v1 else 0
     b = Idx(bx, v2)
-    operators = [FOperator(i, True), FOperator(b,False), FOperator(a, False)]
-    return Expression([Term(1, [], [Tensor([a,b,i],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, True), FOperator(b, False), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a,b,i], "")], operators, [], index_key=index_key)])
 
 
 def braEdea1(v1, v2, index_key=None):
@@ -603,8 +603,8 @@ def braEdea1(v1, v2, index_key=None):
     a = Idx(0, v1)
     bx = 1 if v2 == v1 else 0
     b = Idx(bx, v2)
-    operators = [FOperator(b,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(b, False), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([a,b], "")], operators, [], index_key=index_key)])
 
 
 def braP1(space, index_key=None):
@@ -614,7 +614,7 @@ def braP1(space, index_key=None):
     space (str): Name of boson space
     """
     x = Idx(0, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([x],"")], [BOperator(x, False)], [], index_key=index_key)])
+    return Expression([Term(1, [], [Tensor([x], "")], [BOperator(x, False)], [], index_key=index_key)])
 
 
 def braP2(space, index_key=None):
@@ -625,7 +625,7 @@ def braP2(space, index_key=None):
     """
     x = Idx(0, space, fermion=False)
     y = Idx(1, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([x,y],"")], [BOperator(x, False), BOperator(y, False)], [], index_key=index_key)])
+    return Expression([Term(1, [], [Tensor([x,y], "")], [BOperator(x, False), BOperator(y, False)], [], index_key=index_key)])
 
 
 def braP1E1(bspace, ospace, vspace, index_key=None):
@@ -639,8 +639,8 @@ def braP1E1(bspace, ospace, vspace, index_key=None):
     x = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
     a = Idx(0, vspace)
-    operators = [BOperator(x,False), FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([x,a,i],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, False), FOperator(i, True), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([x,a,i], "")], operators, [], index_key=index_key)])
 
 
 def braP2E1(b1space, b2space, ospace, vspace, index_key=None):
@@ -657,8 +657,8 @@ def braP2E1(b1space, b2space, ospace, vspace, index_key=None):
     y = Idx(yx, b2space, fermion=False)
     i = Idx(0, ospace)
     a = Idx(0, vspace)
-    operators = [BOperator(x,False), BOperator(y,False), FOperator(i,True), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([x,y,a,i],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, False), BOperator(y, False), FOperator(i, True), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([x,y,a,i], "")], operators, [], index_key=index_key)])
 
 
 def braP1Eea1(bspace, vspace, index_key=None):
@@ -670,8 +670,8 @@ def braP1Eea1(bspace, vspace, index_key=None):
     """
     x = Idx(0, bspace, fermion=False)
     a = Idx(0, vspace)
-    operators = [BOperator(x,False), FOperator(a,False)]
-    return Expression([Term(1, [], [Tensor([x,a],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, False), FOperator(a, False)]
+    return Expression([Term(1, [], [Tensor([x,a], "")], operators, [], index_key=index_key)])
 
 
 def braP1Eip1(bspace, ospace, index_key=None):
@@ -683,8 +683,8 @@ def braP1Eip1(bspace, ospace, index_key=None):
     """
     x = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
-    operators = [BOperator(x,False), FOperator(i,True)]
-    return Expression([Term(1, [], [Tensor([x,i],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, False), FOperator(i, True)]
+    return Expression([Term(1, [], [Tensor([x,i], "")], operators, [], index_key=index_key)])
 
 
 def ketE1(ospace, vspace, index_key=None):
@@ -696,8 +696,8 @@ def ketE1(ospace, vspace, index_key=None):
     """
     i = Idx(0, ospace)
     a = Idx(0, vspace)
-    operators = [FOperator(a,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,a],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i,a], "")], operators, [], index_key=index_key)])
 
 
 def ketE2(o1, v1, o2, v2, index_key=None):
@@ -715,8 +715,8 @@ def ketE2(o1, v1, o2, v2, index_key=None):
     bx = 1 if v2 == v1 else 0
     j = Idx(jx, o1)
     b = Idx(bx, v1)
-    operators = [FOperator(a,True), FOperator(b,True), FOperator(j,False), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,j,a,b],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True), FOperator(b, True), FOperator(j, False), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i,j,a,b], "")], operators, [], index_key=index_key)])
 
 
 def ketEea1(space, index_key=None):
@@ -726,8 +726,8 @@ def ketEea1(space, index_key=None):
     space (str): orbital space
     """
     a = Idx(0, space)
-    operators = [FOperator(a,True)]
-    return Expression([Term(1, [], [Tensor([a],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True)]
+    return Expression([Term(1, [], [Tensor([a], "")], operators, [], index_key=index_key)])
 
 
 def ketEea2(o1, v1, v2, index_key=None):
@@ -742,8 +742,8 @@ def ketEea2(o1, v1, v2, index_key=None):
     a = Idx(0, v1)
     bx = 1 if v2 == v1 else 0
     b = Idx(bx, v2)
-    operators = [FOperator(a, True), FOperator(b,True), FOperator(i, False)]
-    return Expression([Term(1, [], [Tensor([i,a,b],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True), FOperator(b, True), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i,a,b], "")], operators, [], index_key=index_key)])
 
 
 def ketEip1(space, index_key=None):
@@ -753,8 +753,8 @@ def ketEip1(space, index_key=None):
     space (str): orbital space
     """
     i = Idx(0, space)
-    operators = [FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i], "")], operators, [], index_key=index_key)])
 
 
 def ketEip2(o1, o2, v1, index_key=None):
@@ -769,8 +769,8 @@ def ketEip2(o1, o2, v1, index_key=None):
     a = Idx(0, v1)
     jx = 1 if o2 == o1 else 0
     j = Idx(jx, o2)
-    operators = [FOperator(a,True), FOperator(j, False), FOperator(i, False)]
-    return Expression([Term(1, [], [Tensor([i,j,a],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True), FOperator(j, False), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i,j,a], "")], operators, [], index_key=index_key)])
 
 
 def ketEdea1(v1, v2, index_key=None):
@@ -783,8 +783,8 @@ def ketEdea1(v1, v2, index_key=None):
     a = Idx(0, v1)
     bx = 1 if v2 == v1 else 0
     b = Idx(bx, v2)
-    operators = [FOperator(a,True), FOperator(b,True)]
-    return Expression([Term(1, [], [Tensor([a,b],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(a, True), FOperator(b, True)]
+    return Expression([Term(1, [], [Tensor([a,b], "")], operators, [], index_key=index_key)])
 
 
 def ketEdip1(o1, o2, index_key=None):
@@ -797,8 +797,8 @@ def ketEdip1(o1, o2, index_key=None):
     i = Idx(0, o1)
     jx = 1 if o2 == o1 else 0
     j = Idx(jx, o2)
-    operators = [FOperator(j,False), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([i,j],"")], operators, [], index_key=index_key)])
+    operators = [FOperator(j,False), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([i,j], "")], operators, [], index_key=index_key)])
 
 
 def ketP1(space, index_key=None):
@@ -806,7 +806,7 @@ def ketP1(space, index_key=None):
     Return right-projection onto single Boson space
     """
     x = Idx(0, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([x],"")], [BOperator(x, True)], [])])
+    return Expression([Term(1, [], [Tensor([x], "")], [BOperator(x, True)], [])])
 
 
 def ketP2(space, index_key=None):
@@ -815,7 +815,7 @@ def ketP2(space, index_key=None):
     """
     x = Idx(0, space, fermion=False)
     y = Idx(1, space, fermion=False)
-    return Expression([Term(1, [], [Tensor([x,y],"")], [BOperator(x, True), BOperator(y, True)], [], index_key=index_key)])
+    return Expression([Term(1, [], [Tensor([x,y], "")], [BOperator(x, True), BOperator(y, True)], [], index_key=index_key)])
 
 
 def ketP1E1(bspace, ospace, vspace, index_key=None):
@@ -829,8 +829,8 @@ def ketP1E1(bspace, ospace, vspace, index_key=None):
     x = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
     a = Idx(0, vspace)
-    operators = [BOperator(x,True), FOperator(a,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([x,i,a],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, True), FOperator(a, True), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([x,i,a], "")], operators, [], index_key=index_key)])
 
 
 def ketP1Eea1(bspace, vspace, index_key=None):
@@ -842,8 +842,8 @@ def ketP1Eea1(bspace, vspace, index_key=None):
     """
     x = Idx(0, bspace, fermion=False)
     a = Idx(0, vspace)
-    operators = [BOperator(x,True), FOperator(a,True)]
-    return Expression([Term(1, [], [Tensor([x,a],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, True), FOperator(a, True)]
+    return Expression([Term(1, [], [Tensor([x,a], "")], operators, [], index_key=index_key)])
 
 
 def ketP1Eip1(bspace, ospace, index_key=None):
@@ -855,8 +855,8 @@ def ketP1Eip1(bspace, ospace, index_key=None):
     """
     x = Idx(0, bspace, fermion=False)
     i = Idx(0, ospace)
-    operators = [BOperator(x,True), FOperator(i,False)]
-    return Expression([Term(1, [], [Tensor([x,i],"")], operators, [], index_key=index_key)])
+    operators = [BOperator(x, True), FOperator(i, False)]
+    return Expression([Term(1, [], [Tensor([x,i], "")], operators, [], index_key=index_key)])
 
 
 def PE1(ospace, vspace, index_key=None):
@@ -869,7 +869,7 @@ def PE1(ospace, vspace, index_key=None):
     i = Idx(0, ospace)
     a = Idx(0, vspace)
     P = Projector()
-    operators = [FOperator(a,True), FOperator(i,False), P, FOperator(i,True), FOperator(a,False)]
+    operators = [FOperator(a, True), FOperator(i, False), P, FOperator(i, True), FOperator(a, False)]
     exp = Expression([Term(1, [Sigma(i), Sigma(a)], [], operators, [], index_key=index_key)])
     return exp
 

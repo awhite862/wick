@@ -26,13 +26,13 @@ def valid_contraction(o1, o2, occ=None):
         return True
 
 
-def pair_list(lst,occ=None):
+def pair_list(lst, occ=None):
     n = len(lst)
     assert(n % 2 == 0)
     if n < 2:
         return []
     elif n == 2:
-        if valid_contraction(lst[0],lst[1],occ=occ):
+        if valid_contraction(lst[0], lst[1], occ=occ):
             return [[(lst[0],lst[1])],]
         else:
             return []
@@ -58,7 +58,7 @@ def get_sign(ipairs):
     ncross = 0
     for p in ipairs:
         i,j = p
-        for x1 in range(i + 1,j):
+        for x1 in range(i + 1, j):
             p1 = find_pair(x1, ipairs)
             if p1 is None:
                 continue
@@ -122,7 +122,7 @@ def apply_wick(e, occ=None):
                         j = operators.index(oj)
                         i1 = oi.idx
                         i2 = oj.idx
-                        deltas.append(Delta(i1,i2))
+                        deltas.append(Delta(i1, i2))
                     elif (is_occupied(oi.idx, occ=occ) and oi.ca and not oj.ca) or (
                             not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
                         i = operators.index(oi)
@@ -130,7 +130,7 @@ def apply_wick(e, occ=None):
                         ipairs.append((i,j))
                         i1 = oi.idx
                         i2 = oj.idx
-                        deltas.append(Delta(i1,i2))
+                        deltas.append(Delta(i1, i2))
                     else:
                         good = False
                         break
@@ -147,7 +147,7 @@ def apply_wick(e, occ=None):
         if not sos:
             assert(len(dos) == 0)
             continue
-        for di,si in zip(product(*dos),product(*sos)):
+        for di,si in zip(product(*dos), product(*sos)):
             assert(si)
             assert(di)
             sign = 1

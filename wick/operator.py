@@ -152,7 +152,7 @@ class TensorSym(object):
     def __init__(self, plist, signs):
         self.plist = plist
         self.signs = signs
-        self.tlist = [(p,s) for p,s in zip(plist,signs)]
+        self.tlist = [(p,s) for p,s in zip(plist, signs)]
 
 
 class Tensor(object):
@@ -322,7 +322,7 @@ def is_normal_ordered(operators, occ):
     return True
 
 
-def normal_ordered(operators,occ=None,sign=1):
+def normal_ordered(operators, occ=None, sign=1):
     if is_normal_ordered(operators, occ):
         return (operators,sign)
     fa = None
@@ -338,4 +338,4 @@ def normal_ordered(operators,occ=None,sign=1):
     newops = operators[:fa] + [operators[swap]] + operators[fa:swap] + operators[swap+1:]
     newsign = 1 if len(operators[fa:swap]) % 2 == 0 else -1
     sign = sign*newsign
-    return normal_ordered(newops,sign=sign)
+    return normal_ordered(newops, sign=sign)
