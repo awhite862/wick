@@ -42,10 +42,10 @@ class OperatorTest(unittest.TestCase):
     def test_tensor(self):
         i = Idx(0, "occ")
         a = Idx(0, "vir")
-        T1 = Tensor([i,a], "g")
-        T2 = Tensor([i,a], "f")
-        T3 = Tensor([i,a], "f")
-        T4 = Tensor([a,i], "f")
+        T1 = Tensor([i, a], "g")
+        T2 = Tensor([i, a], "f")
+        T3 = Tensor([i, a], "f")
+        T4 = Tensor([a, i], "f")
         self.assertTrue(T2 == T3)
         self.assertTrue(T2 != T4)
         self.assertTrue(T1 != T3)
@@ -117,7 +117,7 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(str(Ob1) == sob1)
         self.assertTrue(str(Ob2) == sob2)
 
-        T1 = Tensor([i,a], "g")
+        T1 = Tensor([i, a], "g")
         st1 = "g_{00}"
         self.assertTrue(str(T1) == st1)
 

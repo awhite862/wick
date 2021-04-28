@@ -2,8 +2,8 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H1 = one_e("f", ["occ", "vir"], norder=True)
+H2 = two_e("I", ["occ", "vir"], norder=True)
 
 H = H1 + H2
 

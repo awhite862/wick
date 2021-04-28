@@ -4,10 +4,10 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-i = Idx(0,"occ")
-a = Idx(0,"vir")
-j = Idx(1,"occ")
-b = Idx(1,"vir")
+i = Idx(0, "occ")
+a = Idx(0, "vir")
+j = Idx(1, "occ")
+b = Idx(1, "vir")
 
 T1 = E1("t", ["occ"], ["vir"])
 T2 = E2("t", ["occ"], ["vir"])
@@ -18,8 +18,8 @@ L2 = E2("L", ["vir"], ["occ"])
 L = L1 + L2
 
 # ov block
-operators = [FOperator(a,True), FOperator(i,False)]
-pvo = Expression([Term(1, [], [Tensor([i,a],"")], operators, [])])
+operators = [FOperator(a, True), FOperator(i, False)]
+pvo = Expression([Term(1, [], [Tensor([i, a], "")], operators, [])])
 
 PT = commute(pvo, T)
 PTT = commute(PT, T)
@@ -33,8 +33,8 @@ print("P_{ov} = ")
 print(final)
 
 # vv block
-operators = [FOperator(a,True), FOperator(b,False)]
-pvv = Expression([Term(1, [], [Tensor([b,a],"")], operators, [])])
+operators = [FOperator(a, True), FOperator(b, False)]
+pvv = Expression([Term(1, [], [Tensor([b, a], "")], operators, [])])
 
 PT = commute(pvv, T)
 PTT = commute(PT, T)
@@ -49,8 +49,8 @@ print("P_{vv} = ")
 print(final)
 
 # oo block
-operators = [FOperator(j,False), FOperator(i,True)]
-poo = Expression([Term(-1, [], [Tensor([j,i],"")], operators, [])])
+operators = [FOperator(j, False), FOperator(i, True)]
+poo = Expression([Term(-1, [], [Tensor([j, i], "")], operators, [])])
 
 PT = commute(poo, T)
 PTT = commute(PT, T)
@@ -65,8 +65,8 @@ print("P_{oo} = ")
 print(final)
 
 # vo block
-operators = [FOperator(i,True), FOperator(a,False)]
-pvo = Expression([Term(1, [], [Tensor([a,i],"")], operators, [])])
+operators = [FOperator(i, True), FOperator(a, False)]
+pvo = Expression([Term(1, [], [Tensor([a, i], "")], operators, [])])
 
 PT = commute(pvo, T)
 PTT = commute(PT, T)

@@ -3,8 +3,8 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H1 = one_e("f", ["occ", "vir"], norder=True)
+H2 = two_e("I", ["occ", "vir"], norder=True)
 H = H1 + H2
 
 bra = braEip1("occ")
@@ -16,10 +16,10 @@ R2 = Eip2("r", ["occ"], ["vir"])
 
 T = T1 + T2
 R = R1 + R2
-HT = commute(H,T)
-HTT = commute(HT,T)
-HTTT = commute(HTT,T)
-HTTTT = commute(HTTT,T)
+HT = commute(H, T)
+HTT = commute(HT, T)
+HTTT = commute(HTT, T)
+HTTTT = commute(HTTT, T)
 
 S0 = (H + HT + Fraction('1/2')*HTT)
 E0 = apply_wick(S0)

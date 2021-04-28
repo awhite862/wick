@@ -2,18 +2,18 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H1 = one_e("f", ["occ", "vir"], norder=True)
+H2 = two_e("I", ["occ", "vir"], norder=True)
 H = H1 + H2
 
 T1 = E1("t", ["occ"], ["vir"])
 T2 = E2("t", ["occ"], ["vir"])
 T = T1 + T2
 
-HT = commute(H,T)
-HTT = commute(HT,T)
-HTTT = commute(HTT,T)
-HTTTT = commute(HTTT,T)
+HT = commute(H, T)
+HTT = commute(HT, T)
+HTTT = commute(HTT, T)
+HTTTT = commute(HTTT, T)
 
 # vovvvo piece
 ket = ketEea2("occ", "vir", "vir")
@@ -24,7 +24,7 @@ out.resolve()
 final = AExpression(Ex=out)
 final.sort_tensors()
 final = final.get_connected()
-final.transpose((0,3,1,4,5,2))
+final.transpose((0, 3, 1, 4, 5, 2))
 print("W_{vovvvo} = ")
 print(final)
 #print(final._print_einsum())
@@ -38,7 +38,7 @@ out.resolve()
 final = AExpression(Ex=out)
 final.sort_tensors()
 final = final.get_connected()
-final.transpose((3,4,0,1,5,2))
+final.transpose((3, 4, 0, 1, 5, 2))
 print("W_{oovovo} = ")
 print(final)
 #print(final._print_einsum())

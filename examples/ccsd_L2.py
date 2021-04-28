@@ -3,8 +3,8 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-H1 = one_e("f",["occ","vir"], norder=True)
-H2 = two_e("I",["occ","vir"], norder=True)
+H1 = one_e("f", ["occ", "vir"], norder=True)
+H2 = two_e("I", ["occ", "vir"], norder=True)
 H = H1 + H2
 
 T1 = E1("t", ["occ"], ["vir"])
@@ -17,10 +17,10 @@ L = L1 + L2
 
 ket = ketE2("occ", "vir", "occ", "vir")
 
-HT = commute(H,T)
-HTT = commute(HT,T)
-HTTT = commute(HTT,T)
-HTTTT = commute(HTTT,T)
+HT = commute(H, T)
+HTT = commute(HT, T)
+HTTT = commute(HTT, T)
+HTTTT = commute(HTTT, T)
 
 # Pieces not proportaional to lambda
 S = (H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket

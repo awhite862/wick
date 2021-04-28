@@ -7,8 +7,8 @@ from wick.wick import apply_wick
 
 class ATermTest(unittest.TestCase):
     def test_connected(self):
-        H1 = one_e("f", ["occ","vir"], norder=True)
-        H2 = two_e("I", ["occ","vir"], norder=True)
+        H1 = one_e("f", ["occ", "vir"], norder=True)
+        H2 = two_e("I", ["occ", "vir"], norder=True)
 
         H = H1 + H2
         bra = braE2("occ", "vir", "occ", "vir")
@@ -28,8 +28,8 @@ class ATermTest(unittest.TestCase):
         self.assertTrue(ref == out)
 
     def test_reducible(self):
-        H1 = one_e("f", ["occ","vir"], norder=True)
-        H2 = two_e("I", ["occ","vir"], norder=True)
+        H1 = one_e("f", ["occ", "vir"], norder=True)
+        H2 = two_e("I", ["occ", "vir"], norder=True)
 
         H = H1 + H2
         bra = braE2("occ", "vir", "occ", "vir")

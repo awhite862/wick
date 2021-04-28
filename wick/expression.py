@@ -17,9 +17,8 @@ class TermMap(object):
         self.data = set()
         for ti in tensors:
             ilist = ti.ilist()
-            #strs = {idx.space: "" for idx in ilist}
             strs = {idx.space: frozenset() for idx in ilist}
-            for i,iidx in enumerate(ti.indices):
+            for i, iidx in enumerate(ti.indices):
                 space = iidx.space
                 istr = str(i)
                 for tj in tensors:
@@ -28,13 +27,12 @@ class TermMap(object):
                     def make_str(x):
                         return istr + tjname + x[0]
 
-                    jts = [(str(j),jidx) for j,jidx in enumerate(tj.indices) if jidx == iidx]
-                    #if jts: strs[space] += reduce(lambda a,b: a + b, [make_str(x) for x in jts])
+                    jts = [(str(j), jidx) for j, jidx in enumerate(tj.indices) if jidx == iidx]
                     if jts:
                         strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
             tiname = ti.name if ti.name else "!"
-            lll = [(k,v) for k,v in sorted(strs.items())]
-            self.data.add((tiname,tuple(lll)))
+            lll = [(k, v) for k, v in sorted(strs.items())]
+            self.data.add((tiname, tuple(lll)))
 
     def __eq__(self, other):
         return self.data == other.data
@@ -63,7 +61,6 @@ def _resolve(sums, tensors, operators, deltas):
         assert(i1.space == i2.space)
 
         islist = set([s.idx for s in sums])
-        #for s in sums: islist.add(s.idx)
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
@@ -77,7 +74,7 @@ def _resolve(sums, tensors, operators, deltas):
 
     rs = []
     # loop over deltas for case 1 and 2
-    for dd,case in zip(newdel, cases):
+    for dd, case in zip(newdel, cases):
         i2 = dd.i2
         i1 = dd.i1
 
@@ -92,7 +89,7 @@ def _resolve(sums, tensors, operators, deltas):
         else:
             assert(case == 0)
 
-        for i,(ddd,ccc) in enumerate(zip(newdel,cases)):
+        for i, (ddd, ccc) in enumerate(zip(newdel, cases)):
             if case == 1 and ddd.i1 == i1:
                 newdel[i].i1 = i2
                 if ccc == 3:
@@ -127,7 +124,7 @@ def _resolve(sums, tensors, operators, deltas):
                     assert(False)
 
         for tt in newtens:
-            for k,ti in enumerate(tt.indices):
+            for k, ti in enumerate(tt.indices):
                 if case == 1:
                     if tt.indices[k] == i1:
                         tt.indices[k] = i2
@@ -157,7 +154,7 @@ def _resolve(sums, tensors, operators, deltas):
 
     # loop over case 3 deltas
     rs = []
-    for dd,case in zip(newdel, cases):
+    for dd, case in zip(newdel, cases):
         i2 = dd.i2
         i1 = dd.i1
 
@@ -173,7 +170,7 @@ def _resolve(sums, tensors, operators, deltas):
             continue
 
         for tt in newtens:
-            for k,ti in enumerate(tt.indices):
+            for k, ti in enumerate(tt.indices):
                 if tt.indices[k] == i2:
                     tt.indices[k] = i1
 
@@ -498,7 +495,7 @@ class ATerm(object):
                 sign = 1
                 for x in xs:
                     sign *= x[1]
-                newtensors = [permute(t,x[0]) for t,x in zip(other.tensors, xs)]
+                newtensors = [permute(t, x[0]) for t, x in zip(other.tensors, xs)]
                 TM2 = TermMap(other.sums, newtensors)
                 if TM1 == TM2:
                     return sign
@@ -524,9 +521,9 @@ class ATerm(object):
 
     def sort_tensors(self):
         off = 0
-        for i,tt in enumerate(self.tensors):
+        for i, tt in enumerate(self.tensors):
             if not tt.name:
-                self.tensors[off],self.tensors[i] = self.tensors[i], self.tensors[off]
+                self.tensors[off], self.tensors[i] = self.tensors[i], self.tensors[off]
                 off = off + 1
 
     def merge_external(self):
@@ -563,7 +560,7 @@ class ATerm(object):
         adj = []
         for idx in ll:
             xx = set()
-            for i,t in enumerate(rtensors):
+            for i, t in enumerate(rtensors):
                 if idx in t.indices:
                     xx.add(i)
             adj.append(xx)
@@ -592,7 +589,7 @@ class ATerm(object):
     def reducible(self):
         if not self.connected():
             return True
-        for i,so in enumerate(self.sums):
+        for i, so in enumerate(self.sums):
             new = self.copy()
             new._inc(1)
             sn = new.sums[i]
@@ -663,7 +660,7 @@ class Expression(object):
             new = Expression([other*t for t in self.terms])
             return new
         elif isinstance(other, Expression):
-            terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
+            terms = [t1*t2 for t1, t2 in product(self.terms, other.terms)]
             return Expression(terms)
         else:
             return NotImplemented
@@ -673,7 +670,7 @@ class Expression(object):
             # NOTE: This compares in fixed order with fixed indices
             if len(self.terms) != len(other.terms):
                 return False
-            for t1,t2 in zip(self.terms, other.terms):
+            for t1, t2 in zip(self.terms, other.terms):
                 if t1 != t2:
                     return False
             return True
@@ -736,14 +733,14 @@ class AExpression(object):
         while self.terms:
             t1 = self.terms[0]
             remaining = self.terms[1:]
-            tm = list(filter(test,[(t,t1.pmatch(t),i) for i,t in enumerate(remaining)]))
+            tm = list(filter(test, [(t, t1.pmatch(t), i) for i, t in enumerate(remaining)]))
             s = t1.scalar
             for t in tm:
                 s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(t1.copy())
             tmi = [t[2] for t in tm]
-            indices = list(filter(lambda i: i not in tmi, range(0,len(remaining))))
+            indices = list(filter(lambda i: i not in tmi, range(0, len(remaining))))
             self.terms = [remaining[i] for i in indices]
         self.terms = newterms
 
@@ -770,7 +767,7 @@ class AExpression(object):
             new = AExpression(terms=[other*t for t in self.terms], simplify=False)
             return new
         elif isinstance(other, AExpression):
-            terms = [t1*t2 for t1,t2 in product(self.terms, other.terms)]
+            terms = [t1*t2 for t1, t2 in product(self.terms, other.terms)]
             return AExpression(terms=terms)
         else:
             return NotImplemented
@@ -782,7 +779,7 @@ class AExpression(object):
             # NOTE: This compares in fixed order with fixed indices
             if len(self.terms) != len(other.terms):
                 return False
-            for t1,t2 in zip(self.terms, other.terms):
+            for t1, t2 in zip(self.terms, other.terms):
                 if t1 != t2:
                     return False
             return True

@@ -17,8 +17,8 @@ def get_ref(fname):
 
 class FullTest(unittest.TestCase):
     def test_ccsd_T1(self):
-        H1 = one_e("f", ["occ","vir"], norder=True)
-        H2 = two_e("I", ["occ","vir"], norder=True)
+        H1 = one_e("f", ["occ", "vir"], norder=True)
+        H2 = two_e("I", ["occ", "vir"], norder=True)
         H = H1 + H2
 
         bra = braE1("occ", "vir")

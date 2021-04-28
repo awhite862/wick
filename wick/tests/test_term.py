@@ -11,7 +11,7 @@ class TermTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([i,j], 'f')]
+        tensors = [Tensor([i, j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
         t = Term(s, sums, tensors, operators, [])
         t1 = 3.14*t
@@ -24,11 +24,11 @@ class TermTest(unittest.TestCase):
         a = Idx(0, "vir")
         b = Idx(1, "vir")
         sum1 = [Sigma(i), Sigma(j)]
-        ten1 = [Tensor([i,j], 'f')]
+        ten1 = [Tensor([i, j], 'f')]
         ops1 = [FOperator(i, True), FOperator(j, False)]
         t1 = Term(1.0, sum1, ten1, ops1, [])
         sum2 = [Sigma(a), Sigma(b)]
-        ten2 = [Tensor([a,b], 'f')]
+        ten2 = [Tensor([a, b], 'f')]
         ops2 = [FOperator(a, True), FOperator(b, False)]
         t2 = Term(1.0, sum2, ten2, ops2, [])
 
@@ -45,13 +45,13 @@ class TermTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([i,j], 'f')]
+        tensors = [Tensor([i, j], 'f')]
         t1 = ATerm(s, sums, tensors)
         sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([j,i], 'f')]
+        tensors = [Tensor([j, i], 'f')]
         t2 = ATerm(s, sums, tensors)
         sums = [Sigma(j), Sigma(i)]
-        tensors = [Tensor([i,j], 'f')]
+        tensors = [Tensor([i, j], 'f')]
         t3 = ATerm(s, sums, tensors)
 
         self.assertTrue(t1.match(t2))
@@ -63,7 +63,7 @@ class TermTest(unittest.TestCase):
         i = Idx("i", "occ")
         j = Idx("j", "occ")
         sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([i,j], 'f')]
+        tensors = [Tensor([i, j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
         t1 = Term(s, sums, tensors, operators, [])
         ilist = t1.ilist()
@@ -75,7 +75,7 @@ class TermTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([i,j], 'f')]
+        tensors = [Tensor([i, j], 'f')]
         operators = [FOperator(i, True), FOperator(j, False)]
         t1 = Term(s, sums, tensors, operators, [])
 
@@ -83,7 +83,7 @@ class TermTest(unittest.TestCase):
         k = Idx(2, "occ")
         l = Idx(3, "occ")
         sums = [Sigma(i), Sigma(j), Sigma(k), Sigma(l)]
-        tensors = [Tensor([i,j], 'f'),Tensor([k,l], 'f')]
+        tensors = [Tensor([i, j], 'f'), Tensor([k, l], 'f')]
         operators = [FOperator(i, True), FOperator(j, False),
                      FOperator(k, True), FOperator(l, False)]
         ttest = Term(s, sums, tensors, operators, [])
@@ -93,7 +93,7 @@ class TermTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         a = Idx(0, "vir")
-        tensors = [Tensor([j,i], 'f'),Tensor([a,i], ''),Tensor([a,j], "t")]
+        tensors = [Tensor([j, i], 'f'), Tensor([a, i], ''), Tensor([a, j], "t")]
         st = [tensors[1], tensors[0], tensors[2]]
         sigmas = [Sigma(j)]
         tt = ATerm(scalar=1.0, sums=sigmas, tensors=tensors)

@@ -41,19 +41,19 @@ class WickTest(unittest.TestCase):
         O3 = FOperator(k, False)
         O4 = FOperator(l, True)
 
-        os = [O2,O4,O1,O3]
+        os = [O2, O4, O1, O3]
         pl = pair_list(os)
         self.assertTrue(len(pl) == 2)
 
-        os = [O2,O1,O4,O3]
+        os = [O2, O1, O4, O3]
         pl = pair_list(os)
         self.assertTrue(len(pl) == 1)
 
     def test_get_sign(self):
-        ipairs = [(0,1), (2,3)]
+        ipairs = [(0, 1), (2, 3)]
         self.assertTrue(get_sign(ipairs) == 1)
 
-        ipairs = [(0,2), (1,3)]
+        ipairs = [(0, 2), (1, 3)]
         self.assertTrue(get_sign(ipairs) == -1)
 
     def test_split_operators(self):

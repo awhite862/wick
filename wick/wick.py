@@ -33,16 +33,16 @@ def pair_list(lst, occ=None):
         return []
     elif n == 2:
         if valid_contraction(lst[0], lst[1], occ=occ):
-            return [[(lst[0],lst[1])],]
+            return [[(lst[0], lst[1])],]
         else:
             return []
     else:
         ltmp = lst[1:]
         yy = lst[0]
         plist = []
-        for i,x in enumerate(ltmp):
+        for i, x in enumerate(ltmp):
             if valid_contraction(yy, x):
-                p1 = [(lst[0],x),]
+                p1 = [(lst[0], x),]
                 remainder = pair_list(ltmp[:i] + ltmp[i + 1:])
                 plist += [r + p1 for r in remainder]
         return plist
@@ -57,7 +57,7 @@ def find_pair(i, ipairs):
 def get_sign(ipairs):
     ncross = 0
     for p in ipairs:
-        i,j = p
+        i, j = p
         for x1 in range(i + 1, j):
             p1 = find_pair(x1, ipairs)
             if p1 is None:
@@ -67,13 +67,13 @@ def get_sign(ipairs):
                 ncross += 1
 
     assert(ncross % 2 == 0)
-    ncross = ncross//2
+    ncross = ncross // 2
     return 1 if ncross % 2 == 0 else -1
 
 
 def split_operators(ops):
     ps = []
-    for i,op in enumerate(ops):
+    for i, op in enumerate(ops):
         if isinstance(op, Projector):
             ps.append(i)
 
@@ -82,7 +82,7 @@ def split_operators(ops):
     starts = [0] + [x + 1 for x in ps]
     ends = ps + [len(ops)]
     olists = []
-    for s,e in zip(starts, ends):
+    for s, e in zip(starts, ends):
         olists.append(ops[s:e])
     return olists
 
@@ -113,7 +113,7 @@ def apply_wick(e, occ=None):
                 ipairs = []
                 deltas = []
                 for p in pairs:
-                    oi,oj = p
+                    oi, oj = p
                     if oi.idx.space != oj.idx.space:
                         good = False
                         break
@@ -127,7 +127,7 @@ def apply_wick(e, occ=None):
                             not is_occupied(oi.idx, occ=occ) and not oi.ca and oj.ca):
                         i = operators.index(oi)
                         j = operators.index(oj)
-                        ipairs.append((i,j))
+                        ipairs.append((i, j))
                         i1 = oi.idx
                         i2 = oj.idx
                         deltas.append(Delta(i1, i2))
@@ -147,7 +147,7 @@ def apply_wick(e, occ=None):
         if not sos:
             assert(len(dos) == 0)
             continue
-        for di,si in zip(product(*dos), product(*sos)):
+        for di, si in zip(product(*dos), product(*sos)):
             assert(si)
             assert(di)
             sign = 1

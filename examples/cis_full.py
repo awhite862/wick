@@ -2,8 +2,8 @@ from wick.expression import AExpression
 from wick.convenience import *
 from wick.wick import apply_wick
 
-H1 = one_e("f",["occ","vir"])
-H2 = two_e("I",["occ","vir"])
+H1 = one_e("f", ["occ", "vir"])
+H2 = two_e("I", ["occ", "vir"])
 
 H = H1 + H2
 bra = braE1("occ", "vir")
