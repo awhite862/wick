@@ -1,5 +1,6 @@
 import unittest
 import test_aterm
+import test_convenience
 import test_expression
 import test_full
 import test_idx
@@ -18,6 +19,15 @@ def run_suite():
 
     suite.addTest(test_aterm.ATermTest("test_connected"))
     suite.addTest(test_aterm.ATermTest("test_reducible"))
+
+    suite.addTest(test_convenience.ConvenienceTest("testE1"))
+    suite.addTest(test_convenience.ConvenienceTest("testE2"))
+    suite.addTest(test_convenience.ConvenienceTest("testEip1"))
+    suite.addTest(test_convenience.ConvenienceTest("testEip2"))
+    suite.addTest(test_convenience.ConvenienceTest("testEdip1"))
+    suite.addTest(test_convenience.ConvenienceTest("testEea1"))
+    suite.addTest(test_convenience.ConvenienceTest("testEea2"))
+    suite.addTest(test_convenience.ConvenienceTest("testEdea1"))
 
     suite.addTest(test_expression.ExpressionTest("test_resolve0"))
     suite.addTest(test_expression.ExpressionTest("test_resolve1"))

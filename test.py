@@ -1,4 +1,5 @@
 from wick.tests.test_aterm import *
+from wick.tests.test_convenience import *
 from wick.tests.test_expression import *
 from wick.tests.test_full import *
 from wick.tests.test_idx import *
