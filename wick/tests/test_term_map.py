@@ -1,6 +1,7 @@
 import unittest
-from wick.expression import *
-from wick.convenience import *
+from wick.operator import Tensor, Sigma
+from wick.expression import ATerm
+from wick.index import Idx
 
 
 class TermMapTest(unittest.TestCase):

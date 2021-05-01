@@ -1,7 +1,8 @@
 import unittest
 
 from wick.index import Idx
-from wick.operator import *
+from wick.operator import FOperator, BOperator, Projector
+from wick.operator import Delta, Tensor, Sigma
 
 
 class OperatorTest(unittest.TestCase):

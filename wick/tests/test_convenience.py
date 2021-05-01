@@ -1,8 +1,14 @@
 import unittest
-from wick.convenience import *
-from wick.operator import *
-from wick.expression import AExpression
+from wick.index import Idx
+from wick.operator import Delta, Tensor
+from wick.expression import Term, Expression, AExpression
 from wick.wick import apply_wick
+from wick.convenience import braE1, braE2
+from wick.convenience import braEip1, braEip2, braEdip1
+from wick.convenience import braEea1, braEea2, braEdea1
+from wick.convenience import ketE1, ketE2
+from wick.convenience import ketEip1, ketEip2, ketEdip1
+from wick.convenience import ketEea1, ketEea2, ketEdea1
 
 
 class ConvenienceTest(unittest.TestCase):

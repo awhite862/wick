@@ -1,8 +1,8 @@
 import unittest
 
-from wick.operator import *
-from wick.expression import *
-from wick.convenience import *
+from wick.index import Idx
+from wick.operator import FOperator, Sigma, Tensor, Delta
+from wick.expression import Term
 
 
 class ExpressionTest(unittest.TestCase):

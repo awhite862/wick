@@ -2,8 +2,8 @@ import unittest
 from fractions import Fraction
 
 from wick.index import Idx
-from wick.operator import *
-from wick.expression import *
+from wick.operator import Sigma, Tensor
+from wick.expression import Term, Expression, ATerm, AExpression
 from wick.wick import apply_wick
 from wick.convenience import one_e, two_e, get_sym
 from wick.convenience import ketE1, ketE2, braE1, braE2

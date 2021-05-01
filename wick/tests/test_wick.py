@@ -1,10 +1,11 @@
 import unittest
 
-from wick.expression import *
-from wick.convenience import *
-from wick.operator import *
+from wick.index import Idx
+from wick.expression import Term, Expression, AExpression
+from wick.operator import FOperator, BOperator, Projector
 from wick.wick import valid_contraction, pair_list
 from wick.wick import get_sign, split_operators, apply_wick
+from wick.convenience import one_e
 
 
 class WickTest(unittest.TestCase):

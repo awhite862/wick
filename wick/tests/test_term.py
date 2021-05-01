@@ -1,8 +1,8 @@
 import unittest
 
 from wick.index import Idx
-from wick.expression import *
-from wick.operator import FOperator
+from wick.expression import Term, ATerm
+from wick.operator import FOperator, Sigma, Tensor
 
 
 class TermTest(unittest.TestCase):

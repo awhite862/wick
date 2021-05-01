@@ -1,7 +1,8 @@
 import unittest
 
-from wick.expression import *
-from wick.convenience import *
+from wick.expression import AExpression
+from wick.convenience import one_e, two_e, braE2
+from wick.convenience import E0, E1, E2
 from wick.wick import apply_wick
 
 
