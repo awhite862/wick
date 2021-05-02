@@ -1,8 +1,9 @@
 from fractions import Fraction
 from wick.index import Idx
-from wick.expression import AExpression
-from wick.convenience import *
+from wick.operator import FOperator, Tensor
+from wick.expression import Term, Expression, AExpression
 from wick.wick import apply_wick
+from wick.convenience import E1, E2, commute
 
 i = Idx(0, "occ")
 a = Idx(0, "vir")

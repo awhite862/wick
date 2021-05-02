@@ -1,6 +1,6 @@
 from wick.expression import AExpression
-from wick.convenience import *
 from wick.wick import apply_wick
+from wick.convenience import one_p, braP1
 
 
 Hp = one_p("G")

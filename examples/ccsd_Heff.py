@@ -1,7 +1,11 @@
-from wick.expression import AExpression
-from wick.convenience import *
-from wick.wick import apply_wick
 from fractions import Fraction
+from wick.expression import AExpression
+from wick.wick import apply_wick
+from wick.convenience import one_e, two_e, E1, E2, commute
+from wick.convenience import ketE1, ketE2, ketEip1, ketEea1
+from wick.convenience import ketEea2, ketEip2, ketEdea1, ketEdip1
+from wick.convenience import braE1, braE2, braEip1, braEea1
+from wick.convenience import braEea2, braEip2, braEdea1, braEdip1
 
 H1 = one_e("f", ["occ", "vir"], norder=True)
 H2 = two_e("I", ["occ", "vir"], norder=True, compress=True)
