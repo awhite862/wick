@@ -1,7 +1,7 @@
 from fractions import Fraction
 from wick.expression import AExpression
 from wick.wick import apply_wick
-from wick.convenience import one_e, two_e, E1, braE1, commute
+from wick.convenience import one_e, E1, braE1, commute
 
 H1 = one_e("f", ["occ", "vir"], norder=True)
 

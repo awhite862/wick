@@ -4,7 +4,7 @@ from wick.wick import apply_wick
 from wick.convenience import one_e, two_e, E1, E2, commute
 from wick.convenience import ketE1, ketE2, ketEip1, ketEea1
 from wick.convenience import ketEea2, ketEip2, ketEdea1, ketEdip1
-from wick.convenience import braE1, braE2, braEip1, braEea1
+from wick.convenience import braE1, braEip1, braEea1
 from wick.convenience import braEea2, braEip2, braEdea1, braEdip1
 
 H1 = one_e("f", ["occ", "vir"], norder=True)
@@ -55,7 +55,6 @@ final = final.get_connected()
 final.transpose((1, 0))
 print("F_{oo} = ")
 print(final)
-#print(final._print_einsum())
 
 # vvoo piece
 ket = ketE2("occ", "vir", "occ", "vir")
@@ -92,7 +91,6 @@ final = final.get_connected()
 final.transpose((1, 2, 0, 3))
 print("W_{ooov} = ")
 print(final)
-#print(final._print_einsum())
 
 # vvvv piece
 ket = ketEdea1("vir", "vir")
@@ -105,7 +103,6 @@ final.sort_tensors()
 final = final.get_connected()
 print("W_{vvvv} = ")
 print(final)
-#print(final._print_einsum())
 
 # oooo piece
 ket = ketEdip1("occ", "occ")
@@ -119,7 +116,6 @@ final = final.get_connected()
 final.transpose((2, 3, 0, 1))
 print("W_{oooo} = ")
 print(final)
-#print(final._print_einsum())
 
 # voov piece
 ket = ketE1("occ", "vir")
@@ -133,7 +129,6 @@ final = final.get_connected()
 final.transpose((0, 2, 1, 3))
 print("W_{voov} = ")
 print(final)
-#print(final._print_einsum())
 
 # vvvo piece
 ket = ketEea1("vir")
@@ -147,7 +142,6 @@ final = final.get_connected()
 final.transpose((0, 1, 3, 2))
 print("W_{vvvo} = ")
 print(final)
-#print(final._print_einsum())
 
 # ovoo piece
 ket = ketEip1("occ")
@@ -161,4 +155,3 @@ final = final.get_connected()
 final.transpose((3, 0, 1, 2))
 print("W_{ovoo} = ")
 print(final)
-#print(final._print_einsum())

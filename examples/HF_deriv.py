@@ -15,7 +15,6 @@ final = AExpression(Ex=out)
 final.sort_tensors()
 print("dE/dX* =")
 print(final)
-#print(final._print_einsum())
 
 # first derivative wrt X
 ket = ketE1("occ", "vir")
@@ -27,7 +26,6 @@ final.sort_tensors()
 final.transpose((1, 0))
 print("dE/dX =")
 print(final)
-#print(final._print_einsum())
 
 print("")
 # second derivative wrt X*X*
@@ -39,7 +37,6 @@ final = AExpression(Ex=out)
 final.sort_tensors()
 print("d^2E/dX*dX* =")
 print(final)
-#print(final._print_einsum())
 
 # second derivative wrt X*X
 ket = ketE1("occ", "vir")
@@ -52,7 +49,6 @@ final.sort_tensors()
 final.transpose((0, 1, 3, 2))
 print("d^2E/dX*dX =")
 print(final)
-#print(final._print_einsum())
 
 # second derivative wrt XX
 ket = ketE2("occ", "vir", "occ", "vir")
@@ -64,4 +60,3 @@ final.sort_tensors()
 final.transpose((2, 3, 0, 1))
 print("d^2E/dXdX =")
 print(final)
-#print(final._print_einsum())

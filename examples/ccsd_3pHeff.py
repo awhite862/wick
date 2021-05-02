@@ -1,7 +1,8 @@
 from fractions import Fraction
 from wick.expression import AExpression
 from wick.wick import apply_wick
-from wick.convenience import one_e, two_e, E1, E2, ketEea2, braEea2, commute
+from wick.convenience import one_e, two_e, E1, E2, commute
+from wick.convenience import ketEea2, braEea2, ketEip2, braEip2
 
 H1 = one_e("f", ["occ", "vir"], norder=True)
 H2 = two_e("I", ["occ", "vir"], norder=True)
@@ -28,7 +29,6 @@ final = final.get_connected()
 final.transpose((0, 3, 1, 4, 5, 2))
 print("W_{vovvvo} = ")
 print(final)
-#print(final._print_einsum())
 
 # oovovo piece
 ket = ketEip2("occ", "occ", "vir")
@@ -42,4 +42,3 @@ final = final.get_connected()
 final.transpose((3, 4, 0, 1, 5, 2))
 print("W_{oovovo} = ")
 print(final)
-#print(final._print_einsum())
