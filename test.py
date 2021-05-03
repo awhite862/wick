@@ -9,3 +9,6 @@ from wick.tests.test_term import *
 from wick.tests.test_term_map import *
 from wick.tests.test_test import *
 from wick.tests.test_wick import *
+
+if __name__ == '__main__':
+    unittest.main()

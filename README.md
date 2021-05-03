@@ -24,4 +24,4 @@ directory can be run to compare output text to the expected results in the
 The tests we do have can be run as follows:
   - Individually from the `wick/tests` subdirectory
   - All at once by running `python test_suites.py` from `wick/tests`
-  - All at once by running `python -m unittest test.py`
+  - All at once by running `python test.py`
