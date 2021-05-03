@@ -118,8 +118,6 @@ def apply_wick(e, occ=None):
                         good = False
                         break
                     if not oi.idx.fermion:
-                        i = operators.index(oi)
-                        j = operators.index(oj)
                         i1 = oi.idx
                         i2 = oj.idx
                         deltas.append(Delta(i1, i2))

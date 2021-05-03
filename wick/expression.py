@@ -178,8 +178,7 @@ def _resolve(sums, tensors, operators, deltas):
             if oo.idx == i2:
                 oo.idx = i1
 
-        if not (case == 0 and i1 != i2):
-            rs.append(dd)
+        rs.append(dd)
 
     for d in rs:
         dindx = newdel.index(d)
@@ -594,14 +593,11 @@ class ATerm(object):
             new._inc(1)
             sn = new.sums[i]
             i1 = sn.idx
-            i2 = Idx(0, i1.space)
             new.sums = list(filter(lambda s: s != sn, self.sums))
             m = 0
             for t in new.tensors:
                 for ix in t.indices:
                     if ix == i1:
-                        if m == 0:
-                            ix = i2
                         m += 1
             assert(m == 2)
             if not new.connected():
