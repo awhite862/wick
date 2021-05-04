@@ -2,6 +2,8 @@
 Symbolic manipulation of operator strings for quantum chemistry appliciations
 
 [![Build](https://github.com/awhite862/wick/workflows/Build/badge.svg)](https://github.com/awhite862/wick/actions/workflows/python-package.yml)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/awhite862/wick.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/awhite862/wick/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/awhite862/wick.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/awhite862/wick/context:python)
 [![codecov](https://codecov.io/gh/awhite862/wick/branch/master/graph/badge.svg)](https://codecov.io/gh/awhite862/wick)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org)
 

@@ -33,7 +33,7 @@ def pair_list(lst, occ=None):
         return []
     elif n == 2:
         if valid_contraction(lst[0], lst[1], occ=occ):
-            return [[(lst[0], lst[1])],]
+            return [[(lst[0], lst[1])]]
         else:
             return []
     else:
@@ -42,7 +42,7 @@ def pair_list(lst, occ=None):
         plist = []
         for i, x in enumerate(ltmp):
             if valid_contraction(yy, x):
-                p1 = [(lst[0], x),]
+                p1 = [(lst[0], x)]
                 remainder = pair_list(ltmp[:i] + ltmp[i + 1:])
                 plist += [r + p1 for r in remainder]
         return plist

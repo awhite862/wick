@@ -4,7 +4,6 @@ from copy import copy
 from itertools import product
 from numbers import Number
 from .operator import Sigma, Tensor, permute, tensor_from_delta
-from .index import Idx
 
 
 class TermMap(object):

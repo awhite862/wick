@@ -25,7 +25,7 @@ pvo = Expression([Term(1, [], [Tensor([i, a], "")], operators, [])])
 PT = commute(pvo, T)
 PTT = commute(PT, T)
 mid = pvo + PT + Fraction('1/2')*PTT
-full = mid + L*mid
+#full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
 out.resolve()
@@ -40,7 +40,7 @@ pvv = Expression([Term(1, [], [Tensor([b, a], "")], operators, [])])
 PT = commute(pvv, T)
 PTT = commute(PT, T)
 mid = pvv + PT + Fraction('1/2')*PTT
-full = mid + L*mid
+#full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
 out.resolve()
@@ -56,7 +56,7 @@ poo = Expression([Term(-1, [], [Tensor([j, i], "")], operators, [])])
 PT = commute(poo, T)
 PTT = commute(PT, T)
 mid = poo + PT + Fraction('1/2')*PTT
-full = mid + L*mid
+#full = mid + L*mid
 full = L*mid
 out = apply_wick(full)
 out.resolve()
