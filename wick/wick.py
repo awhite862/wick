@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Alec White
+# Copyright (c) 2020-2021 Alec White
 # Licensed under the MIT License (see LICENSE for details)
 from itertools import product
 from .operator import BOperator, FOperator, Projector, Delta
