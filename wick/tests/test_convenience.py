@@ -9,6 +9,8 @@ from wick.convenience import braEea1, braEea2, braEdea1
 from wick.convenience import ketE1, ketE2
 from wick.convenience import ketEip1, ketEip2, ketEdip1
 from wick.convenience import ketEea1, ketEea2, ketEdea1
+from wick.convenience import braP1, braP2, braP1E1, braP1Eip1, braP1Eea1
+from wick.convenience import ketP1, ketP2, ketP1E1, ketP1Eip1, ketP1Eea1
 
 
 class ConvenienceTest(unittest.TestCase):
@@ -185,6 +187,103 @@ class ConvenienceTest(unittest.TestCase):
             -1, [],  tensors, [],
             [Delta(a, d), Delta(b, c)])
         ref = Expression([tr1, tr2])
+        aref = AExpression(Ex=ref)
+        self.assertTrue(aout.pmatch(aref))
+
+    def testP1(self):
+        bra = braP1("nm")
+        ket = ketP1("nm")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        tensors = [
+            Tensor([x], ""),
+            Tensor([y], "")]
+        tr1 = Term(
+            1, [],  tensors, [], [Delta(x, y)])
+        ref = Expression([tr1])
+        aref = AExpression(Ex=ref)
+        self.assertTrue(aout.pmatch(aref))
+
+    def testP2(self):
+        bra = braP2("nm", "nm")
+        ket = ketP2("nm", "nm")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        u = Idx(2, "nm", fermion=False)
+        v = Idx(3, "nm", fermion=False)
+        tensors = [
+            Tensor([x, y], ""),
+            Tensor([u, v], "")]
+        tr1 = Term(
+            1, [],  tensors, [], [Delta(x, u), Delta(y,v)])
+        tr2 = Term(
+            1, [],  tensors, [], [Delta(x, v), Delta(y,u)])
+        ref = Expression([tr1, tr2])
+        aref = AExpression(Ex=ref)
+        self.assertTrue(aout.pmatch(aref))
+
+    def testP1E1(self):
+        bra = braP1E1("nm", "occ", "vir")
+        ket = ketP1E1("nm", "occ", "vir")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        i = Idx(0, "occ")
+        a = Idx(0, "vir")
+        j = Idx(1, "occ")
+        b = Idx(1, "vir")
+        tensors = [
+            Tensor([x, i, a], ""),
+            Tensor([y, b, j], "")]
+        tr1 = Term(
+            1, [],  tensors, [], [Delta(x, y), Delta(i, j), Delta(a, b)])
+        ref = Expression([tr1])
+        aref = AExpression(Ex=ref)
+        self.assertTrue(aout.pmatch(aref))
+
+    def testP1Eip1(self):
+        bra = braP1Eip1("nm", "occ")
+        ket = ketP1Eip1("nm", "occ")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        tensors = [
+            Tensor([x, i], ""),
+            Tensor([y, j], "")]
+        tr1 = Term(
+            1, [],  tensors, [], [Delta(x, y), Delta(i, j)])
+        ref = Expression([tr1])
+        aref = AExpression(Ex=ref)
+        self.assertTrue(aout.pmatch(aref))
+
+    def testP1Eea1(self):
+        bra = braP1Eea1("nm", "vir")
+        ket = ketP1Eea1("nm", "vir")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
+        tensors = [
+            Tensor([x, a], ""),
+            Tensor([y, b], "")]
+        tr1 = Term(
+            1, [],  tensors, [], [Delta(x, y), Delta(a, b)])
+        ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
 

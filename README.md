@@ -5,7 +5,7 @@ Symbolic manipulation of operator strings for quantum chemistry appliciations
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/awhite862/wick.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/awhite862/wick/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/awhite862/wick.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/awhite862/wick/context:python)
 [![codecov](https://codecov.io/gh/awhite862/wick/branch/master/graph/badge.svg)](https://codecov.io/gh/awhite862/wick)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://mit-license.org)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/awhite862/wick/master/LICENSE)
 
 ## Features
 WICK is a pure python library for applying Wick's theorem, manipulating, and simplifying arbitrary strings of second-quantized operators.
