@@ -88,14 +88,18 @@ class ExpressionTest(unittest.TestCase):
         I2 = Idx(0, "o1")
         I3 = Idx(1, "v1")
         I4 = Idx(1, "o1")
-        operators = [FOperator(I1, True), FOperator(I2, True), FOperator(I4, False), FOperator(I3, False)]
+        operators = [
+            FOperator(I1, True), FOperator(I2, True),
+            FOperator(I4, False), FOperator(I3, False)]
         out = Term(
             1, [Sigma(I2), Sigma(I3), Sigma(I4)],
             [Tensor([I1, I2, I3, I4], "T")],
             operators, [Delta(I1, I3), Delta(I2, I4)])
         out.resolve()
 
-        roperators = [FOperator(I1, True), FOperator(I2, True), FOperator(I2, False), FOperator(I1, False)]
+        roperators = [
+            FOperator(I1, True), FOperator(I2, True),
+            FOperator(I2, False), FOperator(I1, False)]
         ref = Term(
             1, [Sigma(I2)],
             [Tensor([I1, I2, I1, I2], "T")],

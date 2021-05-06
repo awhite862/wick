@@ -93,7 +93,8 @@ class TermTest(unittest.TestCase):
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         a = Idx(0, "vir")
-        tensors = [Tensor([j, i], 'f'), Tensor([a, i], ''), Tensor([a, j], "t")]
+        tensors = [
+            Tensor([j, i], 'f'), Tensor([a, i], ''), Tensor([a, j], "t")]
         st = [tensors[1], tensors[0], tensors[2]]
         sigmas = [Sigma(j)]
         tt = ATerm(scalar=1.0, sums=sigmas, tensors=tensors)

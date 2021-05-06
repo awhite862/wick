@@ -1,8 +1,9 @@
 import unittest
 from wick.index import Idx
 from wick.operator import Delta, Tensor
-from wick.expression import Term, Expression, AExpression
+from wick.expression import Term, ATerm, Expression, AExpression
 from wick.wick import apply_wick
+from wick.convenience import E1, E2, Eip1, Eea1
 from wick.convenience import braE1, braE2
 from wick.convenience import braEip1, braEip2, braEdip1
 from wick.convenience import braEea1, braEea2, braEdea1
@@ -30,6 +31,15 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = E1("A", ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([a, i], "")
+        ten = Tensor([a, i], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(at1 == aout.terms[0])
 
     def testE2(self):
         bra = braE2("occ", "vir", "occ", "vir")
@@ -78,6 +88,15 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = Eip1("A", ["occ"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([i], "")
+        ten = Tensor([i], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(at1 == aout.terms[0])
 
     def testEip2(self):
         bra = braEip2("occ", "occ", "vir")
@@ -141,6 +160,15 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = Eea1("A", ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([a], "")
+        ten = Tensor([a], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(at1 == aout.terms[0])
 
     def testEea2(self):
         bra = braEea2("occ", "vir", "vir")
