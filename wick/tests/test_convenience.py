@@ -221,9 +221,9 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x, y], ""),
             Tensor([u, v], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, u), Delta(y,v)])
+            1, [],  tensors, [], [Delta(x, u), Delta(y, v)])
         tr2 = Term(
-            1, [],  tensors, [], [Delta(x, v), Delta(y,u)])
+            1, [],  tensors, [], [Delta(x, v), Delta(y, u)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))

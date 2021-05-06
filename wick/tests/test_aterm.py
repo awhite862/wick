@@ -1,12 +1,33 @@
 import unittest
 
-from wick.expression import AExpression
-from wick.convenience import one_e, two_e, braE2
+from wick.index import Idx
+from wick.operator import Tensor, Delta, tensor_from_delta
+from wick.expression import AExpression, ATerm
+from wick.convenience import one_e, two_e, braE2, braE1, ketE1
 from wick.convenience import E0, E1, E2
 from wick.wick import apply_wick
 
 
 class ATermTest(unittest.TestCase):
+    def test_merge_external(self):
+        bra = braE1("occ", "vir")
+        ket = ketE1("occ", "vir")
+        out = apply_wick(bra*ket)
+        aout = AExpression(Ex=out)
+        aterm = aout.terms[0]
+        aterm.merge_external()
+
+        i = Idx(0, "occ")
+        a = Idx(0, "vir")
+        j = Idx(1, "occ")
+        b = Idx(1, "vir")
+        tensors = [
+            Tensor([a, i, j, b], ""),
+            tensor_from_delta(Delta(i, j)),
+            tensor_from_delta(Delta(a, b))]
+        aref = ATerm(scalar=1, sums=[], tensors=tensors)
+        self.assertTrue(aterm == aref)
+
     def test_connected(self):
         H1 = one_e("f", ["occ", "vir"], norder=True)
         H2 = two_e("I", ["occ", "vir"], norder=True)

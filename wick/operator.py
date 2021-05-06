@@ -48,8 +48,11 @@ class FOperator(object):
         self.ca = ca
 
     def __eq__(self, other):
-        return self.idx == other.idx\
-            and self.ca == other.ca
+        if isinstance(other, FOperator):
+            return self.idx == other.idx\
+                and self.ca == other.ca
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -102,8 +105,11 @@ class BOperator(object):
         self.ca = ca
 
     def __eq__(self, other):
-        return self.idx == other.idx\
-            and self.ca == other.ca
+        if isinstance(other, BOperator):
+            return self.idx == other.idx\
+                and self.ca == other.ca
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -173,8 +179,11 @@ class Tensor(object):
             self.sym = sym
 
     def __eq__(self, other):
-        return self.indices == other.indices \
-            and self.name == other.name
+        if isinstance(other, Tensor):
+            return self.indices == other.indices \
+                and self.name == other.name
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -247,7 +256,10 @@ class Sigma(object):
         self.idx = idx
 
     def __eq__(self, other):
-        return self.idx == other.idx
+        if isinstance(other, Sigma):
+            return self.idx == other.idx
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -282,8 +294,11 @@ class Delta(object):
         self.i2 = i2
 
     def __eq__(self, other):
-        return (self.i1 == other.i1 and self.i2 == other.i2) or (
-            self.i1 == other.i2 and self.i2 == other.i1)
+        if isinstance(other, Delta):
+            return (self.i1 == other.i1 and self.i2 == other.i2) or (
+                self.i1 == other.i2 and self.i2 == other.i1)
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
         return not self.__eq__(other)

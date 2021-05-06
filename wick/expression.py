@@ -34,7 +34,10 @@ class TermMap(object):
             self.data.add((tiname, tuple(lll)))
 
     def __eq__(self, other):
-        return self.data == other.data
+        if isinstance(other, TermMap):
+            return self.data == other.data
+        else:
+            return NotImplemented
 
 
 default_index_key = {"occ": "ijklmno", "vir": "abcdefg", "nm": "IJKLMNOP"}
