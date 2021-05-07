@@ -131,6 +131,44 @@ class OperatorTest(unittest.TestCase):
         sd1 = "\\delta_{0,1}"
         self.assertTrue(str(D1) == sd1)
 
+    def test_inc(self):
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        I = Idx(0, "nm", fermion=False)
+        J = Idx(1, "nm", fermion=False)
+
+        iii = 3
+
+        # Fermion operator
+        O1 = FOperator(i, False)._inc(iii)
+        self.assertTrue(O1.idx.index == iii)
+
+        # Boson operator
+        O2 = BOperator(I, False)._inc(iii)
+        O3 = BOperator(J, True)._inc(iii)
+        self.assertTrue(O2.idx.index == iii)
+        self.assertTrue(O3.idx.index == iii + 1)
+
+        # Projector
+        P1 = Projector()
+        P2 = P1._inc(iii)
+        self.assertTrue(P1 == P2)
+
+        # tensor
+        T1 = Tensor([i, a], "g")._inc(iii)
+        self.assertTrue(T1.indices[0].index == iii)
+        self.assertTrue(T1.indices[1].index == iii)
+
+        # sigma
+        S3 = Sigma(j)._inc(iii)
+        self.assertTrue(S3.idx.index == iii + 1)
+
+        # delta
+        D1 = Delta(i, j)._inc(iii)
+        self.assertTrue(D1.i1.index == iii)
+        self.assertTrue(D1.i2.index == iii + 1)
+
 
 if __name__ == '__main__':
     unittest.main()

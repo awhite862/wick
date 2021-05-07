@@ -1,9 +1,10 @@
 import unittest
 from wick.index import Idx
-from wick.operator import Delta, Tensor
+from wick.operator import Delta, Tensor, TensorSym
 from wick.expression import Term, ATerm, Expression, AExpression
 from wick.wick import apply_wick
-from wick.convenience import E1, E2, Eip1, Eea1
+from wick.convenience import get_sym, get_sym_ip2, get_sym_ea2
+from wick.convenience import E1, E2, Eip1, Eea1, Eip2, Eea2, P1, P2, EPS1
 from wick.convenience import braE1, braE2
 from wick.convenience import braEip1, braEip2, braEdip1
 from wick.convenience import braEea1, braEea2, braEdea1
@@ -26,7 +27,7 @@ class ConvenienceTest(unittest.TestCase):
         j = Idx(1, "occ")
         b = Idx(1, "vir")
         tr1 = Term(
-            1, [], [Tensor([i, a], ""), Tensor([b, j], "")],
+            1, [], [Tensor([a, i], ""), Tensor([j, b], "")],
             [], [Delta(i, j), Delta(a, b)])
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
@@ -39,6 +40,7 @@ class ConvenienceTest(unittest.TestCase):
         ext = Tensor([a, i], "")
         ten = Tensor([a, i], "A")
         at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(len(aout.terms) == 1)
         self.assertTrue(at1 == aout.terms[0])
 
     def testE2(self):
@@ -56,8 +58,8 @@ class ConvenienceTest(unittest.TestCase):
         l = Idx(3, "occ")
         d = Idx(3, "vir")
         tensors = [
-            Tensor([i, j, a, b], ""),
-            Tensor([c, d, k, l], "")]
+            Tensor([a, b, i, j], ""),
+            Tensor([k, l, c, d], "")]
         tr1 = Term(
             1, [],  tensors, [],
             [Delta(i, k), Delta(j, l), Delta(a, c), Delta(b, d)])
@@ -73,6 +75,16 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1, tr2, tr3, tr4])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = E2("A", ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([a, b, i, j], "")
+        ten = Tensor([a, b, i, j], "A", sym=get_sym(True))
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(len(aout.terms) == 1)
+        self.assertTrue(at1.pmatch(aout.terms[0]))
 
     def testEip1(self):
         bra = braEip1("occ")
@@ -96,6 +108,7 @@ class ConvenienceTest(unittest.TestCase):
         ext = Tensor([i], "")
         ten = Tensor([i], "A")
         at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(len(aout.terms) == 1)
         self.assertTrue(at1 == aout.terms[0])
 
     def testEip2(self):
@@ -111,8 +124,8 @@ class ConvenienceTest(unittest.TestCase):
         c = Idx(1, "vir")
         l = Idx(3, "occ")
         tensors = [
-            Tensor([i, j, a], ""),
-            Tensor([c, k, l], "")]
+            Tensor([a, i, j], ""),
+            Tensor([k, l, c], "")]
         tr1 = Term(
             1, [],  tensors, [],
             [Delta(i, k), Delta(j, l), Delta(a, c)])
@@ -122,6 +135,16 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = Eip2("A", ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([a, i, j], "")
+        ten = Tensor([a, i, j], "A", sym=get_sym_ip2())
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(len(aout.terms) == 1)
+        self.assertTrue(at1.pmatch(aout.terms[0]))
 
     def testEdip1(self):
         bra = braEdip1("occ", "occ")
@@ -195,6 +218,16 @@ class ConvenienceTest(unittest.TestCase):
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
 
+        op = Eea2("A", ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([a, b, i], "")
+        ten = Tensor([a, b, i], "A", sym=get_sym_ea2())
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(len(aout.terms) == 1)
+        self.assertTrue(at1.pmatch(aout.terms[0]))
+
     def testEdea1(self):
         bra = braEdea1("vir", "vir")
         ket = ketEdea1("vir", "vir")
@@ -235,9 +268,18 @@ class ConvenienceTest(unittest.TestCase):
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
 
+        op = P1("A", ["nm"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([x], "")
+        ten = Tensor([x], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, ten])
+        self.assertTrue(at1 == aout.terms[0])
+
     def testP2(self):
-        bra = braP2("nm", "nm")
-        ket = ketP2("nm", "nm")
+        bra = braP2("nm")
+        ket = ketP2("nm")
         out = apply_wick(bra*ket)
         aout = AExpression(Ex=out)
 
@@ -255,6 +297,16 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = P2("A", ["nm"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        sym = TensorSym([(0, 1), (1, 0)], [1, 1])
+        ext = Tensor([x, y], "")
+        t1 = Tensor([x, y], "A", sym=sym)
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
+        self.assertTrue(at1 == aout.terms[0])
 
     def testP1E1(self):
         bra = braP1E1("nm", "occ", "vir")
@@ -276,6 +328,15 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = EPS1("A", ["nm"], ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([x, a, i], "")
+        t1 = Tensor([x, a, i], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
+        self.assertTrue(at1 == aout.terms[0])
 
     def testP1Eip1(self):
         bra = braP1Eip1("nm", "occ")
