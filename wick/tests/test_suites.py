@@ -35,6 +35,9 @@ def run_suite():
     suite.addTest(test_convenience.ConvenienceTest("testP1Eip1"))
     suite.addTest(test_convenience.ConvenienceTest("testP1Eea1"))
     suite.addTest(test_convenience.ConvenienceTest("testP2E1"))
+    suite.addTest(test_convenience.ConvenienceTest("testP1op"))
+    suite.addTest(test_convenience.ConvenienceTest("testP2op"))
+    suite.addTest(test_convenience.ConvenienceTest("testEP11op"))
 
     suite.addTest(test_expression.ExpressionTest("test_resolve0"))
     suite.addTest(test_expression.ExpressionTest("test_resolve1"))

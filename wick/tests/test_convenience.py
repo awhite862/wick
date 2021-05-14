@@ -14,7 +14,7 @@ from wick.convenience import ketEip1, ketEip2, ketEdip1
 from wick.convenience import ketEea1, ketEea2, ketEdea1
 from wick.convenience import braP1, braP2, braP1E1, braP1Eip1, braP1Eea1
 from wick.convenience import ketP1, ketP2, ketP1E1, ketP1Eip1, ketP1Eea1
-from wick.convenience import braP2E1
+from wick.convenience import braP2E1, one_p, two_p, ep11
 
 
 class ConvenienceTest(unittest.TestCase):
@@ -412,6 +412,74 @@ class ConvenienceTest(unittest.TestCase):
         t1 = Tensor([x, y, a, i], "A", sym=sym)
         at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
         self.assertTrue(at1 == aout.terms[0])
+
+    def testP1op(self):
+        op = one_p("Hp", name2="Hq")
+        bra = braP1("nm")
+        ex = apply_wick(bra*op)
+        ex.resolve()
+        out = AExpression(Ex=ex)
+
+        x = Idx(0, "nm", fermion=False)
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([x], "Hq"), Tensor([x], "")])
+        ref = AExpression(terms=[tr1])
+        self.assertTrue(ref.pmatch(out))
+
+        ket = ketP1("nm")
+        ex = apply_wick(op*ket)
+        ex.resolve()
+        out = AExpression(Ex=ex)
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([x], "Hp"), Tensor([x], "")])
+        ref = AExpression(terms=[tr1])
+        self.assertTrue(ref.pmatch(out))
+
+    def testP2op(self):
+        op = two_p("H")
+        bra = braP1("nm")
+        ket = ketP1("nm")
+        ex = apply_wick(bra*op*ket)
+        ex.resolve()
+        out = AExpression(Ex=ex)
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        sym = TensorSym([(0, 1), (1, 0)], [1, 1])
+        tensors = [
+            Tensor([x], ""), Tensor([x, y], "H", sym=sym), Tensor([y], "")]
+        tr1 = ATerm(scalar=1, sums=[], tensors=tensors)
+        ref = AExpression(terms=[tr1])
+        self.assertTrue(ref.pmatch(out))
+
+    def testEP11op(self):
+        op = ep11("Hp", ["occ", "vir"], ["nm"], name2="Hq")
+        bra = braP1E1("nm", "occ", "vir")
+        ex = apply_wick(bra*op)
+        ex.resolve()
+        out = AExpression(Ex=ex)
+
+        x = Idx(0, "nm", fermion=False)
+        a = Idx(0, "vir")
+        i = Idx(0, "occ")
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([x, a, i], ""), Tensor([x, a, i], "Hq")])
+        ref = AExpression(terms=[tr1])
+        self.assertTrue(ref.pmatch(out))
+
+        ket = ketP1E1("nm", "occ", "vir")
+        ex = apply_wick(op*ket)
+        ex.resolve()
+        out = AExpression(Ex=ex)
+
+        tr1 = ATerm(
+            scalar=1, sums=[],
+            tensors=[Tensor([x, i, a], "Hp"), Tensor([x, i, a], "")])
+        ref = AExpression(terms=[tr1])
+        self.assertTrue(ref.pmatch(out))
 
 
 if __name__ == '__main__':
