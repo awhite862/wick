@@ -4,7 +4,8 @@ from wick.operator import Delta, Tensor, TensorSym
 from wick.expression import Term, ATerm, Expression, AExpression
 from wick.wick import apply_wick
 from wick.convenience import get_sym, get_sym_ip2, get_sym_ea2
-from wick.convenience import E1, E2, Eip1, Eea1, Eip2, Eea2, P1, P2, EPS1
+from wick.convenience import E1, E2, Eip1, Eea1, Eip2, Eea2, P1, P2
+from wick.convenience import EPS1, EP1ip1, EP1ea1, EPS2
 from wick.convenience import braE1, braE2
 from wick.convenience import braEip1, braEip2, braEdip1
 from wick.convenience import braEea1, braEea2, braEdea1
@@ -13,6 +14,7 @@ from wick.convenience import ketEip1, ketEip2, ketEdip1
 from wick.convenience import ketEea1, ketEea2, ketEdea1
 from wick.convenience import braP1, braP2, braP1E1, braP1Eip1, braP1Eea1
 from wick.convenience import ketP1, ketP2, ketP1E1, ketP1Eip1, ketP1Eea1
+from wick.convenience import braP2E1
 
 
 class ConvenienceTest(unittest.TestCase):
@@ -357,6 +359,15 @@ class ConvenienceTest(unittest.TestCase):
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
 
+        op = EP1ip1("A", ["nm"], ["occ"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([x, i], "")
+        t1 = Tensor([x, i], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
+        self.assertTrue(at1 == aout.terms[0])
+
     def testP1Eea1(self):
         bra = braP1Eea1("nm", "vir")
         ket = ketP1Eea1("nm", "vir")
@@ -375,6 +386,32 @@ class ConvenienceTest(unittest.TestCase):
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
+
+        op = EP1ea1("A", ["nm"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+        aout = AExpression(Ex=out)
+        ext = Tensor([x, a], "")
+        t1 = Tensor([x, a], "A")
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
+        self.assertTrue(at1 == aout.terms[0])
+
+    def testP2E1(self):
+        bra = braP2E1("nm", "nm", "occ", "vir")
+        op = EPS2("A", ["nm"], ["occ"], ["vir"])
+        out = apply_wick(bra*op)
+        out.resolve()
+
+        x = Idx(0, "nm", fermion=False)
+        y = Idx(1, "nm", fermion=False)
+        a = Idx(0, "vir")
+        i = Idx(0, "occ")
+        sym = TensorSym([(0, 1, 2, 3), (1, 0, 2, 3)], [1, 1])
+        aout = AExpression(Ex=out)
+        ext = Tensor([x, y, a, i], "")
+        t1 = Tensor([x, y, a, i], "A", sym=sym)
+        at1 = ATerm(scalar=1, sums=[], tensors=[ext, t1])
+        self.assertTrue(at1 == aout.terms[0])
 
 
 if __name__ == '__main__':
