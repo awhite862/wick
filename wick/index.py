@@ -30,6 +30,23 @@ class Idx(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __lt__(self, other):
+        if self.space < other.space:
+            return True
+        elif self.space == other.space:
+            return self.index < other.index
+        else:
+            return False
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    def __gt__(self, other):
+        return (not self <= other)
+
+    def __ge__(self, other):
+        return (not self < other)
+
 
 def idx_copy(idx):
     """

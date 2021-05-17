@@ -1,7 +1,7 @@
 import unittest
 
 from wick.index import Idx
-from wick.expression import Term, ATerm
+from wick.expression import Term
 from wick.operator import FOperator, Sigma, Tensor
 
 
@@ -40,24 +40,6 @@ class TermTest(unittest.TestCase):
         out = t1*t2
         self.assertTrue(ref == out)
 
-    def test_term_map(self):
-        s = 1.0
-        i = Idx(0, "occ")
-        j = Idx(1, "occ")
-        sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([i, j], 'f')]
-        t1 = ATerm(s, sums, tensors)
-        sums = [Sigma(i), Sigma(j)]
-        tensors = [Tensor([j, i], 'f')]
-        t2 = ATerm(s, sums, tensors)
-        sums = [Sigma(j), Sigma(i)]
-        tensors = [Tensor([i, j], 'f')]
-        t3 = ATerm(s, sums, tensors)
-
-        self.assertTrue(t1.match(t2))
-        self.assertTrue(t1.match(t3))
-        self.assertTrue(t2.match(t3))
-
     def test_ilist(self):
         s = 1.0
         i = Idx("i", "occ")
@@ -88,19 +70,6 @@ class TermTest(unittest.TestCase):
                      FOperator(k, True), FOperator(l, False)]
         ttest = Term(s, sums, tensors, operators, [])
         self.assertTrue(t3 == ttest)
-
-    def test_tensor_sort(self):
-        i = Idx(0, "occ")
-        j = Idx(1, "occ")
-        a = Idx(0, "vir")
-        tensors = [
-            Tensor([j, i], 'f'), Tensor([a, i], ''), Tensor([a, j], "t")]
-        st = [tensors[1], tensors[0], tensors[2]]
-        sigmas = [Sigma(j)]
-        tt = ATerm(scalar=1.0, sums=sigmas, tensors=tensors)
-        tt.sort_tensors()
-        for ref, out in zip(st, tt.tensors):
-            self.assertTrue(ref == out)
 
 
 if __name__ == '__main__':

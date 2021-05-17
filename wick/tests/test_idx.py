@@ -29,6 +29,18 @@ class IdxTest(unittest.TestCase):
         self.assertTrue(is_occupied(i))
         self.assertTrue(is_occupied(b, occ=["spx"]))
 
+    def test_idx_eq(self):
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
+
+        self.assertTrue(i < j)
+        self.assertTrue(j < a)
+        self.assertTrue(a <= b)
+        self.assertTrue(b > a)
+        self.assertTrue(i <= a)
+
 
 if __name__ == '__main__':
     unittest.main()

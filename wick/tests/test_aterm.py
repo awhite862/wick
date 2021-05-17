@@ -1,7 +1,7 @@
 import unittest
 
 from wick.index import Idx
-from wick.operator import Tensor, Delta, tensor_from_delta
+from wick.operator import Tensor, Delta, Sigma, tensor_from_delta
 from wick.expression import AExpression, ATerm
 from wick.convenience import one_e, two_e, braE2, braE1, ketE1
 from wick.convenience import E0, E1, E2
@@ -27,6 +27,37 @@ class ATermTest(unittest.TestCase):
             tensor_from_delta(Delta(a, b))]
         aref = ATerm(scalar=1, sums=[], tensors=tensors)
         self.assertTrue(aterm == aref)
+
+    def test_tensor_sort(self):
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        a = Idx(0, "vir")
+        tensors = [
+            Tensor([j, i], 'f'), Tensor([a, i], ''), Tensor([a, j], "t")]
+        st = [tensors[1], tensors[0], tensors[2]]
+        sigmas = [Sigma(j)]
+        tt = ATerm(scalar=1.0, sums=sigmas, tensors=tensors)
+        tt.sort_tensors()
+        for ref, out in zip(st, tt.tensors):
+            self.assertTrue(ref == out)
+
+    def test_term_map(self):
+        s = 1.0
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i, j], 'f')]
+        t1 = ATerm(s, sums, tensors)
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([j, i], 'f')]
+        t2 = ATerm(s, sums, tensors)
+        sums = [Sigma(j), Sigma(i)]
+        tensors = [Tensor([i, j], 'f')]
+        t3 = ATerm(s, sums, tensors)
+
+        self.assertTrue(t1.match(t2))
+        self.assertTrue(t1.match(t3))
+        self.assertTrue(t2.match(t3))
 
     def test_connected(self):
         H1 = one_e("f", ["occ", "vir"], norder=True)
