@@ -22,6 +22,7 @@ def run_suite():
     suite.addTest(test_aterm.ATermTest("test_tensor_sort"))
     suite.addTest(test_aterm.ATermTest("test_connected"))
     suite.addTest(test_aterm.ATermTest("test_reducible"))
+    suite.addTest(test_aterm.ATermTest("test_eq"))
 
     suite.addTest(test_convenience.ConvenienceTest("testE1"))
     suite.addTest(test_convenience.ConvenienceTest("testE2"))

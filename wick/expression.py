@@ -432,6 +432,15 @@ class ATerm(object):
         else:
             return NotImplemented
 
+    def __le__(self, other):
+        return (self < other or self == other)
+
+    def __gt__(self, other):
+        return not self <= other
+
+    def __ge__(self, other):
+        return not self < other
+
     def _inc(self, i):
         sums = [s._inc(i) for s in self.sums]
         tensors = [t._inc(i) for t in self.tensors]

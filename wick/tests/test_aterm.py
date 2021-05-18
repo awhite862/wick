@@ -102,6 +102,30 @@ class ATermTest(unittest.TestCase):
         ref[13] = ref[14] = ref[15] = ref[16] = ref[17] = ref[18] = False
         self.assertTrue(ref == out)
 
+    def test_eq(self):
+        s = 1.0
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i, j], 'f')]
+        t1 = ATerm(s, sums, tensors)
+        t0 = t1.copy()
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([j, i], 'f'), Tensor([i, j], 'g')]
+        t2 = ATerm(s, sums, tensors)
+        sums = [Sigma(i)]
+        tensors = [Tensor([i, j], 'f')]
+        t3 = ATerm(s, sums, tensors)
+        sums = [Sigma(i)]
+        tensors = [Tensor([i, j], 'g')]
+        t4 = ATerm(s, sums, tensors)
+        self.assertTrue(t1 < t2)
+        self.assertFalse(t0 < t1)
+        self.assertTrue(t0 <= t1)
+        self.assertTrue(t0 >= t1)
+        self.assertTrue(t1 > t3)
+        self.assertTrue(t3 < t4)
+
 
 if __name__ == '__main__':
     unittest.main()
