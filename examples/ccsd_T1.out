@@ -8,7 +8,7 @@
  - 1.0\sum_{jb}f_{jb}t_{bi}t_{aj}
  - 1.0\sum_{jkb}I_{jkib}t_{aj}t_{bk}
  + 1.0\sum_{jbc}I_{jabc}t_{ci}t_{bj}
- - 0.5\sum_{jkbc}I_{jkbc}t_{ci}t_{abkj}
  - 0.5\sum_{jkbc}I_{jkbc}t_{aj}t_{cbki}
+ - 0.5\sum_{jkbc}I_{jkbc}t_{ci}t_{abkj}
  + 1.0\sum_{jkbc}I_{jkbc}t_{cj}t_{abki}
  + 1.0\sum_{jkbc}I_{jkbc}t_{ci}t_{aj}t_{bk}

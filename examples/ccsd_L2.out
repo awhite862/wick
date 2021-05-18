@@ -2,70 +2,70 @@
 
  + 1.0\sum_{k}I_{jikb}L_{ka}
  - 1.0\sum_{k}I_{jika}L_{kb}
- - 1.0\sum_{c}I_{icba}L_{jc}
  + 1.0\sum_{c}I_{jcba}L_{ic}
- + 1.0\sum_{k}f_{ik}L_{kjba}
+ - 1.0\sum_{c}I_{icba}L_{jc}
  - 1.0\sum_{k}f_{jk}L_{kiba}
+ + 1.0\sum_{k}f_{ik}L_{kjba}
  - 1.0\sum_{c}f_{cb}L_{jiac}
  + 1.0\sum_{c}f_{ca}L_{jibc}
  - 0.5\sum_{lk}I_{jikl}L_{lkba}
- - 1.0\sum_{kc}I_{ickb}L_{kjac}
- + 1.0\sum_{kc}I_{icka}L_{kjbc}
  + 1.0\sum_{kc}I_{jckb}L_{kiac}
  - 1.0\sum_{kc}I_{jcka}L_{kibc}
+ - 1.0\sum_{kc}I_{ickb}L_{kjac}
+ + 1.0\sum_{kc}I_{icka}L_{kjbc}
  - 0.5\sum_{dc}I_{cdba}L_{jidc}
  - 1.0\sum_{kc}I_{jibc}t_{ck}L_{ka}
  + 1.0\sum_{kc}I_{jiac}t_{ck}L_{kb}
- - 1.0\sum_{ck}I_{kiba}t_{ck}L_{jc}
  + 1.0\sum_{ck}I_{kjba}t_{ck}L_{ic}
- + 1.0\sum_{kc}f_{ic}t_{ck}L_{kjba}
+ - 1.0\sum_{ck}I_{kiba}t_{ck}L_{jc}
  - 1.0\sum_{kc}f_{jc}t_{ck}L_{kiba}
+ + 1.0\sum_{kc}f_{ic}t_{ck}L_{kjba}
  + 1.0\sum_{ck}f_{kb}t_{ck}L_{jiac}
  - 1.0\sum_{ck}f_{ka}t_{ck}L_{jibc}
  + 1.0\sum_{klc}I_{jikc}t_{cl}L_{klba}
- - 1.0\sum_{lck}I_{kilb}t_{ck}L_{ljac}
- + 1.0\sum_{lck}I_{kila}t_{ck}L_{ljbc}
- - 1.0\sum_{lkc}I_{kilc}t_{ck}L_{ljba}
  + 1.0\sum_{lck}I_{kjlb}t_{ck}L_{liac}
- - 1.0\sum_{lck}I_{kjla}t_{ck}L_{libc}
- + 1.0\sum_{lkc}I_{kjlc}t_{ck}L_{liba}
- + 1.0\sum_{kcd}I_{icbd}t_{dk}L_{kjac}
- - 1.0\sum_{kcd}I_{icad}t_{dk}L_{kjbc}
  - 1.0\sum_{kcd}I_{jcbd}t_{dk}L_{kiac}
+ - 1.0\sum_{lck}I_{kjla}t_{ck}L_{libc}
  + 1.0\sum_{kcd}I_{jcad}t_{dk}L_{kibc}
+ + 1.0\sum_{lkc}I_{kjlc}t_{ck}L_{liba}
+ - 1.0\sum_{lck}I_{kilb}t_{ck}L_{ljac}
+ + 1.0\sum_{kcd}I_{icbd}t_{dk}L_{kjac}
+ + 1.0\sum_{lck}I_{kila}t_{ck}L_{ljbc}
+ - 1.0\sum_{kcd}I_{icad}t_{dk}L_{kjbc}
+ - 1.0\sum_{lkc}I_{kilc}t_{ck}L_{ljba}
  - 1.0\sum_{dck}I_{kcba}t_{dk}L_{jidc}
  + 1.0\sum_{ckd}I_{kcbd}t_{dk}L_{jiac}
  - 1.0\sum_{ckd}I_{kcad}t_{dk}L_{jibc}
  - 0.5\sum_{ldkc}I_{jibc}t_{dckl}L_{lkad}
  + 0.5\sum_{ldkc}I_{jiac}t_{dckl}L_{lkbd}
  + 0.25\sum_{lkcd}I_{jicd}t_{dckl}L_{lkba}
- - 0.5\sum_{dlck}I_{kiba}t_{cdkl}L_{ljdc}
- + 1.0\sum_{ldkc}I_{kibc}t_{dckl}L_{ljad}
- - 1.0\sum_{ldkc}I_{kiac}t_{dckl}L_{ljbd}
- - 0.5\sum_{lkcd}I_{kicd}t_{dckl}L_{ljba}
  + 0.5\sum_{dlck}I_{kjba}t_{cdkl}L_{lidc}
  - 1.0\sum_{ldkc}I_{kjbc}t_{dckl}L_{liad}
  + 1.0\sum_{ldkc}I_{kjac}t_{dckl}L_{libd}
  + 0.5\sum_{lkcd}I_{kjcd}t_{dckl}L_{liba}
+ - 0.5\sum_{dlck}I_{kiba}t_{cdkl}L_{ljdc}
+ + 1.0\sum_{ldkc}I_{kibc}t_{dckl}L_{ljad}
+ - 1.0\sum_{ldkc}I_{kiac}t_{dckl}L_{ljbd}
+ - 0.5\sum_{lkcd}I_{kicd}t_{dckl}L_{ljba}
  + 0.25\sum_{dckl}I_{klba}t_{cdlk}L_{jidc}
  - 0.5\sum_{dklc}I_{klbc}t_{dclk}L_{jiad}
  + 0.5\sum_{dklc}I_{klac}t_{dclk}L_{jibd}
  - 0.5\sum_{klcd}I_{jicd}t_{dk}t_{cl}L_{klba}
- + 1.0\sum_{ldkc}I_{kibc}t_{cl}t_{dk}L_{ljad}
- - 1.0\sum_{ldkc}I_{kiac}t_{cl}t_{dk}L_{ljbd}
- + 1.0\sum_{lkcd}I_{kicd}t_{dl}t_{ck}L_{ljba}
  - 1.0\sum_{ldkc}I_{kjbc}t_{cl}t_{dk}L_{liad}
  + 1.0\sum_{ldkc}I_{kjac}t_{cl}t_{dk}L_{libd}
  - 1.0\sum_{lkcd}I_{kjcd}t_{dl}t_{ck}L_{liba}
+ + 1.0\sum_{ldkc}I_{kibc}t_{cl}t_{dk}L_{ljad}
+ - 1.0\sum_{ldkc}I_{kiac}t_{cl}t_{dk}L_{ljbd}
+ + 1.0\sum_{lkcd}I_{kicd}t_{dl}t_{ck}L_{ljba}
  - 0.5\sum_{dckl}I_{klba}t_{ck}t_{dl}L_{jidc}
  + 1.0\sum_{dklc}I_{klbc}t_{dk}t_{cl}L_{jiad}
  - 1.0\sum_{dklc}I_{klac}t_{dk}t_{cl}L_{jibd}
 
- - 1.0L_{ib}f_{ja}
- + 1.0L_{ia}f_{jb}
  + 1.0L_{jb}f_{ia}
  - 1.0L_{ja}f_{ib}
- + 1.0\sum_{kc}t_{ck}L_{ib}I_{kjac}
- - 1.0\sum_{kc}t_{ck}L_{ia}I_{kjbc}
+ - 1.0L_{ib}f_{ja}
+ + 1.0L_{ia}f_{jb}
  - 1.0\sum_{kc}t_{ck}L_{jb}I_{kiac}
  + 1.0\sum_{kc}t_{ck}L_{ja}I_{kibc}
+ + 1.0\sum_{kc}t_{ck}L_{ib}I_{kjac}
+ - 1.0\sum_{kc}t_{ck}L_{ia}I_{kjbc}

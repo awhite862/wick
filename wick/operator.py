@@ -192,9 +192,14 @@ class Tensor(object):
         if len(self.indices) < len(other.indices):
             return True
         elif len(self.indices) == len(other.indices):
-            return self.name < other.name
+            if self.name < other.name:
+                return True
+            elif self.name == other.name:
+                return self.indices < other.indices
+            else:
+                return False
         else:
-            return self.indices < other.indices
+            return False
 
     def __le__(self, other):
         return (self < other or self == other)

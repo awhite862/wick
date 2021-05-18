@@ -420,7 +420,13 @@ class ATerm(object):
             if len(self.tensors) < len(other.tensors):
                 return True
             elif len(self.tensors) == len(other.tensors):
-                return len(self.sums) < len(other.sums)
+                if len(self.sums) == len(other.sums):
+                    if self.tensors == other.tensors:
+                        return self.sums < other.sums
+                    else:
+                        return self.tensors < other.tensors
+                else:
+                    return len(self.sums) < len(other.sums)
             else:
                 return False
         else:

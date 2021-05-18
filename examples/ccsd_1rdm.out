@@ -10,5 +10,5 @@ P_{vo} =
  + 1.0t_{ai}
  - 1.0\sum_{bj}L_{jb}t_{baij}
  - 1.0\sum_{bj}L_{jb}t_{aj}t_{bi}
- + 0.5\sum_{bjck}L_{jkbc}t_{aj}t_{cbik}
  + 0.5\sum_{bjck}L_{jkbc}t_{ci}t_{bakj}
+ + 0.5\sum_{bjck}L_{jkbc}t_{aj}t_{cbik}

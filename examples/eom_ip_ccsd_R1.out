@@ -1,0 +1,9 @@
+ - 1.0\sum_{j}f_{ji}r_{j}
+ - 1.0\sum_{ja}f_{ja}r_{aji}
+ + 0.5\sum_{jka}I_{jkia}r_{akj}
+ - 1.0\sum_{ja}f_{ja}t_{ai}r_{j}
+ + 1.0\sum_{jka}I_{jkia}t_{aj}r_{k}
+ - 0.5\sum_{jkab}I_{jkab}t_{bi}r_{akj}
+ + 1.0\sum_{jkab}I_{jkab}t_{bj}r_{aki}
+ + 0.5\sum_{jkab}I_{jkab}t_{baji}r_{k}
+ - 1.0\sum_{jkab}I_{jkab}t_{bi}t_{aj}r_{k}
