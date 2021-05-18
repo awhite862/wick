@@ -43,6 +43,7 @@ class OperatorTest(unittest.TestCase):
     def test_tensor(self):
         i = Idx(0, "occ")
         a = Idx(0, "vir")
+        T0 = Tensor([i], "g")
         T1 = Tensor([i, a], "g")
         T2 = Tensor([i, a], "f")
         T3 = Tensor([i, a], "f")
@@ -51,6 +52,11 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(T2 != T4)
         self.assertTrue(T1 != T3)
         self.assertTrue(T1 != T4)
+
+        self.assertTrue(T2 <= T3)
+        self.assertFalse(T2 < T3)
+        self.assertTrue(T2 > T0)
+        self.assertTrue(T4 >= T3)
 
     def test_sigma(self):
         i = Idx(0, "occ")

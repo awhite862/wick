@@ -188,6 +188,23 @@ class Tensor(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __lt__(self, other):
+        if len(self.indices) < len(other.indices):
+            return True
+        elif len(self.indices) == len(other.indices):
+            return self.name < other.name
+        else:
+            return self.indices < other.indices
+
+    def __le__(self, other):
+        return (self < other or self == other)
+
+    def __gt__(self, other):
+        return not self <= other
+
+    def __ge__(self, other):
+        return not self < other
+
     def __hash__(self):
         ss = str(self.name)
         for i in self.indices:
