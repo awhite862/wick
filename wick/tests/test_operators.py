@@ -64,6 +64,11 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(S2 != S3)
         self.assertTrue(S2 != S4)
         self.assertTrue(S3 != S4)
+        self.assertTrue(S1 < S3)
+        self.assertTrue(S1 <= S3)
+        self.assertTrue(S1 <= S2)
+        self.assertTrue(S1 >= S2)
+        self.assertTrue(S4 > S2)
 
     def test_delta(self):
         i = Idx(0, "occ")

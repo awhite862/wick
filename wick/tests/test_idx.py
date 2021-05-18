@@ -40,6 +40,8 @@ class IdxTest(unittest.TestCase):
         self.assertTrue(a <= b)
         self.assertTrue(b > a)
         self.assertTrue(i <= a)
+        self.assertFalse(i < i)
+        self.assertTrue(b >= a)
 
 
 if __name__ == '__main__':
