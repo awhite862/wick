@@ -184,7 +184,7 @@ class SCRulesTest(unittest.TestCase):
 
     def test_2d1c(self):
         # 2 differences, 1-electron operator
-        e = one_e("f", ["occ", "vir"])
+        e = one_e("f", ["occ", "vir"], norder=True)
         bra = braE1("occ", "vir")
         ket = ketE1("occ", "vir")
         x = apply_wick(bra*e*ket)
@@ -195,13 +195,12 @@ class SCRulesTest(unittest.TestCase):
 
     def test_2d2c(self):
         # 2 differences, 2-electron operator
-        e = two_e("I", ["occ", "vir"])
+        e = two_e("I", ["occ", "vir"], norder=True)
         bra = braE1("occ", "vir")
         ket = ketE1("occ", "vir")
         x = apply_wick(bra*e*ket)
         x.resolve()
         out = AExpression(Ex=x)
-        out = out.get_connected()
 
         i = Idx(0, "occ")
         j = Idx(1, "occ")

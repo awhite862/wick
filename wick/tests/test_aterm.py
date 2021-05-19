@@ -28,6 +28,7 @@ class ATermTest(unittest.TestCase):
         tx.scalar = 2
         out = 2*out
         self.assertTrue(tx == out)
+        self.assertTrue(4*tx == out*4)
 
     def test_merge_external(self):
         bra = braE1("occ", "vir")
@@ -139,12 +140,29 @@ class ATermTest(unittest.TestCase):
         sums = [Sigma(i)]
         tensors = [Tensor([i, j], 'g')]
         t4 = ATerm(s, sums, tensors)
+
         self.assertTrue(t1 < t2)
+        self.assertTrue(t1 != t2)
         self.assertFalse(t0 < t1)
         self.assertTrue(t0 <= t1)
         self.assertTrue(t0 >= t1)
         self.assertTrue(t1 > t3)
         self.assertTrue(t3 < t4)
+
+    def test_string(self):
+        s = 1
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
+        sums = [Sigma(a), Sigma(b)]
+        tensors = [Tensor([a, b], 'f')]
+        t1 = ATerm(sums=sums, tensors=tensors)
+        out = str(t1)
+        ref = "1\sum_{0}\sum_{1}f_{01}"
+        self.assertTrue(out == ref)
+
+        out = t1._print_str()
+        ref = "1.0\sum_{ab}f_{ab}"
+        self.assertTrue(out == ref)
 
 
 if __name__ == '__main__':
