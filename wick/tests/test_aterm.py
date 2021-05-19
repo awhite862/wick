@@ -9,6 +9,26 @@ from wick.wick import apply_wick
 
 
 class ATermTest(unittest.TestCase):
+    def test_mul(self):
+        s = 1
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i, j], 'f')]
+        t1 = ATerm(s, sums, tensors)
+        t2 = t1.copy()
+        out = t1*t2
+
+        k = Idx(2, "occ")
+        l = Idx(3, "occ")
+        sumsx = [Sigma(i), Sigma(j), Sigma(k), Sigma(l)]
+        tensorsx = [Tensor([i, j], 'f'), Tensor([k, l], 'f')]
+        tx = ATerm(s, sumsx, tensorsx)
+        self.assertTrue(tx == out)
+        tx.scalar = 2
+        out = 2*out
+        self.assertTrue(tx == out)
+
     def test_merge_external(self):
         bra = braE1("occ", "vir")
         ket = ketE1("occ", "vir")
@@ -42,7 +62,7 @@ class ATermTest(unittest.TestCase):
             self.assertTrue(ref == out)
 
     def test_term_map(self):
-        s = 1.0
+        s = 1
         i = Idx(0, "occ")
         j = Idx(1, "occ")
         sums = [Sigma(i), Sigma(j)]

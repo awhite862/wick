@@ -17,6 +17,7 @@ def run_suite():
 
     suite.addTest(test_test.TestTest("test_framework"))
 
+    suite.addTest(test_aterm.ATermTest("test_mul"))
     suite.addTest(test_aterm.ATermTest("test_merge_external"))
     suite.addTest(test_aterm.ATermTest("test_term_map"))
     suite.addTest(test_aterm.ATermTest("test_tensor_sort"))
