@@ -28,7 +28,8 @@ class TermMap(object):
 
                     jts = [(str(j), jidx) for j, jidx in enumerate(tj.indices) if jidx == iidx]
                     if jts:
-                        strs[space] = strs[space].union(frozenset([make_str(x) for x in jts]))
+                        strs[space] = strs[space].union(
+                            frozenset([make_str(x) for x in jts]))
             tiname = ti.name if ti.name else "!"
             lll = [(k, v) for k, v in sorted(strs.items())]
             self.data.add((tiname, tuple(lll)))
@@ -245,7 +246,8 @@ class Term(object):
             operators = self.operators + new.operators
             deltas = self.deltas + new.deltas
             index_key = other.index_key if self.index_key is None else self.index_key
-            return Term(scalar, sums, tensors, operators, deltas, index_key=index_key)
+            return Term(
+                scalar, sums, tensors, operators, deltas, index_key=index_key)
         else:
             return NotImplemented
 
@@ -275,7 +277,9 @@ class Term(object):
         tensors = [t._inc(i) for t in self.tensors]
         operators = [o._inc(i) for o in self.operators]
         deltas = [d._inc(i) for d in self.deltas]
-        return Term(self.scalar, sums, tensors, operators, deltas, index_key=self.index_key)
+        return Term(
+            self.scalar, sums, tensors, operators,
+            deltas, index_key=self.index_key)
 
     def _idx_map(self, indices=None):
         if self.index_key is None:
@@ -330,7 +334,9 @@ class Term(object):
         newtensors = [t.copy() for t in self.tensors]
         newoperators = [o.copy() for o in self.operators]
         newdeltas = [d.copy() for d in self.deltas]
-        return Term(newscalar, newsums, newtensors, newoperators, newdeltas, index_key=self.index_key)
+        return Term(
+            newscalar, newsums, newtensors, newoperators,
+            newdeltas, index_key=self.index_key)
 
 
 class ATerm(object):
@@ -341,7 +347,8 @@ class ATerm(object):
         sums (list): list of Sums in the term
         tensors (list): list of Tensors
     """
-    def __init__(self, scalar=None, sums=None, tensors=None, index_key=None, term=None):
+    def __init__(self, scalar=None, sums=None,
+                 tensors=None, index_key=None, term=None):
         if term is not None:
             assert(len(term.operators) == 0)
             if scalar is not None:
@@ -392,7 +399,9 @@ class ATerm(object):
             scalar = self.scalar*new.scalar
             sums = self.sums + new.sums
             tensors = self.tensors + new.tensors
-            return ATerm(scalar=scalar, sums=sums, tensors=tensors, index_key=self.index_key)
+            return ATerm(
+                scalar=scalar, sums=sums,
+                tensors=tensors, index_key=self.index_key)
         else:
             return NotImplemented
 
@@ -444,7 +453,9 @@ class ATerm(object):
     def _inc(self, i):
         sums = [s._inc(i) for s in self.sums]
         tensors = [t._inc(i) for t in self.tensors]
-        return ATerm(scalar=self.scalar, sums=sums, tensors=tensors, index_key=self.index_key)
+        return ATerm(
+            scalar=self.scalar, sums=sums,
+            tensors=tensors, index_key=self.index_key)
 
     def _idx_map(self):
         if self.index_key is None:
@@ -627,7 +638,9 @@ class ATerm(object):
         newtensors = [t.copy() for t in self.tensors]
         newscalar = copy(self.scalar)
         newsums = [s.copy() for s in self.sums]
-        return ATerm(scalar=newscalar, sums=newsums, tensors=newtensors, index_key=self.index_key)
+        return ATerm(
+            scalar=newscalar, sums=newsums,
+            tensors=newtensors, index_key=self.index_key)
 
 
 class Expression(object):
@@ -646,7 +659,8 @@ class Expression(object):
             self.terms[i].resolve()
 
         # get rid of terms that are zero
-        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
+        self.terms = list(
+            filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
         out = str()
@@ -732,7 +746,8 @@ class AExpression(object):
 
     def simplify(self):
         # get rid of terms that are zero
-        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
+        self.terms = list(
+            filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
         # compress all symmetry-related terms
         newterms = []
@@ -743,19 +758,22 @@ class AExpression(object):
         while self.terms:
             t1 = self.terms[0]
             remaining = self.terms[1:]
-            tm = list(filter(test, [(t, t1.pmatch(t), i) for i, t in enumerate(remaining)]))
+            tm = list(filter(
+                test, [(t, t1.pmatch(t), i) for i, t in enumerate(remaining)]))
             s = t1.scalar
             for t in tm:
                 s += t[1]*t[0].scalar
             t1.scalar = s
             newterms.append(t1.copy())
             tmi = [t[2] for t in tm]
-            indices = list(filter(lambda i: i not in tmi, range(0, len(remaining))))
+            indices = list(
+                filter(lambda i: i not in tmi, range(0, len(remaining))))
             self.terms = [remaining[i] for i in indices]
         self.terms = newterms
 
         # get rid of terms that are zero after compression
-        self.terms = list(filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
+        self.terms = list(
+            filter(lambda x: abs(x.scalar) > self.tthresh, self.terms))
 
     def __repr__(self):
         return self._print_str()
@@ -774,7 +792,8 @@ class AExpression(object):
 
     def __mul__(self, other):
         if isinstance(other, Number):
-            new = AExpression(terms=[other*t for t in self.terms], simplify=False)
+            new = AExpression(
+                terms=[other*t for t in self.terms], simplify=False)
             return new
         elif isinstance(other, AExpression):
             terms = [t1*t2 for t1, t2 in product(self.terms, other.terms)]

@@ -156,11 +156,11 @@ class ATermTest(unittest.TestCase):
         tensors = [Tensor([a, b], 'f')]
         t1 = ATerm(sums=sums, tensors=tensors)
         out = str(t1)
-        ref = "1\sum_{0}\sum_{1}f_{01}"
+        ref = "1\\sum_{0}\\sum_{1}f_{01}"
         self.assertTrue(out == ref)
 
         out = t1._print_str()
-        ref = "1.0\sum_{ab}f_{ab}"
+        ref = "1.0\\sum_{ab}f_{ab}"
         self.assertTrue(out == ref)
 
         out = t1._einsum_str()

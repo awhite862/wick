@@ -122,7 +122,8 @@ class BOperator(object):
 
     def _inc(self, i):
         """Increment indices"""
-        return BOperator(Idx(self.idx.index + i, self.idx.space, fermion=False), self.ca)
+        return BOperator(
+            Idx(self.idx.index + i, self.idx.space, fermion=False), self.ca)
 
     def _print_str(self, imap):
         if self.ca:
@@ -174,7 +175,8 @@ class Tensor(object):
         self.indices = indices
         self.name = name
         if sym is None:
-            self.sym = TensorSym([tuple([i for i in range(len(indices))])], [1])
+            self.sym = TensorSym(
+                [tuple([i for i in range(len(indices))])], [1])
         else:
             self.sym = sym
 
@@ -344,7 +346,9 @@ class Delta(object):
         return "\\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
 
     def _inc(self, i):
-        return Delta(Idx(self.i1.index + i, self.i1.space), Idx(self.i2.index + i, self.i2.space))
+        return Delta(
+            Idx(self.i1.index + i, self.i1.space),
+            Idx(self.i2.index + i, self.i2.space))
 
     def _print_str(self, imap):
         return "\\delta_{" + imap[self.i1] + imap[self.i2] + "}"
@@ -384,7 +388,8 @@ def normal_ordered(operators, occ=None, sign=1):
             swap = i
             break
     assert(swap is not None)
-    newops = operators[:fa] + [operators[swap]] + operators[fa:swap] + operators[swap + 1:]
+    newops = operators[:fa] + [operators[swap]]\
+        + operators[fa:swap] + operators[swap + 1:]
     newsign = 1 if len(operators[fa:swap]) % 2 == 0 else -1
     sign = sign*newsign
     return normal_ordered(newops, sign=sign)
