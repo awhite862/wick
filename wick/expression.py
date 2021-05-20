@@ -557,10 +557,7 @@ class ATerm(object):
             if not t.name:
                 num_ext = num_ext + 1
 
-        # check for symmetry in external indices
-        if num_ext < 2:
-            pass
-        else:
+        if num_ext > 1:
             newtensors = [t.copy() for t in self.tensors[num_ext:]]
             ext_indices = []
             for t in self.tensors[:num_ext]:

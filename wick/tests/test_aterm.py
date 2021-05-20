@@ -150,7 +150,6 @@ class ATermTest(unittest.TestCase):
         self.assertTrue(t3 < t4)
 
     def test_string(self):
-        s = 1
         a = Idx(0, "vir")
         b = Idx(1, "vir")
         sums = [Sigma(a), Sigma(b)]
@@ -162,6 +161,19 @@ class ATermTest(unittest.TestCase):
 
         out = t1._print_str()
         ref = "1.0\sum_{ab}f_{ab}"
+        self.assertTrue(out == ref)
+
+        out = t1._einsum_str()
+        ref = "1.0*einsum('ab->', f)"
+        self.assertTrue(out == ref)
+
+        a = Idx(0, "vir")
+        b = Idx(1, "vir")
+        sums = [Sigma(b)]
+        tensors = [Tensor([a], ''), Tensor([a, b], 'f')]
+        t2 = ATerm(sums=sums, tensors=tensors)
+        out = t2._einsum_str()
+        ref = "1.0*einsum('ab->a', f)"
         self.assertTrue(out == ref)
 
 

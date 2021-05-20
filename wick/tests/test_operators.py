@@ -37,8 +37,10 @@ class OperatorTest(unittest.TestCase):
     def test_projector(self):
         P1 = Projector()
         P2 = Projector()
+        P3 = P1.copy()
         self.assertTrue(not (P1 != P2))
         self.assertTrue(P1.dagger() == P2)
+        self.assertTrue(P1 == P3)
 
     def test_tensor(self):
         i = Idx(0, "occ")
@@ -53,6 +55,7 @@ class OperatorTest(unittest.TestCase):
         self.assertTrue(T1 != T3)
         self.assertTrue(T1 != T4)
 
+        self.assertTrue(T0 < T1)
         self.assertTrue(T2 <= T3)
         self.assertFalse(T2 < T3)
         self.assertTrue(T2 > T0)

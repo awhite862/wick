@@ -165,7 +165,7 @@ class SCRulesTest(unittest.TestCase):
 
     def test_2d2b(self):
         # 2 differences, 2-electron operator (compressed)
-        e = two_e("I", ["occ", "vir"], compress=True)
+        e = two_e("I", ["occ", "vir"], compress=True, norder=True)
         bra = braE2("occ", "vir", "occ", "vir")
         x = apply_wick(bra*e)
         x.resolve()
