@@ -21,9 +21,11 @@ HT = commute(H, T)
 HTT = commute(HT, T)
 HTTT = commute(HTT, T)
 HTTTT = commute(HTTT, T)
+Hbar = H + HT + Fraction('1/2')*HTT
+Hbar += Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT
 
 # Pieces not proportaional to lambda
-S = (H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
+S = Hbar*ket
 out = apply_wick(S)
 out.resolve()
 ex = AExpression(Ex=out)
@@ -33,7 +35,7 @@ print(ex)
 print("")
 
 # Connected pieces proportional to Lambda
-S1 = L*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
+S1 = L*S
 out1 = apply_wick(S1)
 out1.resolve()
 ex1 = AExpression(Ex=out1)
@@ -41,7 +43,7 @@ ex1 = ex1.get_connected()
 ex1.sort_tensors()
 
 # Subtract those terms that sum to zero
-S2 = L*ket*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)
+S2 = L*ket*Hbar
 out2 = apply_wick(S2)
 out2.resolve()
 ex2 = AExpression(Ex=out2)

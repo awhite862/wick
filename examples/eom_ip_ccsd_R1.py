@@ -20,12 +20,14 @@ HT = commute(H, T)
 HTT = commute(HT, T)
 HTTT = commute(HTT, T)
 HTTTT = commute(HTTT, T)
+Hbar = H + HT + Fraction('1/2')*HTT
 
-S0 = (H + HT + Fraction('1/2')*HTT)
+S0 = Hbar
 E0 = apply_wick(S0)
 E0.resolve()
 
-S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT - E0)*R
+Hbar += Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT
+S = bra*(Hbar - E0)*R
 
 out = apply_wick(S)
 out.resolve()

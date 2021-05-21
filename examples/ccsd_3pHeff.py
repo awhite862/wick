@@ -16,11 +16,13 @@ HT = commute(H, T)
 HTT = commute(HT, T)
 HTTT = commute(HTT, T)
 HTTTT = commute(HTTT, T)
+Hbar = H + HT + Fraction('1/2')*HTT
+Hbar += Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT
 
 # vovvvo piece
 ket = ketEea2("occ", "vir", "vir")
 bra = braEea2("occ", "vir", "vir")
-S = bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
+S = bra*Hbar*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)
@@ -33,7 +35,7 @@ print(final)
 # oovovo piece
 ket = ketEip2("occ", "occ", "vir")
 bra = braEip2("occ", "occ", "vir")
-S = -1*bra*(H + HT + Fraction('1/2')*HTT + Fraction('1/6')*HTTT + Fraction('1/24')*HTTTT)*ket
+S = -1*bra*Hbar*ket
 out = apply_wick(S)
 out.resolve()
 final = AExpression(Ex=out)

@@ -1,3 +1,4 @@
+import unittest
 from wick.tests.test_aterm import *
 from wick.tests.test_convenience import *
 from wick.tests.test_expression import *
