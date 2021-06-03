@@ -109,13 +109,18 @@ class ExpressionTest(unittest.TestCase):
 
     def test_str(self):
         i = Idx(0, "occ")
+        j = Idx(1, "occ")
         sums = [Sigma(i)]
-        tensors = [Tensor([i], "X")]
+        tensors = [Tensor([i, j], "X")]
         operators = [FOperator(i, False)]
-        e1 = Term(1, sums, tensors, operators, [])
+        e1 = Term(1, sums, tensors, operators, [Delta(i, j)])
         ex = Expression([e1])
         out = str(ex)
-        ref = "1\\sum_{0}X_{0}a_0(occ)"
+        ref = "1\\sum_{0}\\delta_{0,1}X_{01}a_0(occ)"
+        self.assertTrue(ref == out)
+
+        out = ex._print_str()
+        ref = " + 1\\sum_{i}\\delta_{ij}X_{ij}a_i"
         self.assertTrue(ref == out)
 
 

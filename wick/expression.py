@@ -326,7 +326,9 @@ class Term(object):
         for dd in self.deltas:
             ilist.add(dd.i1)
             ilist.add(dd.i2)
-        return list(ilist)
+        ret = list(ilist)
+        ret.sort()
+        return ret
 
     def copy(self):
         newscalar = copy(self.scalar)
