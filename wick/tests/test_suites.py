@@ -49,6 +49,7 @@ def run_suite():
     suite.addTest(test_expression.ExpressionTest("test_resolve2"))
     suite.addTest(test_expression.ExpressionTest("test_resolve3"))
     suite.addTest(test_expression.ExpressionTest("test_resolve_chain"))
+    suite.addTest(test_expression.ExpressionTest("test_str"))
 
     suite.addTest(test_full.FullTest("test_ccsd_T1"))
     suite.addTest(test_full.FullTest("test_p2"))

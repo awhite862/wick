@@ -2,7 +2,7 @@ import unittest
 
 from wick.index import Idx
 from wick.operator import FOperator, Sigma, Tensor, Delta
-from wick.expression import Term
+from wick.expression import Term, Expression
 
 
 class ExpressionTest(unittest.TestCase):
@@ -105,6 +105,17 @@ class ExpressionTest(unittest.TestCase):
             [Tensor([I1, I2, I1, I2], "T")],
             roperators, [])
 
+        self.assertTrue(ref == out)
+
+    def test_str(self):
+        i = Idx(0, "occ")
+        sums = [Sigma(i)]
+        tensors = [Tensor([i], "X")]
+        operators = [FOperator(i, False)]
+        e1 = Term(1, sums, tensors, operators, [])
+        ex = Expression([e1])
+        out = str(ex)
+        ref = "1\\sum_{0}X_{0}a_0(occ)"
         self.assertTrue(ref == out)
 
 

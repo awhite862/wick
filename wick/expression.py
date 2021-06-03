@@ -667,7 +667,7 @@ class Expression(object):
         for t in self.terms:
             out += str(t)
             out += " + "
-        return out[:-2]
+        return out[:-3]
 
     def __add__(self, other):
         if isinstance(other, Expression):
