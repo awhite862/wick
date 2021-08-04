@@ -63,16 +63,16 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([a, b, i, j], ""),
             Tensor([k, l, c, d], "")]
         tr1 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(i, k), Delta(j, l), Delta(a, c), Delta(b, d)])
         tr2 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(i, l), Delta(j, k), Delta(a, c), Delta(b, d)])
         tr3 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(i, k), Delta(j, l), Delta(a, d), Delta(b, c)])
         tr4 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(i, l), Delta(j, k), Delta(a, d), Delta(b, c)])
         ref = Expression([tr1, tr2, tr3, tr4])
         aref = AExpression(Ex=ref)
@@ -129,10 +129,10 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([a, i, j], ""),
             Tensor([k, l, c], "")]
         tr1 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(i, k), Delta(j, l), Delta(a, c)])
         tr2 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(i, l), Delta(j, k), Delta(a, c)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
@@ -162,10 +162,10 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([i, j], ""),
             Tensor([k, l], "")]
         tr1 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(i, k), Delta(j, l)])
         tr2 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(i, l), Delta(j, k)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
@@ -211,10 +211,10 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([i, a, b], ""),
             Tensor([c, d, k], "")]
         tr1 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(i, k), Delta(a, c), Delta(b, d)])
         tr2 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(i, k), Delta(a, d), Delta(b, c)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
@@ -244,10 +244,10 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([a, b], ""),
             Tensor([c, d], "")]
         tr1 = Term(
-            1, [],  tensors, [],
+            1, [], tensors, [],
             [Delta(a, c), Delta(b, d)])
         tr2 = Term(
-            -1, [],  tensors, [],
+            -1, [], tensors, [],
             [Delta(a, d), Delta(b, c)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
@@ -265,7 +265,7 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x], ""),
             Tensor([y], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, y)])
+            1, [], tensors, [], [Delta(x, y)])
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
@@ -293,9 +293,9 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x, y], ""),
             Tensor([u, v], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, u), Delta(y, v)])
+            1, [], tensors, [], [Delta(x, u), Delta(y, v)])
         tr2 = Term(
-            1, [],  tensors, [], [Delta(x, v), Delta(y, u)])
+            1, [], tensors, [], [Delta(x, v), Delta(y, u)])
         ref = Expression([tr1, tr2])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
@@ -326,7 +326,7 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x, i, a], ""),
             Tensor([y, b, j], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, y), Delta(i, j), Delta(a, b)])
+            1, [], tensors, [], [Delta(x, y), Delta(i, j), Delta(a, b)])
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
@@ -354,7 +354,7 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x, i], ""),
             Tensor([y, j], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, y), Delta(i, j)])
+            1, [], tensors, [], [Delta(x, y), Delta(i, j)])
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))
@@ -382,7 +382,7 @@ class ConvenienceTest(unittest.TestCase):
             Tensor([x, a], ""),
             Tensor([y, b], "")]
         tr1 = Term(
-            1, [],  tensors, [], [Delta(x, y), Delta(a, b)])
+            1, [], tensors, [], [Delta(x, y), Delta(a, b)])
         ref = Expression([tr1])
         aref = AExpression(Ex=ref)
         self.assertTrue(aout.pmatch(aref))

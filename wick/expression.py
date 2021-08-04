@@ -61,7 +61,7 @@ def _resolve(sums, tensors, operators, deltas):
     def get_case(dd):
         i2 = dd.i2
         i1 = dd.i1
-        assert(i1.space == i2.space)
+        assert i1.space == i2.space
 
         islist = set([s.idx for s in sums])
         is1 = i1 in islist
@@ -90,7 +90,7 @@ def _resolve(sums, tensors, operators, deltas):
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
         else:
-            assert(case == 0)
+            assert case == 0
 
         for i, (ddd, ccc) in enumerate(zip(newdel, cases)):
             if case == 1 and ddd.i1 == i1:
@@ -100,7 +100,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 1:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 1 and ddd.i2 == i1:
                 newdel[i].i2 = i2
                 if ccc == 3:
@@ -108,7 +108,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 2:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 2 and ddd.i2 == i2:
                 newdel[i].i2 = i1
                 if ccc == 3:
@@ -116,7 +116,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 2:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 2 and ddd.i1 == i2:
                 newdel[i].i1 = i1
                 if ccc == 3:
@@ -124,7 +124,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 1:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
 
         for tt in newtens:
             for k, ti in enumerate(tt.indices):
@@ -165,9 +165,9 @@ def _resolve(sums, tensors, operators, deltas):
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
         elif case < 3:
-            assert(case == 0)
+            assert case == 0
         else:
-            assert(False)
+            assert False
 
         if case == 0:
             continue
@@ -352,7 +352,7 @@ class ATerm(object):
     def __init__(self, scalar=None, sums=None,
                  tensors=None, index_key=None, term=None):
         if term is not None:
-            assert(len(term.operators) == 0)
+            assert len(term.operators) == 0
             if scalar is not None:
                 raise Exception("ATerm improperly initialized")
             if sums is not None:
@@ -626,7 +626,7 @@ class ATerm(object):
                 for ix in t.indices:
                     if ix == i1:
                         m += 1
-            assert(m == 2)
+            assert m == 2
             if not new.connected():
                 return True
 
