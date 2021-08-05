@@ -1,4 +1,8 @@
 [config]
 disable=
     invalid-name,
-    no-else-return
+    missing-function-docstring,
+    no-else-return,
+    too-many-locals,
+    too-many-statements,
+    useless-object-inheritance
