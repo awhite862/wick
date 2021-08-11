@@ -44,7 +44,7 @@ class FOperator(object):
     """
     def __init__(self, idx, ca):
         self.idx = idx
-        assert(self.idx.fermion)
+        assert self.idx.fermion
         self.ca = ca
 
     def __eq__(self, other):
@@ -101,7 +101,7 @@ class BOperator(object):
     """
     def __init__(self, idx, ca):
         self.idx = idx
-        assert(not self.idx.fermion)
+        assert not self.idx.fermion
         self.ca = ca
 
     def __eq__(self, other):
@@ -251,7 +251,7 @@ class Tensor(object):
         return self.name + "_{" + istr + "}"
 
     def transpose(self, perm):
-        assert(len(self.indices) == len(perm))
+        assert len(self.indices) == len(perm)
         newindices = []
         for p in perm:
             newindices.append(self.indices[p])
@@ -325,7 +325,7 @@ class Delta(object):
         i2 (Idx): Second index
     """
     def __init__(self, i1, i2):
-        assert(i1.space == i2.space)
+        assert i1.space == i2.space
         self.i1 = i1
         self.i2 = i2
 
@@ -381,13 +381,13 @@ def normal_ordered(operators, occ=None, sign=1):
     fa = None
     swap = None
     for i, op in enumerate(operators):
-        assert(type(op) is FOperator)
+        assert type(op) is FOperator
         if fa is None and (not op.qp_creation(occ)):
             fa = i
         if fa is not None and op.qp_creation(occ):
             swap = i
             break
-    assert(swap is not None)
+    assert swap is not None
     newops = operators[:fa] + [operators[swap]]\
         + operators[fa:swap] + operators[swap + 1:]
     newsign = 1 if len(operators[fa:swap]) % 2 == 0 else -1

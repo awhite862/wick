@@ -31,7 +31,8 @@ class TermMap(object):
                         strs[space] = strs[space].union(
                             frozenset([make_str(x) for x in jts]))
             tiname = ti.name if ti.name else "!"
-            lll = [(k, v) for k, v in sorted(strs.items())]
+            #lll = [(k, v) for k, v in sorted(strs.items())]
+            lll = sorted(strs.items())
             self.data.add((tiname, tuple(lll)))
 
     def __eq__(self, other):
@@ -63,7 +64,8 @@ def _resolve(sums, tensors, operators, deltas):
         i1 = dd.i1
         assert i1.space == i2.space
 
-        islist = set([s.idx for s in sums])
+        #islist = set([s.idx for s in sums])
+        islist = {s.idx for s in sums}
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
@@ -127,7 +129,7 @@ def _resolve(sums, tensors, operators, deltas):
                     assert False
 
         for tt in newtens:
-            for k, ti in enumerate(tt.indices):
+            for k, _ in enumerate(tt.indices):
                 if case == 1:
                     if tt.indices[k] == i1:
                         tt.indices[k] = i2
@@ -173,7 +175,7 @@ def _resolve(sums, tensors, operators, deltas):
             continue
 
         for tt in newtens:
-            for k, ti in enumerate(tt.indices):
+            for k, _ in enumerate(tt.indices):
                 if tt.indices[k] == i2:
                     tt.indices[k] = i1
 
@@ -281,7 +283,7 @@ class Term(object):
             self.scalar, sums, tensors, operators,
             deltas, index_key=self.index_key)
 
-    def _idx_map(self, indices=None):
+    def _idx_map(self):
         if self.index_key is None:
             index_key = default_index_key
         else:
@@ -444,7 +446,7 @@ class ATerm(object):
             return NotImplemented
 
     def __le__(self, other):
-        return (self < other or self == other)
+        return self < other or self == other
 
     def __gt__(self, other):
         return not self <= other
@@ -593,10 +595,11 @@ class ATerm(object):
 
         # If there are fewer than two tensors, there is no adjacency
         if not adj:
-            return (len(rtensors) < 2)
+            return len(rtensors) < 2
         blue = set(adj[0])
         nb = len(blue)
         maxiter = 300000
+        i = 0
         while i < maxiter:
             newtensors = []
             for b in blue:
@@ -615,7 +618,7 @@ class ATerm(object):
     def reducible(self):
         if not self.connected():
             return True
-        for i, so in enumerate(self.sums):
+        for i, _ in enumerate(self.sums):
             new = self.copy()
             new._inc(1)
             sn = new.sums[i]
@@ -680,6 +683,8 @@ class Expression(object):
     def __sub__(self, other):
         if isinstance(other, Expression):
             return self + -1*other
+        else:
+            return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -755,7 +760,7 @@ class AExpression(object):
         newterms = []
 
         def test(x):
-            return (x[1] is not None)
+            return x[1] is not None
 
         while self.terms:
             t1 = self.terms[0]

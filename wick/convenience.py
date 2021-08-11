@@ -289,7 +289,8 @@ def E2(name, ospaces, vspaces, index_key=None):
                     operators = [
                         FOperator(a, True), FOperator(b, True),
                         FOperator(j, False), FOperator(i, False)]
-                    e2 = Term(scalar, sums, tensors, operators, [])
+                    e2 = Term(scalar, sums, tensors, operators,
+                              [], index_key=index_key)
                     terms.append(e2)
     return Expression(terms)
 
@@ -324,7 +325,7 @@ def Eip2(name, ospaces, vspaces, index_key=None):
     sym = get_sym_ip2()
     for i1, o1 in enumerate(ospaces):
         for o2 in ospaces[i1:]:
-            for j1, v1 in enumerate(vspaces):
+            for v1 in vspaces:
                 i = Idx(0, o1)
                 a = Idx(0, v1)
                 j = Idx(1, o2)
@@ -366,7 +367,7 @@ def Eea2(name, ospaces, vspaces, index_key=None):
     """
     terms = []
     sym = get_sym_ea2()
-    for i1, o1 in enumerate(ospaces):
+    for o1 in ospaces:
         for j1, v1 in enumerate(vspaces):
             for v2 in vspaces[j1:]:
                 i = Idx(0, o1)
@@ -882,7 +883,8 @@ def ketP1(space, index_key=None):
     """
     x = Idx(0, space, fermion=False)
     return Expression([
-        Term(1, [], [Tensor([x], "")], [BOperator(x, True)], [])])
+        Term(1, [], [Tensor([x], "")],
+             [BOperator(x, True)], [], index_key=index_key)])
 
 
 def ketP2(space, index_key=None):
