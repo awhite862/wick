@@ -98,10 +98,12 @@ def apply_wick(e, occ=None):
 
         dos = []
         sos = []
+        # if member of the product has an odd number of operators,
+        # then we are done
+        oparity = [len(operators) % 2 == 0 for operators in olists]
+        if not all(oparity):
+            continue
         for operators in olists:
-            # if there is an odd number of operators, then we are done
-            if len(operators) % 2 != 0:
-                continue
             if len(operators) == 0:
                 continue
             # loop to find a contraction
