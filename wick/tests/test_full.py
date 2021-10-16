@@ -1,5 +1,7 @@
+import os
 import unittest
 from fractions import Fraction
+
 from wick.expression import AExpression
 from wick.wick import apply_wick
 from wick.convenience import one_e, two_e, two_p, commute
@@ -7,7 +9,6 @@ from wick.convenience import braE1, E1, E2, braP2, P2
 
 
 def get_ref(fname):
-    import os
     froot = os.path.dirname(__file__)
     fpath = os.path.join(froot, "..", "..", "examples", fname)
     f = open(fpath)

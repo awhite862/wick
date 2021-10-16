@@ -42,10 +42,10 @@ class Idx(object):
         return self < other or self == other
 
     def __gt__(self, other):
-        return (not self <= other)
+        return not self <= other
 
     def __ge__(self, other):
-        return (not self < other)
+        return not self < other
 
 
 def idx_copy(idx):

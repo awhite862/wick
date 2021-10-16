@@ -28,7 +28,7 @@ def valid_contraction(o1, o2, occ=None):
 
 def pair_list(lst, occ=None):
     n = len(lst)
-    assert(n % 2 == 0)
+    assert n % 2 == 0
     if n < 2:
         return []
     elif n == 2:
@@ -50,8 +50,10 @@ def pair_list(lst, occ=None):
 
 def find_pair(i, ipairs):
     for p in ipairs:
-        if p[0] == i or p[1] == i:
+        #if p[0] == i or p[1] == i:
+        if i in p:
             return p
+    return None
 
 
 def get_sign(ipairs):
@@ -66,7 +68,7 @@ def get_sign(ipairs):
             if x2 > j or x2 < i:
                 ncross += 1
 
-    assert(ncross % 2 == 0)
+    assert ncross % 2 == 0
     ncross = ncross // 2
     return 1 if ncross % 2 == 0 else -1
 
@@ -145,11 +147,11 @@ def apply_wick(e, occ=None):
 
         # If there are no contractions, continue
         if not sos:
-            assert(len(dos) == 0)
+            assert len(dos) == 0
             continue
         for di, si in zip(product(*dos), product(*sos)):
-            assert(si)
-            assert(di)
+            assert si
+            assert di
             sign = 1
             for s in si:
                 sign *= s
@@ -167,5 +169,5 @@ def apply_wick(e, occ=None):
     o = Expression(to)
     if o.are_operators():
         raise Exception("Application of Wick's theorem has failed!")
-    else:
-        return o
+
+    return o

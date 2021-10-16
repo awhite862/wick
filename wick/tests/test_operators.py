@@ -38,7 +38,7 @@ class OperatorTest(unittest.TestCase):
         P1 = Projector()
         P2 = Projector()
         P3 = P1.copy()
-        self.assertTrue(not (P1 != P2))
+        self.assertFalse(P1 != P2)
         self.assertTrue(P1.dagger() == P2)
         self.assertTrue(P1 == P3)
 

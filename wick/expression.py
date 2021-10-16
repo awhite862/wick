@@ -34,7 +34,8 @@ class TermMap(object):
                         strs[space] = strs[space].union(
                             frozenset([make_str(x, summed) for x in jts]))
             tiname = ti.name if ti.name else "!"
-            lll = [(k, v) for k, v in sorted(strs.items())]
+            #lll = [(k, v) for k, v in sorted(strs.items())]
+            lll = sorted(strs.items())
             self.data.add((tiname, tuple(lll)))
 
     def __eq__(self, other):
@@ -64,9 +65,10 @@ def _resolve(sums, tensors, operators, deltas):
     def get_case(dd):
         i2 = dd.i2
         i1 = dd.i1
-        assert(i1.space == i2.space)
+        assert i1.space == i2.space
 
-        islist = set([s.idx for s in sums])
+        #islist = set([s.idx for s in sums])
+        islist = {s.idx for s in sums}
         is1 = i1 in islist
         is2 = i2 in islist
         case = 0
@@ -93,7 +95,7 @@ def _resolve(sums, tensors, operators, deltas):
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
         else:
-            assert(case == 0)
+            assert case == 0
 
         for i, (ddd, ccc) in enumerate(zip(newdel, cases)):
             if case == 1 and ddd.i1 == i1:
@@ -103,7 +105,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 1:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 1 and ddd.i2 == i1:
                 newdel[i].i2 = i2
                 if ccc == 3:
@@ -111,7 +113,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 2:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 2 and ddd.i2 == i2:
                 newdel[i].i2 = i1
                 if ccc == 3:
@@ -119,7 +121,7 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 2:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
             elif case == 2 and ddd.i1 == i2:
                 newdel[i].i1 = i1
                 if ccc == 3:
@@ -127,10 +129,10 @@ def _resolve(sums, tensors, operators, deltas):
                 elif ccc == 1:
                     cases[i] = 0
                 else:
-                    assert(False)
+                    assert False
 
         for tt in newtens:
-            for k, ti in enumerate(tt.indices):
+            for k, _ in enumerate(tt.indices):
                 if case == 1:
                     if tt.indices[k] == i1:
                         tt.indices[k] = i2
@@ -168,15 +170,15 @@ def _resolve(sums, tensors, operators, deltas):
             dindx = newsums.index(Sigma(i2))
             del newsums[dindx]
         elif case < 3:
-            assert(case == 0)
+            assert case == 0
         else:
-            assert(False)
+            assert False
 
         if case == 0:
             continue
 
         for tt in newtens:
-            for k, ti in enumerate(tt.indices):
+            for k, _ in enumerate(tt.indices):
                 if tt.indices[k] == i2:
                     tt.indices[k] = i1
 
@@ -284,7 +286,7 @@ class Term(object):
             self.scalar, sums, tensors, operators,
             deltas, index_key=self.index_key)
 
-    def _idx_map(self, indices=None):
+    def _idx_map(self):
         if self.index_key is None:
             index_key = default_index_key
         else:
@@ -355,7 +357,7 @@ class ATerm(object):
     def __init__(self, scalar=None, sums=None,
                  tensors=None, index_key=None, term=None):
         if term is not None:
-            assert(len(term.operators) == 0)
+            assert len(term.operators) == 0
             if scalar is not None:
                 raise Exception("ATerm improperly initialized")
             if sums is not None:
@@ -447,7 +449,7 @@ class ATerm(object):
             return NotImplemented
 
     def __le__(self, other):
-        return (self < other or self == other)
+        return self < other or self == other
 
     def __gt__(self, other):
         return not self <= other
@@ -596,10 +598,11 @@ class ATerm(object):
 
         # If there are fewer than two tensors, there is no adjacency
         if not adj:
-            return (len(rtensors) < 2)
+            return len(rtensors) < 2
         blue = set(adj[0])
         nb = len(blue)
         maxiter = 300000
+        i = 0
         while i < maxiter:
             newtensors = []
             for b in blue:
@@ -618,7 +621,7 @@ class ATerm(object):
     def reducible(self):
         if not self.connected():
             return True
-        for i, so in enumerate(self.sums):
+        for i, _ in enumerate(self.sums):
             new = self.copy()
             new._inc(1)
             sn = new.sums[i]
@@ -629,7 +632,7 @@ class ATerm(object):
                 for ix in t.indices:
                     if ix == i1:
                         m += 1
-            assert(m == 2)
+            assert m == 2
             if not new.connected():
                 return True
 
@@ -683,6 +686,8 @@ class Expression(object):
     def __sub__(self, other):
         if isinstance(other, Expression):
             return self + -1*other
+        else:
+            return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -758,7 +763,7 @@ class AExpression(object):
         newterms = []
 
         def test(x):
-            return (x[1] is not None)
+            return x[1] is not None
 
         while self.terms:
             t1 = self.terms[0]

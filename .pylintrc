@@ -1,0 +1,9 @@
+[config]
+disable=
+    invalid-name,
+    missing-function-docstring,
+    no-else-return,
+    too-many-arguments,
+    too-many-locals,
+    too-many-statements,
+    useless-object-inheritance

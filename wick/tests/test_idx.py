@@ -1,6 +1,6 @@
 import unittest
 
-from wick.index import Idx, is_occupied
+from wick.index import Idx, is_occupied, idx_copy
 
 
 class IdxTest(unittest.TestCase):
@@ -40,7 +40,7 @@ class IdxTest(unittest.TestCase):
         self.assertTrue(a <= b)
         self.assertTrue(b > a)
         self.assertTrue(i <= a)
-        self.assertFalse(i < i)
+        self.assertFalse(i < idx_copy(i))
         self.assertTrue(b >= a)
 
 
