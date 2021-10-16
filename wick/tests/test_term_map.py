@@ -33,6 +33,7 @@ class TermMapTest(unittest.TestCase):
         L1 = Tensor([i, j, a, b], "L")
         J1 = Tensor([j, b], "J")
         S1j = Sigma(j)
+        S1a = Sigma(a)
         S1b = Sigma(b)
         T1 = ATerm(
             scalar=1,
@@ -42,7 +43,7 @@ class TermMapTest(unittest.TestCase):
         J2 = Tensor([j, a], "J")
         T2 = ATerm(
             scalar=1,
-            sums=[S1j, S1b],
+            sums=[S1j, S1a],
             tensors=[L2, J2])
         self.assertTrue(T1.match(T2))
         self.assertTrue(T2.match(T1))

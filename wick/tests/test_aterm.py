@@ -80,6 +80,34 @@ class ATermTest(unittest.TestCase):
         self.assertTrue(t1.match(t3))
         self.assertTrue(t2.match(t3))
 
+    def test_term_map2(self):
+        s = 1
+        i = Idx(0, "occ")
+        j = Idx(1, "occ")
+        sums = [Sigma(i), Sigma(j)]
+        tensors = [Tensor([i, j], 'f')]
+        t1 = ATerm(s, sums, tensors)
+
+        sums = [Sigma(i)]
+        tensors = [Tensor([j, i], 'f')]
+        t2 = ATerm(s, sums, tensors)
+
+        self.assertFalse(t1.match(t2))
+
+    def test_term_map3(self):
+        s = 1
+        i = Idx(0, "occ")
+        a = Idx(0, "vir")
+        sums = [Sigma(i), Sigma(a)]
+        tensors = [Tensor([i, a], 'f'),
+                   Tensor([a, i], 't')]
+        t1 = ATerm(s, sums, tensors)
+
+        sums = [Sigma(i)]
+        t2 = ATerm(s, sums, tensors)
+
+        self.assertFalse(t1.match(t2))
+
     def test_connected(self):
         H1 = one_e("f", ["occ", "vir"], norder=True)
         H2 = two_e("I", ["occ", "vir"], norder=True)

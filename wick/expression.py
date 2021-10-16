@@ -14,22 +14,25 @@ class TermMap(object):
     """
     def __init__(self, sums, tensors, occ=None):
         self.data = set()
+        sindices = [s.idx for s in sums]
         for ti in tensors:
             ilist = ti.ilist()
             strs = {idx.space: frozenset() for idx in ilist}
             for i, iidx in enumerate(ti.indices):
                 space = iidx.space
                 istr = str(i)
+                summed = iidx in sindices
                 for tj in tensors:
                     tjname = tj.name if tj.name else "!"
 
-                    def make_str(x):
-                        return istr + tjname + x[0]
+                    def make_str(x, ss):
+                        sout = istr + tjname + x[0]
+                        return sout + 'x' if ss else sout
 
                     jts = [(str(j), jidx) for j, jidx in enumerate(tj.indices) if jidx == iidx]
                     if jts:
                         strs[space] = strs[space].union(
-                            frozenset([make_str(x) for x in jts]))
+                            frozenset([make_str(x, summed) for x in jts]))
             tiname = ti.name if ti.name else "!"
             lll = [(k, v) for k, v in sorted(strs.items())]
             self.data.add((tiname, tuple(lll)))
