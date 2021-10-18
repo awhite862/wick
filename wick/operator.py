@@ -132,10 +132,7 @@ class BOperator(object):
             return "b_" + imap[self.idx]
 
     def qp_creation(self):
-        if self.ca:
-            return True
-        else:
-            return False
+        return self.ca
 
     def qp_annihilation(self):
         return not self.qp_creation()
@@ -159,7 +156,7 @@ class TensorSym(object):
     def __init__(self, plist, signs):
         self.plist = plist
         self.signs = signs
-        self.tlist = [(p, s) for p, s in zip(plist, signs)]
+        self.tlist = list(zip(plist, signs))
 
 
 class Tensor(object):
@@ -176,7 +173,7 @@ class Tensor(object):
         self.name = name
         if sym is None:
             self.sym = TensorSym(
-                [tuple([i for i in range(len(indices))])], [1])
+                [tuple(range(len(indices)))], [1])
         else:
             self.sym = sym
 
@@ -204,7 +201,7 @@ class Tensor(object):
             return False
 
     def __le__(self, other):
-        return (self < other or self == other)
+        return self < other or self == other
 
     def __gt__(self, other):
         return not self <= other
@@ -343,7 +340,8 @@ class Delta(object):
         return hash(''.join(sorted(str(self.i1.index) + str(self.i2.index))))
 
     def __repr__(self):
-        return "\\delta_{" + str(self.i1.index) + "," + str(self.i2.index) + "}"
+        istr = str(self.i1.index) + "," + str(self.i2.index)
+        return "\\delta_{" + istr + "}"
 
     def _inc(self, i):
         return Delta(
@@ -381,7 +379,7 @@ def normal_ordered(operators, occ=None, sign=1):
     fa = None
     swap = None
     for i, op in enumerate(operators):
-        assert type(op) is FOperator
+        assert isinstance(op, FOperator)
         if fa is None and (not op.qp_creation(occ)):
             fa = i
         if fa is not None and op.qp_creation(occ):

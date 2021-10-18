@@ -11,9 +11,8 @@ from wick.convenience import braE1, E1, E2, braP2, P2
 def get_ref(fname):
     froot = os.path.dirname(__file__)
     fpath = os.path.join(froot, "..", "..", "examples", fname)
-    f = open(fpath)
-    ref = f.read()
-    f.close()
+    with open(fpath) as f:
+        ref = f.read()
     return ref
 
 
