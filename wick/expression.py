@@ -557,7 +557,8 @@ class ATerm(object):
         off = 0
         for i, tt in enumerate(self.tensors):
             if not tt.name:
-                self.tensors[off], self.tensors[i] = self.tensors[i], self.tensors[off]
+                self.tensors[off], self.tensors[i] =\
+                    self.tensors[i], self.tensors[off]
                 off = off + 1
 
     def merge_external(self):
@@ -565,7 +566,8 @@ class ATerm(object):
         ext = True
         for t in self.tensors:
             if not ext and not t.name:
-                raise Exception("Cannot merge external indices in unsorted term")
+                raise Exception(
+                    "Cannot merge external indices in unsorted term")
             if t.name:
                 ext = False
 
@@ -882,36 +884,3 @@ class AExpression(object):
     def transpose(self, perm):
         for t in self.terms:
             t.transpose(perm)
-
-#def contract(idx_str, T1, T2):
-#    if idx_str.count(',') != 1:
-#        raise Exception("""'Contract' can only contract two tensors!""")
-#
-#    idxA, idxBC = idx_str.split(',')
-#    idxB, idxC = idxBC.split('->')
-#    extern = list(idxC)
-#    summed = list(set(idxA + idxB) - set(idxC))
-#    sidxA = [idxA.find(s) for s in summed]
-#    sidxA = []
-#    sidxB = []
-#    for s in summed:
-#        xa = idxA.find(s)
-#        xb = idxB.find(s)
-#        if xa < len(idxA): sidxA.append(xa)
-#        if xb < len(idxB): sidxB.append(xb)
-#
-#    # get external indices of each term
-#    def get_external(tt):
-#        Si = [x.idx for x in tt.sums]
-#        e1 = []
-#        for i,t in enumerate(tt.tensors):
-#            for idx in t.indices:
-#                if idx not in Si:
-#                    e1.append(idx)
-#        return e1
-#
-#    e1 = get_external(T1)
-#    e2 = get_external(T2)
-#
-#    # create product expression
-#    raise Exception("This function is not implemented")
