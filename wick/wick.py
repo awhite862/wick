@@ -50,7 +50,6 @@ def pair_list(lst, occ=None):
 
 def find_pair(i, ipairs):
     for p in ipairs:
-        #if p[0] == i or p[1] == i:
         if i in p:
             return p
     return None
