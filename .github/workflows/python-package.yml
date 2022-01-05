@@ -37,6 +37,9 @@ jobs:
     - name: Test with unittest
       run: |
         coverage run test.py
-    - name: Upload coverage to codecov
-      run: |
-        bash <(curl -s https://codecov.io/bash)
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        fail_ci_if_error: true
+        verbose: true
