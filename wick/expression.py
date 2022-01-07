@@ -45,7 +45,7 @@ class TermMap(object):
             return NotImplemented
 
 
-default_index_key = {"occ": "ijklmno", "vir": "abcdefg", "nm": "IJKLMNOP"}
+default_index_key = {"occ": "ijklmnop", "vir": "abcdefgh", "nm": "IJKLMNOP"}
 
 
 def _resolve(sums, tensors, operators, deltas):
