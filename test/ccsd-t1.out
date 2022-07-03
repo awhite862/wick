@@ -1,0 +1,33 @@
+
+
+# T1 part
+T1 += 1.0*einsum('ai->ai', h1ehaha)
+T1 += -1.0*einsum('ji,aj->ai', h1ehaha, t1)
+T1 += 1.0*einsum('ab,bi->ai', h1ehaha, t1)
+T1 += -1.0*einsum('jb,abji->ai', h1ehaha, t2)
+T1 += -1.0*einsum('jaib,bj->ai', h2ehaha, t1)
+T1 += 0.5*einsum('jkib,abkj->ai', h2ehaha, t2)
+T1 += -0.5*einsum('jabc,cbji->ai', h2ehaha, t2)
+T1 += -1.0*einsum('jb,bi,aj->ai', h1ehaha, t1, t1)
+T1 += -1.0*einsum('jkib,aj,bk->ai', h2ehaha, t1, t1)
+T1 += 1.0*einsum('jabc,ci,bj->ai', h2ehaha, t1, t1)
+T1 += -0.5*einsum('jkbc,aj,cbki->ai', h2ehaha, t1, t2)
+T1 += -0.5*einsum('jkbc,ci,abkj->ai', h2ehaha, t1, t2)
+T1 += 1.0*einsum('jkbc,cj,abki->ai', h2ehaha, t1, t2)
+T1 += 1.0*einsum('jkbc,ci,aj,bk->ai', h2ehaha, t1, t1, t1)
+
+# T2 part
+T2 += 1.0*einsum('ai->ai', h1ehaha)
+T2 += -1.0*einsum('ji,aj->ai', h1ehaha, t1)
+T2 += 1.0*einsum('ab,bi->ai', h1ehaha, t1)
+T2 += -1.0*einsum('jb,abji->ai', h1ehaha, t2)
+T2 += -1.0*einsum('jaib,bj->ai', h2ehaha, t1)
+T2 += 0.5*einsum('jkib,abkj->ai', h2ehaha, t2)
+T2 += -0.5*einsum('jabc,cbji->ai', h2ehaha, t2)
+T2 += -1.0*einsum('jb,bi,aj->ai', h1ehaha, t1, t1)
+T2 += -1.0*einsum('jkib,aj,bk->ai', h2ehaha, t1, t1)
+T2 += 1.0*einsum('jabc,ci,bj->ai', h2ehaha, t1, t1)
+T2 += -0.5*einsum('jkbc,aj,cbki->ai', h2ehaha, t1, t2)
+T2 += -0.5*einsum('jkbc,ci,abkj->ai', h2ehaha, t1, t2)
+T2 += 1.0*einsum('jkbc,cj,abki->ai', h2ehaha, t1, t2)
+T2 += 1.0*einsum('jkbc,ci,aj,bk->ai', h2ehaha, t1, t1, t1)
