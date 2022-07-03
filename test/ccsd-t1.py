@@ -3,9 +3,20 @@ from wick.expression import AExpression
 from wick.wick import apply_wick
 from wick.convenience import one_e, two_e, E1, E2, braE1, commute
 
-def space_formatter(space_list):
-    print("Space list:", space_list)
-    return "haha"
+def space_formatter(name, space_list):
+    s = f"{name}["
+
+    for i, space in enumerate(space_list):
+        s += f"{space}_idx"
+        if i != len(space_list) - 1:
+            s += ", "
+    s += "]"
+
+    return s
+
+def einsum_formatter(sstr, fstr, istr, tstr):
+        einsum_str = "\'" + istr + "->" + fstr + "\'"
+        return f"{float(sstr): 12.6f} * einsum({einsum_str:20s}{tstr})"
 
 H1 = one_e("h1e", ["occ", "vir"], norder = True)
 H2 = two_e("h2e", ["occ", "vir"], norder = True)

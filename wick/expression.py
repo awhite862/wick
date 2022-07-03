@@ -495,7 +495,7 @@ class ATerm(object):
             out += tt._print_str(imap)
         return out
 
-    def _einsum_str(self, exprs_with_space = None, space_formatter = None):
+    def _einsum_str(self, exprs_with_space = None, space_formatter = None, einsum_str_formatter = None):
         imap = self._idx_map()
         sstr = str(float(self.scalar))
         fstr = str()
@@ -516,19 +516,23 @@ class ATerm(object):
             if not tt.name:
                 fstr += tt._istr(imap)
             else:
-                tstr += ", " + tt.name
-
                 if tt.name in names_with_space:
                     space_list = []
 
                     for ii in tt.indices:
                         space_list.append(ii.space)
 
-                    tstr += space_formatter(space_list)
+                    tstr += ", " + space_formatter(tt.name, space_list)
+
+                else:
+                    tstr += ", " + tt.name
 
                 istr += tt._istr(imap) + ","
 
-        return sstr + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
+        if einsum_str_formatter is not None:
+            return einsum_str_formatter(sstr, fstr, istr[:-1], tstr)
+        else:
+            return f"{sstr: 12.6f} * einsum({istr[:-1]:20s}->{fstr:20s}{tstr})"
 
     def match(self, other):
         if isinstance(other, ATerm):
