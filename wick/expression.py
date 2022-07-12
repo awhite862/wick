@@ -495,34 +495,33 @@ class ATerm(object):
             out += tt._print_str(imap)
         return out
 
-    def _einsum_str(self, exprs_with_space = None, space_formatter = None, einsum_str_formatter = None):
+    def _einsum_str(self, exprs_with_space = None, names_with_space = None, space_idx_formatter = None, einsum_str_formatter = None):
         imap = self._idx_map()
         sstr = str(float(self.scalar))
         fstr = str()
         istr = str()
         tstr = str()
 
-        names_with_space = []
+        names_with_space = [] if names_with_space is None else names_with_space
 
         if exprs_with_space:
-            assert space_formatter is not None
+            assert space_idx_formatter is not None
             for expr in exprs_with_space:
                 for term in expr.terms:
                     for tt in term.tensors:
                         names_with_space.append(tt.name)
 
         for tt in self.tensors:
-
             if not tt.name:
                 fstr += tt._istr(imap)
             else:
                 if tt.name in names_with_space:
-                    space_list = []
+                    space_idx_list = []
 
                     for ii in tt.indices:
-                        space_list.append(ii.space)
+                        space_idx_list.append(ii.space)
 
-                    tstr += ", " + space_formatter(tt.name, space_list)
+                    tstr += ", " + space_idx_formatter(tt.name, space_idx_list)
 
                 else:
                     tstr += ", " + tt.name
@@ -532,7 +531,7 @@ class ATerm(object):
         if einsum_str_formatter is not None:
             return einsum_str_formatter(sstr, fstr, istr[:-1], tstr)
         else:
-            return f"{sstr: 12.6f} * einsum({istr[:-1]:20s}->{fstr:20s}{tstr})"
+            return sstr + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
 
     def match(self, other):
         if isinstance(other, ATerm):
@@ -864,13 +863,24 @@ class AExpression(object):
             out += sign + str(num) + t._print_str(with_scalar=False) + "\n"
         return out[:-1]
 
-    def _print_einsum(self, lhs=None, exprs_with_space = None, space_formatter = None):
+    def _print_einsum(self, lhs=None, exprs_with_space = None, names_with_space = None, space_idx_formatter = None, einsum_str_formatter = None):
         X = lhs if lhs is not None else str()
         out = str()
         for t in self.terms[:-1]:
-            out += X + " += " + t._einsum_str(exprs_with_space = exprs_with_space, space_formatter = space_formatter) + "\n"
+            out += X + " += " + t._einsum_str(
+                exprs_with_space     = exprs_with_space,
+                names_with_space     = names_with_space,
+                space_idx_formatter  = space_idx_formatter, 
+                einsum_str_formatter = einsum_str_formatter
+                ) 
+            out += "\n"
         if self.terms:
-            out += X + " += " + self.terms[-1]._einsum_str(exprs_with_space = exprs_with_space, space_formatter = space_formatter)
+            out += X + " += " + self.terms[-1]._einsum_str(
+                exprs_with_space     = exprs_with_space,
+                names_with_space     = names_with_space,
+                space_idx_formatter  = space_idx_formatter, 
+                einsum_str_formatter = einsum_str_formatter
+                )
         return out
 
     def sort_tensors(self):
