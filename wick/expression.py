@@ -529,7 +529,7 @@ class ATerm(object):
                 istr += tt._istr(imap) + ","
 
         if einsum_str_formatter is not None:
-            return einsum_str_formatter(sstr, fstr, istr[:-1], tstr)
+            return einsum_str_formatter(sstr, istr[:-1], fstr, tstr)
         else:
             return sstr + "*einsum('" + istr[:-1] + "->" + fstr + "'" + tstr + ")"
 
